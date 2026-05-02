@@ -1,0 +1,26 @@
+package com.duck.model.type;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+public class Period {
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+
+    public Period(LocalDate startDate, LocalDate endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public long getDaysBetween() {
+        return ChronoUnit.DAYS.between(this.startDate, this.endDate);
+    }
+
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return this.endDate;
+    }
+}
