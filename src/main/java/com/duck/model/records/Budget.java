@@ -1,31 +1,40 @@
 package com.duck.model.records;
 
-import java.time.Period;
+import java.time.LocalDate;
+
+import com.duck.model.type.Period;
+
+import com.duck.model.type.Account;
 
 public class Budget {
     private String category;
-    private int amount;
-    private int usedAmount;
+    private float amount;
+    private float usedAmount;
     private Period period; 
     private float threshold;
+    private Account account;
 
-    public Budget(String category, int amount, Period period, float threshold) {
+    public Budget(String category, float amount, Period period, float threshold) {
         this.category = category;
         this.amount = amount;
-        this.usedAmount = 0; // Initially, no amount is used
+        this.usedAmount = 0;
         this.period = period;
         this.threshold = threshold;
+    }
+
+    public Account getAccount() {
+        return this.account;
     }
 
     public String getCategory() {
         return category;
     }
     
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
     
-    public int getUsedAmount() {
+    public float getUsedAmount() {
         return usedAmount;
     }
     
@@ -35,5 +44,33 @@ public class Budget {
     
     public float getThreshold() {
         return threshold;
+    }
+
+    public void gsetCategory(String category) {
+        this.category = category;
+    }
+    
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+    
+    public void setUsedAmount(float amount) {
+        this.usedAmount = amount;
+    }
+    
+    public void setPeriod(Period period) {
+        this.period = period;
+    }
+    
+    public void getThreshold(float threshold) {
+        this.threshold = threshold;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public boolean isActive() {
+        return period.contains(LocalDate.now());
     }
 }

@@ -14,6 +14,10 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public Account getAccount() {
+        return this.config.getAccount();
+    }
+
     public TransactionConfig getConfig() {
         return this.config;
     }
@@ -32,5 +36,9 @@ public class Transaction {
 
     public String getCategory() {
         return config.getCategory().get(0);
+    }
+
+    public void setAccount(Account account) {
+        this.config.setAccount(account);
     }
 }

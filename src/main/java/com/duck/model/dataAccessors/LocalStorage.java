@@ -1,5 +1,6 @@
 package com.duck.model.dataAccessors;
 
+import com.duck.model.records.Budget;
 import com.duck.model.type.*;
 import com.duck.model.type.AppSettings.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,7 @@ public class LocalStorage implements StorageStrategy {
     private List<Account> accounts = new ArrayList<>();
     private List<Transaction> expenses = new ArrayList<>();
     private List<Transaction> income = new ArrayList<>();
-    private List<TransactionConfig> budgets = new ArrayList<>();
+    private List<Budget> budgets = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
     private List<SavingGoal> goals = new ArrayList<>();
 
@@ -117,7 +118,7 @@ public class LocalStorage implements StorageStrategy {
     public List<Account> getAccounts() { return accounts; }
     public List<Transaction> getExpenses() { return expenses; }
     public List<Transaction> getIncome() { return income; }
-    public List<TransactionConfig> getBudgets() { return budgets; }
+    public List<Budget> getBudgets() { return budgets; }
     public List<String> getCategories() { return categories; }
     public List<SavingGoal> getGoals() { return goals; }
 }
