@@ -48,26 +48,26 @@
                         <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
                             <children>
                                 <!-- Dashboard -->
-                                <Button text="Dashboard" styleClass="menu-button" onAction="#navigateToDashboard" />
+
 
                                 <!-- Transactions -->
-                                <Button text="Transactions" styleClass="menu-button" onAction="#navigateToTransactions" />
+
 
                                 <!-- Budgets (Active) -->
-                                <Button text="Budgets" styleClass="menu-button-active" onAction="#navigateToBudgets" />
+
 
                                 <!-- Saving Goals -->
-                                <Button text="Saving Goals" styleClass="menu-button" onAction="#navigateToGoals" />
+
 
                                 <!-- Reports -->
-                                <Button text="Reports" styleClass="menu-button" onAction="#navigateToReports" />
+
                             </children>
                         </VBox>
 
                         <!-- Add Transaction Button -->
                         <VBox styleClass="sidebar-bottom">
                             <children>
-                                <Button text="+ Add Transaction" styleClass="add-transaction-btn" onAction="#handleAddTransaction" />
+
                             </children>
                         </VBox>
                     </children>
@@ -97,7 +97,7 @@
                                                 <SVGPath styleClass="notification-icon" content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
                                             </children>
                                         </StackPane>
-                                        <Button text="Profile" styleClass="menu-button" onAction="#navigateToProfile" />
+
                                     </children>
                                 </HBox>
                             </children>
@@ -121,7 +121,7 @@
                                                         <Button text="▶" styleClass="month-nav-btn" />
                                                     </children>
                                                 </HBox>
-                                                <Button text="+ Create Budget" styleClass="create-budget-btn" onAction="#handleCreateBudget" />
+
                                             </children>
                                         </HBox>
 

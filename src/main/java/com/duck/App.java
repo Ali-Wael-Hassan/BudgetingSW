@@ -23,7 +23,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
-        Parent root = loadFXML("sign_up");
+        Parent root = loadFXML("budget");
         scene = new Scene(root, 960, 720);
         scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         stage.setTitle("BudgetWise");
@@ -32,39 +32,37 @@ public class App extends Application {
     }
 
     /**
-     * Switch to Sign-Up screen
+     * Switch to Sign-Up screen with fade and slide animation
      */
     public static void showSignUp() {
         try {
             Parent newRoot = loadFXML("sign_up");
-            scene.setRoot(newRoot);
+            animateSceneTransition(newRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Switch to Login screen
+     * Switch to Login screen with fade and slide animation
      */
     public static void showLogin() {
         try {
             Parent newRoot = loadFXML("login");
-            scene.setRoot(newRoot);
+            animateSceneTransition(newRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Switch to Dashboard screen
+     * Switch to Dashboard screen with fade and slide animation
      */
     public static void showDashboard() {
         try {
-            System.out.println("Loading dashboard...");
-            setRoot("dashboard");
-            System.out.println("Dashboard loaded successfully");
-        } catch (Exception e) {
-            System.out.println("ERROR: " + e.getMessage());
+            Parent newRoot = loadFXML("dashboard");
+            animateSceneTransition(newRoot);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -73,60 +71,35 @@ public class App extends Application {
      * Switch to Transactions screen
      */
     public static void showTransactions() {
-        try {
-            setRoot("transactions");
-        } catch (IOException e) {
-            System.out.println("ERROR loading transactions: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("Navigate to Transactions");
     }
 
     /**
      * Switch to Budgets screen
      */
     public static void showBudgets() {
-        try {
-            setRoot("budget");
-        } catch (IOException e) {
-            System.out.println("ERROR loading budget: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("Navigate to Budgets");
     }
 
     /**
      * Switch to Saving Goals screen
      */
     public static void showGoals() {
-        try {
-            setRoot("goals");
-        } catch (IOException e) {
-            System.out.println("ERROR loading goals: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("Navigate to Saving Goals");
     }
 
     /**
      * Switch to Reports screen
      */
     public static void showReports() {
-        try {
-            setRoot("reports");
-        } catch (IOException e) {
-            System.out.println("ERROR loading reports: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("Navigate to Reports");
     }
 
     /**
      * Switch to Profile screen
      */
     public static void showProfile() {
-        try {
-            setRoot("profile");
-        } catch (IOException e) {
-            System.out.println("ERROR loading profile: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("Navigate to Profile");
     }
 
     /**
