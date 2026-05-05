@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane styleClass="main-background" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.duck.GoalsController">
+    <top>
+        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
+            <HBox alignment="CENTER_LEFT">
+                <VBox spacing="5.0">
+                    <Label styleClass="page-title" text="Budgets &amp; Goals" />
+                    <Label styleClass="page-subtitle" text="Manage your financial thresholds and track saving targets." />
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox spacing="15.0" alignment="CENTER_LEFT">
+                    <Button styleClass="btn-filter" text="Filter" />
+                    <Button styleClass="btn-primary" text="+ New Budget" />
+                </HBox>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <padding>
+                    <Insets top="20.0" />
+                </padding>
+                <Region styleClass="icon-active-budgets" minWidth="20" minHeight="20" maxWidth="20" maxHeight="20"/>
+                <Label styleClass="section-title" text="Active Budgets" />
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" BorderPane.alignment="CENTER">
+            <content>
+                <FlowPane fx:id="cardsContainer" hgap="20.0" vgap="20.0">
+                    <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="10.0" />
+                    </padding>
+                    <!-- Cards will be added here dynamically -->
+                </FlowPane>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
