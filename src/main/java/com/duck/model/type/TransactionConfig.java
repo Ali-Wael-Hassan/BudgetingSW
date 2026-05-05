@@ -1,12 +1,14 @@
 package com.duck.model.type;
 
+import java.util.List;
+
 public class TransactionConfig {
     private AppSettings.TransactionType type;
     private Period period;
-    private String category;
+    private List<String> category;
     private Range range;
 
-    public TransactionConfig(AppSettings.TransactionType type, Period period, String category, Range range) {
+    public TransactionConfig(AppSettings.TransactionType type, Period period, List<String> category, Range range) {
         this.type = type;
         this.period = period;
         this.category = category;
@@ -21,7 +23,7 @@ public class TransactionConfig {
         return this.period;
     }
 
-    public String getCategory() {
+    public List<String> getCategory() {
         return this.category;
     }
 
@@ -37,7 +39,7 @@ public class TransactionConfig {
         this.period = period;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(List<String> category) {
         this.category = category;
     }
 

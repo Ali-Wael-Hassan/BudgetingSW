@@ -31,6 +31,6 @@ public class Transaction {
     }
 
     public String getCategory() {
-        return config.getCategory();
+        return config.getCategory().get(0);
     }
 }
