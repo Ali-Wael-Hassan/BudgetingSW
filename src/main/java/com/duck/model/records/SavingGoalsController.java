@@ -12,6 +12,7 @@ import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.type.Account;
 import com.duck.model.type.SavingGoal;
 import com.duck.model.type.Transaction;
+import com.duck.model.type.AppSettings.DataKey;
 import com.duck.model.type.AppSettings.GoalEvent;
 import com.duck.model.type.AppSettings.Message;
 
@@ -79,6 +80,7 @@ public class SavingGoalsController implements PropertyChangeListener {
         Message check = validateGoal(savingGoal);
         if (check == Message.SUCCESS) {
             goals.add(savingGoal);
+            LocalStorage.getInstance().insert(DataKey.GOALS, savingGoal);
             return Message.SUCCESS;
         }
 
@@ -165,8 +167,11 @@ public class SavingGoalsController implements PropertyChangeListener {
         if (amount > 0) {
             float newAmount = activeGoal.getCurrentAmount() + amount;
             activeGoal.setCurrentAmount(newAmount);
-            
+
+            LocalStorage.getInstance().save(DataKey.GOALS, goals);
+
             System.out.println("Added " + amount + " to goal: " + activeGoal.getName() + ". New balance: " + newAmount);
+            
     
             if (activeGoal.getCurrentAmount() >= activeGoal.getTargetAmount()) {
                 System.out.println("Congratulations! The saving goal '" + activeGoal.getName() + "' is fully funded!");

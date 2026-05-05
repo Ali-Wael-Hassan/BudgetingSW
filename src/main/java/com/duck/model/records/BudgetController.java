@@ -10,6 +10,7 @@ import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.type.Account;
 import com.duck.model.type.Transaction;
 import com.duck.model.type.AppSettings.BudgetEvent;
+import com.duck.model.type.AppSettings.DataKey;
 import com.duck.model.type.AppSettings.Message;
 import com.duck.model.type.AppSettings.TransactionType;
 
@@ -81,6 +82,11 @@ public class BudgetController implements PropertyChangeListener {
         Message check = validateBudget(budget);
         if (check == Message.SUCCESS) {
             budgets.add(budget);
+
+            if(!LocalStorage.getInstance().getCategories().contains(budget.getCategory()))
+                LocalStorage.getInstance().insert(DataKey.CATEGORIES, budget.getCategory());
+
+            LocalStorage.getInstance().insert(DataKey.BUDGETS, budget);
             return Message.SUCCESS;
         }
         return check;
@@ -111,6 +117,8 @@ public class BudgetController implements PropertyChangeListener {
         // 5. Apply the result
         if (validationResult == Message.SUCCESS) {
             budgets.add(index, updatedBudget);
+
+            LocalStorage.getInstance().save(DataKey.BUDGETS, budgets);
             
             support.firePropertyChange(BudgetEvent.BUDGET_UPDATED.getName(), budget, updatedBudget);
             
@@ -194,6 +202,8 @@ public class BudgetController implements PropertyChangeListener {
         }
     
         activeBudget.setUsedAmount(newUsedAmount); 
+
+        LocalStorage.getInstance().save(DataKey.BUDGETS, budgets);
         
         System.out.println("Transaction applied to " + activeBudget.getCategory() + ". Total used: " + newUsedAmount);
     
