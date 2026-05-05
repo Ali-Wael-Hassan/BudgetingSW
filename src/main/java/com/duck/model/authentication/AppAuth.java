@@ -24,7 +24,7 @@ public class AppAuth implements Auth {
     @Override
     public AppSettings.Message emailExists(String email) {
         try {
-            List<Account> accounts = (List<Account>) storage.fetch(AppSettings.DataKey.ACCOUNTS);
+            List<Account> accounts = LocalStorage.getInstance().getAccounts();
             
             if (accounts != null) {
                 for (Account acc : accounts) {
