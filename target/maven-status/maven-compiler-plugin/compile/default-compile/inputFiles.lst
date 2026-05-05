@@ -1,6 +1,8 @@
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\App.java
+D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\DashboardController.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\GoalCardController.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\GoalsController.java
+D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\LoginController.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\AppAuth.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\Auth.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\Login.java
@@ -21,4 +23,5 @@ D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\mo
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\UserName.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\PrimaryController.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\SecondaryController.java
+D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\SignUpController.java
 D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\module-info.java

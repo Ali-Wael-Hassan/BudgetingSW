@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.duck.ProfileController"
+           styleClass="dashboard-root">
+    <children>
+        <HBox spacing="0" styleClass="dashboard-container">
+            <children>
+                <!-- Sidebar -->
+                <VBox styleClass="sidebar" prefWidth="280">
+                    <children>
+                        <!-- Logo & Profile Section -->
+                        <VBox spacing="12" styleClass="sidebar-top">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="14">
+                                    <children>
+                                        <StackPane styleClass="user-avatar">
+                                            <children>
+                                                <Circle radius="24" fill="#1F2937" />
+                                                <SVGPath styleClass="avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label text="BudgetWise" styleClass="app-name" />
+                                                <Label text="Financial Stewardship" styleClass="app-tagline" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Menu Items -->
+                        <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
+                            <children>
+                                <!-- Dashboard -->
+                                <Button text="Dashboard" styleClass="menu-button" onAction="#navigateToDashboard" />
+
+                                <!-- Transactions -->
+                                <Button text="Transactions" styleClass="menu-button" onAction="#navigateToTransactions" />
+
+                                <!-- Budgets -->
+                                <Button text="Budgets" styleClass="menu-button" onAction="#navigateToBudgets" />
+
+                                <!-- Saving Goals -->
+                                <Button text="Saving Goals" styleClass="menu-button" onAction="#navigateToGoals" />
+
+                                <!-- Reports -->
+                                <Button text="Reports" styleClass="menu-button" onAction="#navigateToReports" />
+                            </children>
+                        </VBox>
+
+                        <!-- Add Transaction Button -->
+                        <VBox styleClass="sidebar-bottom">
+                            <children>
+                                <Button text="+ Add Transaction" styleClass="add-transaction-btn" onAction="#handleAddTransaction" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Main Content Area -->
+                <VBox styleClass="main-content" HBox.hgrow="ALWAYS">
+                    <children>
+                        <!-- Top Header -->
+                        <HBox styleClass="top-header" alignment="CENTER_LEFT">
+                            <children>
+                                <!-- Search Bar -->
+                                <HBox styleClass="search-box" alignment="CENTER_LEFT">
+                                    <children>
+                                        <SVGPath styleClass="search-icon" content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                                        <TextField promptText="Search..." styleClass="search-input" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+                                <StackPane HBox.hgrow="ALWAYS" />
+
+                                <!-- Header Icons -->
+                                <HBox spacing="20" alignment="CENTER">
+                                    <children>
+                                        <StackPane styleClass="header-icon">
+                                            <children>
+                                                <SVGPath styleClass="notification-icon" content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+                                            </children>
+                                        </StackPane>
+                                        <Button text="Profile" styleClass="menu-button-active" onAction="#navigateToProfile" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Content Area -->
+                        <ScrollPane styleClass="content-scroll" VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox spacing="32" styleClass="content-area">
+                                    <children>
+                                        <!-- Page Header -->
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <VBox spacing="4">
+                                                    <children>
+                                                        <Label text="Account Settings" styleClass="profile-title" />
+                                                        <Label text="Manage your preferences and account details" styleClass="profile-subtitle" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+
+                                        <!-- Profile Card -->
+                                        <VBox styleClass="profile-card">
+                                            <children>
+                                                <HBox spacing="24" alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <StackPane styleClass="profile-avatar-large">
+                                                            <children>
+                                                                <Circle radius="50" fill="#1F2937" />
+                                                                <SVGPath styleClass="profile-avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                                            </children>
+                                                        </StackPane>
+                                                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                                            <children>
+                                                                <Label text="John Doe" styleClass="profile-name" />
+                                                                <Label text="john.doe@example.com" styleClass="profile-email" />
+                                                            </children>
+                                                        </VBox>
+                                                        <Button text="Edit Profile" styleClass="edit-profile-btn" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Settings Grid -->
+                                        <GridPane hgap="24" vgap="24">
+                                            <children>
+                                                <!-- Theme Settings -->
+                                                <VBox styleClass="settings-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="12">
+                                                            <children>
+                                                                <StackPane styleClass="settings-icon">
+                                                                    <children>
+                                                                        <Circle radius="20" fill="#1F2937" />
+                                                                        <SVGPath styleClass="settings-icon-svg" content="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="Appearance" styleClass="settings-card-title" />
+                                                            </children>
+                                                        </HBox>
+                                                        <Label text="Choose your preferred theme" styleClass="settings-card-desc" />
+                                                        
+                                                        <VBox spacing="12" styleClass="theme-options">
+                                                            <children>
+                                                                <HBox spacing="12" alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <ToggleButton text="Dark" styleClass="theme-toggle" selected="true" />
+                                                                        <ToggleButton text="Light" styleClass="theme-toggle" />
+                                                                        <ToggleButton text="System" styleClass="theme-toggle" />
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- Currency Settings -->
+                                                <VBox styleClass="settings-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="12">
+                                                            <children>
+                                                                <StackPane styleClass="settings-icon">
+                                                                    <children>
+                                                                        <Circle radius="20" fill="#1F2937" />
+                                                                        <SVGPath styleClass="settings-icon-svg" content="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.35 3.68 3.74V19h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="Currency" styleClass="settings-card-title" />
+                                                            </children>
+                                                        </HBox>
+                                                        <Label text="Select your preferred currency" styleClass="settings-card-desc" />
+                                                        
+                                                        <VBox spacing="12" styleClass="currency-options">
+                                                            <children>
+                                                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <ToggleButton text="$ USD" styleClass="currency-toggle" selected="true" />
+                                                                        <ToggleButton text="€ EUR" styleClass="currency-toggle" />
+                                                                        <ToggleButton text="£ GBP" styleClass="currency-toggle" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <ToggleButton text="¥ JPY" styleClass="currency-toggle" />
+                                                                        <ToggleButton text="ر.س SAR" styleClass="currency-toggle" />
+                                                                        <ToggleButton text="ج.م EGP" styleClass="currency-toggle" />
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- Notification Settings -->
+                                                <VBox styleClass="settings-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="12">
+                                                            <children>
+                                                                <StackPane styleClass="settings-icon">
+                                                                    <children>
+                                                                        <Circle radius="20" fill="#1F2937" />
+                                                                        <SVGPath styleClass="settings-icon-svg" content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="Notifications" styleClass="settings-card-title" />
+                                                            </children>
+                                                        </HBox>
+                                                        <Label text="Manage your notification preferences" styleClass="settings-card-desc" />
+                                                        
+                                                        <VBox spacing="16" styleClass="notification-options">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <VBox HBox.hgrow="ALWAYS">
+                                                                            <children>
+                                                                                <Label text="Push Notifications" styleClass="notification-label" />
+                                                                                <Label text="Receive notifications on your device" styleClass="notification-desc" />
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <ToggleButton styleClass="toggle-switch" selected="true" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <VBox HBox.hgrow="ALWAYS">
+                                                                            <children>
+                                                                                <Label text="Email Alerts" styleClass="notification-label" />
+                                                                                <Label text="Get important updates via email" styleClass="notification-desc" />
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <ToggleButton styleClass="toggle-switch" selected="true" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <VBox HBox.hgrow="ALWAYS">
+                                                                            <children>
+                                                                                <Label text="Budget Alerts" styleClass="notification-label" />
+                                                                                <Label text="Alert when approaching budget limits" styleClass="notification-desc" />
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <ToggleButton styleClass="toggle-switch" selected="true" />
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- Security Settings -->
+                                                <VBox styleClass="settings-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="12">
+                                                            <children>
+                                                                <StackPane styleClass="settings-icon">
+                                                                    <children>
+                                                                        <Circle radius="20" fill="#1F2937" />
+                                                                        <SVGPath styleClass="settings-icon-svg" content="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="Security" styleClass="settings-card-title" />
+                                                            </children>
+                                                        </HBox>
+                                                        <Label text="Protect your account" styleClass="settings-card-desc" />
+                                                        
+                                                        <VBox spacing="16" styleClass="security-options">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT" styleClass="security-item">
+                                                                    <children>
+                                                                        <VBox HBox.hgrow="ALWAYS">
+                                                                            <children>
+                                                                                <Label text="Change Password" styleClass="security-label" />
+                                                                                <Label text="Update your account password" styleClass="security-desc" />
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <Button text="Change" styleClass="security-btn" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" styleClass="security-item">
+                                                                    <children>
+                                                                        <VBox HBox.hgrow="ALWAYS">
+                                                                            <children>
+                                                                                <Label text="Two-Factor Authentication" styleClass="security-label" />
+                                                                                <Label text="Add an extra layer of security" styleClass="security-desc" />
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <Button text="Enable" styleClass="security-btn-active" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" styleClass="security-item">
+                                                                    <children>
+                                                                        <VBox HBox.hgrow="ALWAYS">
+                                                                            <children>
+                                                                                <Label text="Sign Out" styleClass="security-label" />
+                                                                                <Label text="Sign out from all devices" styleClass="security-desc" />
+                                                                            </children>
+                                                                        </VBox>
+                                                                        <Button text="Sign Out" styleClass="signout-btn" onAction="#handleSignOut" />
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </GridPane>
+
+                                        <!-- Danger Zone -->
+                                        <VBox styleClass="danger-zone">
+                                            <children>
+                                                <Label text="Danger Zone" styleClass="danger-title" />
+                                                <HBox alignment="CENTER_LEFT" styleClass="danger-item">
+                                                    <children>
+                                                        <VBox HBox.hgrow="ALWAYS">
+                                                            <children>
+                                                                <Label text="Delete Account" styleClass="danger-label" />
+                                                                <Label text="Permanently delete your account and all data" styleClass="danger-desc" />
+                                                            </children>
+                                                        </VBox>
+                                                        <Button text="Delete Account" styleClass="delete-btn" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</StackPane>

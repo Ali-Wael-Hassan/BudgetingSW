@@ -10,8 +10,10 @@ com\duck\model\authentication\AppAuth.class
 com\duck\model\authentication\Auth.class
 com\duck\model\type\Transaction.class
 com\duck\GoalCardController.class
+com\duck\LoginController.class
 com\duck\model\authentication\Login.class
 com\duck\App.class
+com\duck\DashboardController.class
 com\duck\model\type\AppSettings.class
 com\duck\model\type\Range.class
 com\duck\model\type\AccountConfig.class
@@ -22,6 +24,7 @@ com\duck\SecondaryController.class
 com\duck\model\dataAccessors\StorageStrategy.class
 com\duck\model\type\AppSettings$TransactionType.class
 com\duck\model\type\UserName.class
+com\duck\SignUpController.class
 com\duck\model\type\AppSettings$Mode.class
 com\duck\model\authentication\Recognition.class
 com\duck\GoalsController.class

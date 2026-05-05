@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.duck.BudgetController"
+           styleClass="dashboard-root">
+    <children>
+        <HBox spacing="0" styleClass="dashboard-container">
+            <children>
+                <!-- Sidebar -->
+                <VBox styleClass="sidebar" prefWidth="280">
+                    <children>
+                        <!-- Logo & Profile Section -->
+                        <VBox spacing="12" styleClass="sidebar-top">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="14">
+                                    <children>
+                                        <StackPane styleClass="user-avatar">
+                                            <children>
+                                                <Circle radius="24" fill="#1F2937" />
+                                                <SVGPath styleClass="avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label text="BudgetWise" styleClass="app-name" />
+                                                <Label text="Financial Stewardship" styleClass="app-tagline" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Menu Items -->
+                        <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
+                            <children>
+                                <!-- Dashboard -->
+                                <Button text="Dashboard" styleClass="menu-button" onAction="#navigateToDashboard" />
+
+                                <!-- Transactions -->
+                                <Button text="Transactions" styleClass="menu-button" onAction="#navigateToTransactions" />
+
+                                <!-- Budgets (Active) -->
+                                <Button text="Budgets" styleClass="menu-button-active" onAction="#navigateToBudgets" />
+
+                                <!-- Saving Goals -->
+                                <Button text="Saving Goals" styleClass="menu-button" onAction="#navigateToGoals" />
+
+                                <!-- Reports -->
+                                <Button text="Reports" styleClass="menu-button" onAction="#navigateToReports" />
+                            </children>
+                        </VBox>
+
+                        <!-- Add Transaction Button -->
+                        <VBox styleClass="sidebar-bottom">
+                            <children>
+                                <Button text="+ Add Transaction" styleClass="add-transaction-btn" onAction="#handleAddTransaction" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Main Content Area -->
+                <VBox styleClass="main-content" HBox.hgrow="ALWAYS">
+                    <children>
+                        <!-- Top Header -->
+                        <HBox styleClass="top-header" alignment="CENTER_LEFT">
+                            <children>
+                                <!-- Search Bar -->
+                                <HBox styleClass="search-box" alignment="CENTER_LEFT">
+                                    <children>
+                                        <SVGPath styleClass="search-icon" content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                                        <TextField promptText="Search..." styleClass="search-input" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+                                <StackPane HBox.hgrow="ALWAYS" />
+
+                                <!-- Header Icons -->
+                                <HBox spacing="20" alignment="CENTER">
+                                    <children>
+                                        <StackPane styleClass="header-icon">
+                                            <children>
+                                                <SVGPath styleClass="notification-icon" content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+                                            </children>
+                                        </StackPane>
+                                        <Button text="Profile" styleClass="menu-button" onAction="#navigateToProfile" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Content Area -->
+                        <ScrollPane styleClass="content-scroll" VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox spacing="24" styleClass="content-area">
+                                    <children>
+                                        <!-- Page Header -->
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="Budgets" styleClass="page-header-title" />
+                                                <StackPane HBox.hgrow="ALWAYS" />
+                                                <!-- Month Navigation -->
+                                                <HBox spacing="16" alignment="CENTER" styleClass="month-nav">
+                                                    <children>
+                                                        <Button text="◀" styleClass="month-nav-btn" />
+                                                        <Label text="October 2024" styleClass="month-label" />
+                                                        <Button text="▶" styleClass="month-nav-btn" />
+                                                    </children>
+                                                </HBox>
+                                                <Button text="+ Create Budget" styleClass="create-budget-btn" onAction="#handleCreateBudget" />
+                                            </children>
+                                        </HBox>
+
+                                        <!-- Overall Budget Summary Card -->
+                                        <VBox styleClass="summary-card">
+                                            <children>
+                                                <Label text="Total Monthly Budget" styleClass="summary-title" />
+                                                <Label text="$4,500.00" styleClass="summary-amount" />
+                                                
+                                                <!-- Main Progress Bar -->
+                                                <StackPane styleClass="main-progress-container">
+                                                    <children>
+                                                        <StackPane styleClass="main-progress-bg">
+                                                            <children>
+                                                                <StackPane styleClass="main-progress-fill" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </StackPane>
+                                                
+                                                <!-- Spent and Remaining -->
+                                                <HBox spacing="40" alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <VBox>
+                                                            <children>
+                                                                <Label text="Spent" styleClass="summary-label" />
+                                                                <Label text="$3,240.00" styleClass="summary-value" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox>
+                                                            <children>
+                                                                <Label text="Remaining" styleClass="summary-label" />
+                                                                <Label text="$1,260.00" styleClass="summary-value-remaining" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Budget Categories Grid -->
+                                        <VBox spacing="16">
+                                            <children>
+                                                <Label text="Categories" styleClass="section-title" />
+                                                
+                                                <GridPane hgap="16" vgap="16">
+                                                    <children>
+                                                        <!-- Housing Card -->
+                                                        <VBox styleClass="category-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-icon">
+                                                                            <children>
+                                                                                <Circle radius="18" fill="#1F2937" />
+                                                                                <SVGPath styleClass="category-icon-svg" content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                        <Label text="Housing" styleClass="category-name" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="category-amount-row">
+                                                                    <children>
+                                                                        <Label text="$450" styleClass="category-spent" />
+                                                                        <Label text="/ $600" styleClass="category-limit" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <StackPane styleClass="category-progress-container">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-progress-bg">
+                                                                            <children>
+                                                                                <StackPane styleClass="category-progress-fill-green" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="75%" styleClass="category-percent" />
+                                                            </children>
+                                                        </VBox>
+
+                                                        <!-- Food Card -->
+                                                        <VBox styleClass="category-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-icon">
+                                                                            <children>
+                                                                                <Circle radius="18" fill="#1F2937" />
+                                                                                <SVGPath styleClass="category-icon-svg" content="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                        <Label text="Food" styleClass="category-name" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="category-amount-row">
+                                                                    <children>
+                                                                        <Label text="$280" styleClass="category-spent" />
+                                                                        <Label text="/ $400" styleClass="category-limit" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <StackPane styleClass="category-progress-container">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-progress-bg">
+                                                                            <children>
+                                                                                <StackPane styleClass="category-progress-fill-green" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="70%" styleClass="category-percent" />
+                                                            </children>
+                                                        </VBox>
+
+                                                        <!-- Transportation Card -->
+                                                        <VBox styleClass="category-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-icon">
+                                                                            <children>
+                                                                                <Circle radius="18" fill="#1F2937" />
+                                                                                <SVGPath styleClass="category-icon-svg" content="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                        <Label text="Transportation" styleClass="category-name" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="category-amount-row">
+                                                                    <children>
+                                                                        <Label text="$180" styleClass="category-spent" />
+                                                                        <Label text="/ $250" styleClass="category-limit" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <StackPane styleClass="category-progress-container">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-progress-bg">
+                                                                            <children>
+                                                                                <StackPane styleClass="category-progress-fill-green" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="72%" styleClass="category-percent" />
+                                                            </children>
+                                                        </VBox>
+
+                                                        <!-- Utilities Card -->
+                                                        <VBox styleClass="category-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-icon">
+                                                                            <children>
+                                                                                <Circle radius="18" fill="#1F2937" />
+                                                                                <SVGPath styleClass="category-icon-svg" content="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 15h-2v-6H9v6H7v-7.81l5-4.5 5 4.5V18z" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                        <Label text="Utilities" styleClass="category-name" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="category-amount-row">
+                                                                    <children>
+                                                                        <Label text="$150" styleClass="category-spent" />
+                                                                        <Label text="/ $200" styleClass="category-limit" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <StackPane styleClass="category-progress-container">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-progress-bg">
+                                                                            <children>
+                                                                                <StackPane styleClass="category-progress-fill-green" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="75%" styleClass="category-percent" />
+                                                            </children>
+                                                        </VBox>
+
+                                                        <!-- Entertainment Card -->
+                                                        <VBox styleClass="category-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-icon">
+                                                                            <children>
+                                                                                <Circle radius="18" fill="#1F2937" />
+                                                                                <SVGPath styleClass="category-icon-svg" content="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zM10 12l4 4 4-4z" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                        <Label text="Entertainment" styleClass="category-name" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="category-amount-row">
+                                                                    <children>
+                                                                        <Label text="$120" styleClass="category-spent" />
+                                                                        <Label text="/ $150" styleClass="category-limit" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <StackPane styleClass="category-progress-container">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-progress-bg">
+                                                                            <children>
+                                                                                <StackPane styleClass="category-progress-fill-yellow" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="80%" styleClass="category-percent" />
+                                                            </children>
+                                                        </VBox>
+
+                                                        <!-- Shopping Card -->
+                                                        <VBox styleClass="category-card" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <HBox alignment="CENTER_LEFT" spacing="12">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-icon">
+                                                                            <children>
+                                                                                <Circle radius="18" fill="#1F2937" />
+                                                                                <SVGPath styleClass="category-icon-svg" content="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                        <Label text="Shopping" styleClass="category-name" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="category-amount-row">
+                                                                    <children>
+                                                                        <Label text="$200" styleClass="category-spent" />
+                                                                        <Label text="/ $150" styleClass="category-limit-over" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <StackPane styleClass="category-progress-container">
+                                                                    <children>
+                                                                        <StackPane styleClass="category-progress-bg">
+                                                                            <children>
+                                                                                <StackPane styleClass="category-progress-fill-red" />
+                                                                            </children>
+                                                                        </StackPane>
+                                                                    </children>
+                                                                </StackPane>
+                                                                <Label text="133%" styleClass="category-percent-over" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</StackPane>

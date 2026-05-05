@@ -1,0 +1,270 @@
+/* Main Background */
+.main-background {
+    -fx-background-color: #121415;
+}
+
+/* Typography */
+.page-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.page-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9CA3AF;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+/* Buttons */
+.btn-primary {
+    -fx-background-color: #0F766E;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+.btn-primary:hover {
+    -fx-background-color: #115E59;
+}
+
+.btn-filter {
+    -fx-background-color: transparent;
+    -fx-border-color: #374151;
+    -fx-border-radius: 6px;
+    -fx-text-fill: #D1D5DB;
+    -fx-font-size: 14px;
+    -fx-padding: 7px 15px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+.btn-filter:hover {
+    -fx-background-color: #1F2937;
+}
+
+/* ScrollPane */
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+}
+.transparent-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+.transparent-scroll-pane:focused {
+    -fx-background-color: transparent;
+}
+
+/* Icons Placeholders */
+.icon-active-budgets {
+    -fx-background-color: #34D399; /* Greenish placeholder for pie icon */
+    -fx-shape: "M 10 0 A 10 10 0 0 0 0 10 L 10 10 Z M 12 0 L 12 10 L 22 10 A 10 10 0 0 0 12 0 Z M 12 12 L 12 22 A 10 10 0 0 0 22 12 Z M 0 12 A 10 10 0 0 0 10 22 L 10 12 Z";
+}
+.icon-category-placeholder {
+    -fx-background-color: #6B7280;
+    -fx-shape: "M 4 2 L 20 2 C 21.1 2 22 2.9 22 4 L 22 20 C 22 21.1 21.1 22 20 22 L 4 22 C 2.9 22 2 21.1 2 20 L 2 4 C 2 2.9 2.9 2 4 2 Z";
+}
+
+/* Goal Card styling */
+.goal-card {
+    -fx-background-color: #1A1D1F;
+    -fx-background-radius: 8px;
+    -fx-border-color: #2D3135;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-pref-width: 350px;
+    -fx-pref-height: 200px;
+    /* subtle drop shadow */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 5);
+}
+
+/* Card typography */
+.card-category {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9CA3AF;
+    -fx-letter-spacing: 1px;
+}
+
+.card-amount-spent {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.card-amount-limit {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9CA3AF;
+}
+
+.card-text-small {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9CA3AF;
+}
+
+.card-status-text {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.status-on-track {
+    -fx-text-fill: #34D399; /* Green */
+}
+.status-approaching {
+    -fx-text-fill: #FBBF24; /* Yellow */
+}
+.status-action-required {
+    -fx-text-fill: #F87171; /* Red */
+}
+
+/* Progress bar styling */
+.custom-progress-bar {
+    -fx-pref-height: 8px;
+}
+.custom-progress-bar .track {
+    -fx-background-color: #2D3135;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+.custom-progress-bar .bar {
+    -fx-background-radius: 4px;
+    -fx-padding: 4px;
+}
+
+/* Progress colors */
+.progress-green .bar { -fx-background-color: #34D399; }
+.progress-yellow .bar { -fx-background-color: #FBBF24; }
+.progress-red .bar { -fx-background-color: #F87171; }
+
+/* Left border colors */
+.status-border {
+    -fx-background-radius: 8px 0px 0px 8px;
+}
+.border-green { -fx-background-color: #34D399; }
+.border-yellow { -fx-background-color: #FBBF24; }
+.border-red { -fx-background-color: #F87171; }
+
+/* Sign-up screen styles */
+.auth-root {
+    -fx-background-color: linear-gradient(to bottom right, #070B14 0%, #111827 100%);
+    -fx-padding: 32px;
+}
+.auth-card {
+    -fx-background-color: #111827;
+    -fx-background-radius: 24px;
+    -fx-border-color: rgba(148, 163, 184, 0.16);
+    -fx-border-radius: 24px;
+    -fx-border-width: 1px;
+    -fx-padding: 28px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 24, 0, 0, 10);
+}
+.form-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+.field-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #94A3B8;
+}
+.input-frame {
+    -fx-background-color: #0F172A;
+    -fx-background-radius: 16px;
+    -fx-border-color: #1F2937;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+    -fx-padding: 10 14 10 14;
+}
+.input-icon-background {
+    -fx-pref-width: 44px;
+    -fx-pref-height: 44px;
+    -fx-background-color: #0F172A;
+    -fx-background-radius: 14px;
+    -fx-alignment: center;
+}
+.input-icon {
+    -fx-fill: #34D399;
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+.text-input {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #E5E7EB;
+    -fx-prompt-text-fill: #94A3B8;
+    -fx-font-size: 14px;
+    -fx-pref-height: 44px;
+    -fx-pref-width: 100%;
+}
+.text-input:focused {
+    -fx-border-color: transparent;
+}
+.btn-block {
+    -fx-max-width: Infinity;
+}
+.btn-primary {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #10B981, #059669);
+    -fx-text-fill: #F8FAFC;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 16px;
+    -fx-padding: 14 16 14 16;
+    -fx-cursor: hand;
+}
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #059669, #047857);
+}
+.btn-google {
+    -fx-background-color: #0F172A;
+    -fx-border-color: #334155;
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+    -fx-text-fill: #E5E7EB;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 16 14 16;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+.btn-google:hover {
+    -fx-background-color: #111827;
+}
+.btn-google .label {
+    -fx-text-fill: #E5E7EB;
+}
+.separator-line {
+    -fx-background-color: #334155;
+}
+.separator-label {
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 13px;
+}
+.link-label {
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 13px;
+}
+.link-primary {
+    -fx-text-fill: #10B981;
+    -fx-font-size: 13px;
+}
+.google-icon {
+    -fx-pref-width: 32px;
+    -fx-pref-height: 32px;
+    -fx-background-color: #0F172A;
+    -fx-background-radius: 12px;
+    -fx-alignment: center;
+}
+.google-icon-text {
+    -fx-text-fill: #F8FAFC;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.btn-google-text {
+    -fx-text-fill: #E5E7EB;
+    -fx-font-size: 14px;
+}
