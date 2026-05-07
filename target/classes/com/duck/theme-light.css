@@ -1,0 +1,397 @@
+/* Light mode color overrides */
+.dashboard-root,
+.dashboard-container {
+    -fx-background-color: #F3F4F6;
+}
+
+.sidebar {
+    -fx-background-color: #FFFFFF;
+}
+
+.main-content {
+    -fx-background-color: #F9FAFB;
+}
+
+/* Cards */
+.balance-card,
+.spending-card,
+.summary-card,
+.report-card,
+.category-card,
+.profile-card,
+.settings-card,
+.goal-card,
+.transaction-row,
+.expense-item {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D1D5DB;
+}
+
+/* Headers & Titles */
+.page-title,
+.page-header-title,
+.reports-title,
+.section-title,
+.profile-title {
+    -fx-text-fill: #111827;
+}
+
+.page-subtitle,
+.reports-subtitle,
+.profile-subtitle,
+.card-title {
+    -fx-text-fill: #6B7280;
+}
+
+/* Dashboard balance/spending */
+.balance-amount,
+.spending-amount,
+.spending-income,
+.goal-title {
+    -fx-text-fill: #111827;
+}
+
+.spending-limit,
+.spending-info,
+.goal-amount {
+    -fx-text-fill: #6B7280;
+}
+
+/* Balance badge stays green in light mode */
+.balance-badge {
+    -fx-text-fill: #059669;
+    -fx-background-color: rgba(5, 150, 101, 0.15);
+}
+
+/* Buttons */
+.btn-transfer {
+    -fx-background-color: #059669;
+    -fx-text-fill: #FFFFFF;
+}
+
+.btn-transfer:hover {
+    -fx-background-color: #047857;
+}
+
+.btn-deposit {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+}
+
+.btn-deposit:hover {
+    -fx-background-color: #D1D5DB;
+}
+
+/* Menu button */
+.menu-button {
+    -fx-text-fill: #6B7280;
+}
+
+.menu-button:hover {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #111827;
+}
+
+.menu-button-active {
+    -fx-text-fill: #059669;
+}
+
+/* Sidebar add button */
+.add-transaction-btn {
+    -fx-background-color: #059669;
+    -fx-text-fill: #FFFFFF;
+}
+
+.add-transaction-btn:hover {
+    -fx-background-color: #047857;
+}
+
+/* Profile section */
+.profile-name,
+.settings-card-title,
+.security-label,
+.danger-label,
+.notification-label {
+    -fx-text-fill: #111827;
+}
+
+.profile-email,
+.settings-card-desc,
+.security-desc,
+.danger-desc,
+.notification-desc {
+    -fx-text-fill: #6B7280;
+}
+
+/* Theme & currency toggles */
+.theme-toggle,
+.currency-toggle {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #4B5563;
+}
+
+.theme-toggle:selected,
+.currency-toggle:selected {
+    -fx-background-color: #10B981;
+    -fx-text-fill: #FFFFFF;
+}
+
+/* Security buttons */
+.security-btn {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+}
+
+.security-btn:hover {
+    -fx-background-color: #D1D5DB;
+}
+
+/* Danger zone */
+.danger-zone {
+    -fx-border-color: #FCA5A5;
+    -fx-background-color: #FEF2F2;
+}
+
+/* Budget summary */
+.summary-amount,
+.summary-value,
+.category-name,
+.category-spent,
+.category-percent {
+    -fx-text-fill: #111827;
+}
+
+.summary-title,
+.summary-label,
+.category-limit,
+.category-percent-over {
+    -fx-text-fill: #6B7280;
+}
+
+.summary-value-remaining {
+    -fx-text-fill: #059669;
+}
+
+.month-label,
+.month-nav-btn {
+    -fx-text-fill: #374151;
+}
+
+.month-nav-btn:hover {
+    -fx-text-fill: #111827;
+}
+
+/* Budget progress bars */
+.progress-bar-bg,
+.main-progress-bg,
+.category-progress-bg,
+.goal-progress-bg {
+    -fx-background-color: #E5E7EB;
+}
+
+/* Transactions */
+.transaction-name {
+    -fx-text-fill: #111827;
+}
+
+.transaction-category,
+.date-header {
+    -fx-text-fill: #6B7280;
+}
+
+.amount-income {
+    -fx-text-fill: #059669;
+}
+
+.amount-expense {
+    -fx-text-fill: #DC2626;
+}
+
+/* Reports */
+.reports-title {
+    -fx-text-fill: #111827;
+}
+
+.reports-subtitle {
+    -fx-text-fill: #6B7280;
+}
+
+.donut-center-amount,
+.expense-name,
+.goal-name {
+    -fx-text-fill: #111827;
+}
+
+.donut-center-label,
+.expense-category,
+.goal-target,
+.segment-label,
+.segment-percent {
+    -fx-text-fill: #6B7280;
+}
+
+.expense-amount {
+    -fx-text-fill: #DC2626;
+}
+
+.goal-current {
+    -fx-text-fill: #059669;
+}
+
+/* Report buttons */
+.date-filter-btn {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+}
+
+.date-filter-btn:hover {
+    -fx-background-color: #D1D5DB;
+}
+
+.nav-btn {
+    -fx-text-fill: #374151;
+}
+
+.nav-btn:hover {
+    -fx-background-color: #E5E7EB;
+}
+
+/* Filter buttons in transactions */
+.filter-btn {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+}
+
+.filter-btn:hover {
+    -fx-background-color: #D1D5DB;
+}
+
+.filter-btn-active {
+    -fx-background-color: #10B981;
+    -fx-text-fill: #FFFFFF;
+}
+
+.filter-btn:selected {
+    -fx-background-color: #10B981;
+    -fx-text-fill: #FFFFFF;
+}
+
+/* Goals page */
+.card-category {
+    -fx-text-fill: #6B7280;
+}
+
+.card-amount-spent {
+    -fx-text-fill: #111827;
+}
+
+.card-amount-limit,
+.card-text-small {
+    -fx-text-fill: #6B7280;
+}
+
+/* App header */
+.app-name {
+    -fx-text-fill: #059669;
+}
+
+.app-tagline {
+    -fx-text-fill: #6B7280;
+}
+
+/* Goal card on goals page */
+.goal-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D1D5DB;
+}
+
+/* Goal card on dashboard */
+.dashboard-root .goal-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D1D5DB;
+}
+
+/* Goal progress */
+.goal-progress-fill {
+    -fx-background-color: #059669;
+}
+
+/* Category progress fills stay their colors but use lighter backgrounds */
+.category-progress-fill-green {
+    -fx-background-color: #059669;
+}
+
+.category-progress-fill-yellow {
+    -fx-background-color: #D97706;
+}
+
+.category-progress-fill-red {
+    -fx-background-color: #DC2626;
+}
+
+/* Main progress fill */
+.main-progress-fill {
+    -fx-background-color: linear-gradient(to right, #059669, #10B981);
+}
+
+/* Edit profile button */
+.edit-profile-btn {
+    -fx-border-color: #059669;
+    -fx-text-fill: #059669;
+}
+
+.edit-profile-btn:hover {
+    -fx-background-color: rgba(5, 150, 101, 0.08);
+}
+
+/* Dialog buttons */
+.dialog .button {
+    -fx-cursor: hand;
+}
+.dialog-button {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+}
+.dialog-button:hover {
+    -fx-background-color: #D1D5DB;
+}
+.dialog-button:default {
+    -fx-background-color: #10B981;
+    -fx-text-fill: #FFFFFF;
+}
+.dialog-button:default:hover {
+    -fx-background-color: #059669;
+}
+
+/* Transaction icon circle */
+.transaction-icon Circle {
+    -fx-fill: #E5E7EB;
+}
+
+/* Category icon circle */
+.category-icon Circle {
+    -fx-fill: #E5E7EB;
+}
+
+/* Sidebar and settings icon circles in FXML */
+.user-avatar Circle,
+.settings-icon Circle,
+.input-icon-background,
+.profile-avatar-large Circle {
+    -fx-fill: #E5E7EB;
+}
+
+/* Sidebar icon SVGs */
+.avatar-icon {
+    -fx-fill: #6B7280;
+}
+
+/* Expense icon circle */
+.expense-icon Circle {
+    -fx-fill: #E5E7EB;
+}
+
+/* Default avatar */
+.default-avatar Circle {
+    -fx-fill: #E5E7EB;
+}
