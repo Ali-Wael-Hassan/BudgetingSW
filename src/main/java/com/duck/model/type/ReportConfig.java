@@ -4,6 +4,8 @@ public class ReportConfig {
     private String category;
     private float percent;
 
+    public ReportConfig() {}
+
     public ReportConfig(String category, float percent) {
         this.category = category;
         this.percent = percent;

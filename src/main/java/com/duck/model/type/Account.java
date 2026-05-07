@@ -1,13 +1,15 @@
 package com.duck.model.type;
 
 public class Account {
-    private Email email;
-    private UserName userName;
+    private String email;
+    private String userName;
     private String password;
     private float balance;
     private AccountConfig accountConfig;
 
-    public Account(Email email, UserName userName, String password, float balance, AccountConfig accountConfig) {
+    public Account() {}
+
+    public Account(String email, String userName, String password, float balance, AccountConfig accountConfig) {
         this.email = email;
         this.userName = userName;
         this.password = password;
@@ -15,9 +17,9 @@ public class Account {
         this.accountConfig = accountConfig;
     }
 
-    public String getEmail() { return this.email.getEmail(); }
+    public String getEmail() { return this.email; }
 
-    public UserName getUserName() { return this.userName; }
+    public String getUserName() { return this.userName; }
 
     public String getPassword() { return this.password; }
 
@@ -30,4 +32,6 @@ public class Account {
     public void setBalance(float balance) { this.balance = balance; }
 
     public void setAccountConfig(AccountConfig accountConfig) { this.accountConfig = accountConfig; }
+
+    public void setUserName(String userName) { this.userName = userName; }
 }

@@ -32,6 +32,7 @@ public class AppSettings {
         NOT_FOUND,
         NULL_ACCOUNT,
         ACCOUNT_MISMATCH_ERROR,
+        INVALID_EMAIL,
         // Goals Specific Flags
         NULL_GOAL_ERROR,
         INVALID_NAME,

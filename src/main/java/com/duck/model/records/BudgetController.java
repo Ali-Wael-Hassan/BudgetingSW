@@ -15,11 +15,19 @@ import com.duck.model.type.AppSettings.Message;
 import com.duck.model.type.AppSettings.TransactionType;
 
 public class BudgetController implements PropertyChangeListener {
-    private List<Budget> budgets;
+    private List<Budget> budgets = new ArrayList<>();
     private final PropertyChangeSupport support;
 
     public BudgetController() {
         support =  new PropertyChangeSupport(this);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 
     private Message validateBudget(Budget budget) {

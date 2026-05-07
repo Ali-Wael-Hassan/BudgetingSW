@@ -28,12 +28,20 @@ public class Session {
 
     public void saveToken(String token) {
         String oldToken = this.token;
-        try (PrintWriter out = new PrintWriter(new FileWriter(SESSION_FILE))) {
-            String encryptedToken = EncryptionUtil.encrypt(token);
-            out.println(encryptedToken);
-            this.token = token;
-
-            support.firePropertyChange("token", oldToken, token);
+        try {
+            if (token == null) {
+                this.token = null;
+                File f = new File(SESSION_FILE);
+                if (f.exists()) f.delete();
+                support.firePropertyChange("token", oldToken, null);
+                return;
+            }
+            try (PrintWriter out = new PrintWriter(new FileWriter(SESSION_FILE))) {
+                String encryptedToken = EncryptionUtil.encrypt(token);
+                out.println(encryptedToken);
+                this.token = token;
+                support.firePropertyChange("token", oldToken, token);
+            }
         } catch (Exception e) {
             System.err.println("Failed to encrypt and save token: " + e.getMessage());
         }

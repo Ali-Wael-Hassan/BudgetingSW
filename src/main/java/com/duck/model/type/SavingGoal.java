@@ -10,11 +10,14 @@ public class SavingGoal {
     private LocalDate deadline;
     private Account account;
 
+    public SavingGoal() {}
+
     public SavingGoal(String name, float targetAmount, float currentAmount, LocalDate deadline, Account account) {
         this.name = name;
         this.targetAmount = targetAmount;
         this.currentAmount = currentAmount;
         this.deadline = deadline;
+        this.account = account;
     }
 
     @Override

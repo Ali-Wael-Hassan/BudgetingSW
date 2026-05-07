@@ -8,7 +8,9 @@ public class Transaction {
     private LocalDate date;
     private float amount;
 
-    public Transaction(TransactionConfig config, LocalDate date, long amount) {
+    public Transaction() {}
+
+    public Transaction(TransactionConfig config, LocalDate date, float amount) {
         this.config = config;
         this.date = date;
         this.amount = amount;

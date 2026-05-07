@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.duck.ReportsController"
+           styleClass="dashboard-root">
+    <children>
+        <HBox spacing="0" styleClass="dashboard-container">
+            <children>
+                <!-- Sidebar -->
+                <VBox styleClass="sidebar" prefWidth="280">
+                    <children>
+                        <!-- Logo &amp; Profile Section -->
+                        <VBox spacing="12" styleClass="sidebar-top">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="14">
+                                    <children>
+                                        <StackPane styleClass="user-avatar">
+                                            <children>
+                                                <Circle radius="24" fill="#1F2937" />
+                                                <SVGPath styleClass="avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label text="BudgetWise" styleClass="app-name" />
+                                                <Label text="Financial Stewardship" styleClass="app-tagline" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Menu Items -->
+                        <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Button text="Dashboard"    styleClass="menu-button" />
+                                <Button text="Transactions" styleClass="menu-button" />
+                                <Button text="Budgets"      styleClass="menu-button" />
+                                <Button text="Saving Goals" styleClass="menu-button" />
+                                <Button text="Reports"      styleClass="menu-button-active" />
+                            </children>
+                        </VBox>
+
+                        <!-- Add Transaction Button -->
+                        <VBox styleClass="sidebar-bottom">
+                            <children>
+                                <Button text="+ Add Transaction"
+                                        styleClass="add-transaction-btn"
+                                        onAction="#handleAddTransaction" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Main Content Area -->
+                <VBox styleClass="main-content" HBox.hgrow="ALWAYS">
+                    <children>
+                        <!-- Top Header -->
+                        <HBox styleClass="top-header" alignment="CENTER_LEFT">
+                            <children>
+                                <!-- Search Bar -->
+                                <HBox styleClass="search-box" alignment="CENTER_LEFT">
+                                    <children>
+                                        <SVGPath styleClass="search-icon" content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                                        <TextField promptText="Search..." styleClass="search-input" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+                                <StackPane HBox.hgrow="ALWAYS" />
+
+                                <!-- Header Icons -->
+                                <HBox spacing="20" alignment="CENTER">
+                                    <children>
+                                        <StackPane styleClass="header-icon">
+                                            <children>
+                                                <SVGPath styleClass="notification-icon" content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+                                            </children>
+                                        </StackPane>
+                                        <Button text="Profile" styleClass="menu-button" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Content Area -->
+                        <ScrollPane styleClass="content-scroll" VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox spacing="24" styleClass="content-area">
+                                    <children>
+                                        <!-- Page Header -->
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <VBox spacing="4">
+                                                    <children>
+                                                        <Label text="Financial Reports" styleClass="reports-title" />
+                                                        <Label text="Comprehensive analysis of your fiscal activity." styleClass="reports-subtitle" />
+                                                    </children>
+                                                </VBox>
+                                                <StackPane HBox.hgrow="ALWAYS" />
+                                                <HBox spacing="12" alignment="CENTER">
+                                                    <children>
+                                                        <Button text="This Month" styleClass="date-filter-btn" />
+                                                        <Button text="Export"     styleClass="export-btn" onAction="#handleExport" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </HBox>
+
+                                        <!-- Cards Grid -->
+                                        <GridPane hgap="20" vgap="20">
+                                            <children>
+
+                                                <!-- CARD 1: Cash Flow (bar chart built by controller) -->
+                                                <VBox styleClass="report-card"
+                                                      GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                                    <children>
+                                                        <Label text="Cash Flow" styleClass="card-title" />
+                                                        <!-- bars injected here -->
+                                                        <HBox fx:id="cashFlowChart"
+                                                              spacing="16" alignment="BOTTOM_CENTER"
+                                                              styleClass="bar-chart" />
+                                                        <!-- Legend -->
+                                                        <HBox spacing="20" alignment="CENTER" styleClass="chart-legend">
+                                                            <children>
+                                                                <HBox spacing="6" alignment="CENTER">
+                                                                    <children>
+                                                                        <StackPane styleClass="legend-dot-income" />
+                                                                        <Label text="Income" styleClass="legend-label" />
+                                                                    </children>
+                                                                </HBox>
+                                                                <HBox spacing="6" alignment="CENTER">
+                                                                    <children>
+                                                                        <StackPane styleClass="legend-dot-expense" />
+                                                                        <Label text="Expense" styleClass="legend-label" />
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- CARD 2: Categories (donut legend built by controller) -->
+                                                <VBox styleClass="report-card"
+                                                      GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                                    <children>
+                                                        <Label text="Categories" styleClass="card-title" />
+                                                        <StackPane styleClass="donut-container" prefHeight="160">
+                                                            <children>
+                                                                <Circle radius="60" styleClass="donut-chart" />
+                                                                <VBox alignment="CENTER">
+                                                                    <children>
+                                                                        <Label fx:id="donutTotalLabel"  styleClass="donut-center-amount" />
+                                                                        <Label                           text="Total Spent" styleClass="donut-center-label" />
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                        </StackPane>
+                                                        <!-- legend rows injected here -->
+                                                        <VBox fx:id="donutLegend" spacing="8" styleClass="donut-legend" />
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- CARD 3: Largest Expenses (list built by controller) -->
+                                                <VBox styleClass="report-card"
+                                                      GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Label text="Largest Expenses" styleClass="card-title" />
+                                                                <StackPane HBox.hgrow="ALWAYS" />
+                                                                <Label text="View All" styleClass="view-all-link" />
+                                                            </children>
+                                                        </HBox>
+                                                        <!-- expense rows injected here -->
+                                                        <VBox fx:id="expenseList" spacing="12" styleClass="expense-list" />
+                                                    </children>
+                                                </VBox>
+
+                                                <!-- CARD 4: Savings Goals (list built by controller) -->
+                                                <VBox styleClass="report-card"
+                                                      GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Label text="Savings Goals" styleClass="card-title" />
+                                                                <StackPane HBox.hgrow="ALWAYS" />
+                                                                <!-- FIX: bullet char escaped as XML entity -->
+                                                                <Label text="&#x2022;&#x2022;&#x2022;" styleClass="menu-dots" />
+                                                            </children>
+                                                        </HBox>
+                                                        <!-- goal rows injected here -->
+                                                        <VBox fx:id="goalsList" spacing="16" styleClass="goals-list" />
+                                                    </children>
+                                                </VBox>
+
+                                            </children>
+                                        </GridPane>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</StackPane>

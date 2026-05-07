@@ -14,6 +14,8 @@ public class Budget {
     private float threshold;
     private Account account;
 
+    public Budget() {}
+
     public Budget(String category, float amount, Period period, float threshold) {
         this.category = category;
         this.amount = amount;
@@ -46,7 +48,7 @@ public class Budget {
         return threshold;
     }
 
-    public void gsetCategory(String category) {
+    public void setCategory(String category) {
         this.category = category;
     }
     
@@ -62,7 +64,7 @@ public class Budget {
         this.period = period;
     }
     
-    public void getThreshold(float threshold) {
+    public void setThreshold(float threshold) {
         this.threshold = threshold;
     }
 

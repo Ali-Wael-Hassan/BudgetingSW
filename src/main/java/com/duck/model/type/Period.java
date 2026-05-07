@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class Period {
-    private final LocalDate startDate;
-    private final LocalDate endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    public Period() {}
 
     public Period(LocalDate startDate, LocalDate endDate) {
         this.startDate = startDate;

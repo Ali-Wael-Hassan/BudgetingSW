@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.duck.BudgetController"
+           styleClass="dashboard-root">
+    <children>
+        <HBox spacing="0" styleClass="dashboard-container">
+            <children>
+                <!-- Sidebar -->
+                <VBox styleClass="sidebar" prefWidth="280">
+                    <children>
+                        <!-- Logo & Profile Section -->
+                        <VBox spacing="12" styleClass="sidebar-top">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="14">
+                                    <children>
+                                        <StackPane styleClass="user-avatar">
+                                            <children>
+                                                <Circle radius="24" fill="#1F2937" />
+                                                <SVGPath styleClass="avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label text="BudgetWise" styleClass="app-name" />
+                                                <Label text="Financial Stewardship" styleClass="app-tagline" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Menu Items -->
+                        <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Button text="Dashboard"    styleClass="menu-button" />
+                                <Button text="Transactions" styleClass="menu-button" />
+                                <Button text="Budgets"      styleClass="menu-button-active" />
+                                <Button text="Saving Goals" styleClass="menu-button" />
+                                <Button text="Reports"      styleClass="menu-button" />
+                            </children>
+                        </VBox>
+
+                        <!-- Add Budget Button -->
+                        <VBox styleClass="sidebar-bottom">
+                            <children>
+                                <Button text="+ Add Budget"
+                                        styleClass="add-transaction-btn"
+                                        onAction="#handleAddBudget" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Main Content Area -->
+                <VBox styleClass="main-content" HBox.hgrow="ALWAYS">
+                    <children>
+                        <!-- Top Header -->
+                        <HBox styleClass="top-header" alignment="CENTER_LEFT">
+                            <children>
+                                <!-- Search Bar -->
+                                <HBox styleClass="search-box" alignment="CENTER_LEFT">
+                                    <children>
+                                        <SVGPath styleClass="search-icon" content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                                        <TextField promptText="Search..." styleClass="search-input" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+                                <StackPane HBox.hgrow="ALWAYS" />
+
+                                <!-- Header Icons -->
+                                <HBox spacing="20" alignment="CENTER">
+                                    <children>
+                                        <StackPane styleClass="header-icon">
+                                            <children>
+                                                <SVGPath styleClass="notification-icon" content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+                                            </children>
+                                        </StackPane>
+                                        <Button text="Profile" styleClass="menu-button" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Content Area -->
+                        <ScrollPane fx:id="contentScroll" styleClass="content-scroll" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.171" >
+                            <content>
+                                <VBox spacing="24" styleClass="content-area">
+                                    <children>
+
+                                        <!-- Page Header -->
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="Budgets" styleClass="page-header-title" />
+                                                <StackPane HBox.hgrow="ALWAYS" />
+                                                <!-- Month Navigation -->
+                                                <HBox spacing="16" alignment="CENTER" styleClass="month-nav">
+                                                    <children>
+                                                        <Button text="◀" styleClass="month-nav-btn" onAction="#handlePrevMonth" />
+                                                        <Label fx:id="monthLabel" text="October 2024" styleClass="month-label" />
+                                                        <Button text="▶" styleClass="month-nav-btn" onAction="#handleNextMonth" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </HBox>
+
+                                        <!-- Overall Budget Summary Card -->
+                                        <VBox styleClass="summary-card">
+                                            <children>
+                                                <Label text="Total Monthly Budget" styleClass="summary-title" />
+                                                <Label fx:id="summaryTotalLabel" styleClass="summary-amount" />
+
+                                                <!-- Main Progress Bar -->
+                                                <StackPane styleClass="main-progress-container">
+                                                    <children>
+                                                        <StackPane styleClass="main-progress-bg">
+                                                            <children>
+                                                                <StackPane fx:id="mainProgressFill" styleClass="main-progress-fill" />
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </StackPane>
+
+                                                <!-- Spent and Remaining -->
+                                                <HBox spacing="40" alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <VBox>
+                                                            <children>
+                                                                <Label text="Spent" styleClass="summary-label" />
+                                                                <Label fx:id="summarySpentLabel" styleClass="summary-value" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox>
+                                                            <children>
+                                                                <Label text="Remaining" styleClass="summary-label" />
+                                                                <Label fx:id="summaryRemainingLabel" styleClass="summary-value-remaining" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Budget Categories Grid (dynamic - populated by Controller) -->
+                                        <VBox spacing="16">
+                                            <children>
+                                                <Label text="Categories" styleClass="section-title" />
+                                                <GridPane fx:id="categoriesGrid" hgap="16" vgap="16">
+                                                    <children>
+                                                        <!-- Cards are added here programmatically from BudgetController -->
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </VBox>
+
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</StackPane>

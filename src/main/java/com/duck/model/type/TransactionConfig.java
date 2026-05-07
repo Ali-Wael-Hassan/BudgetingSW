@@ -1,7 +1,7 @@
 package com.duck.model.type;
 
 import java.util.List;
-import com.duck.model.type.AppSettings.TransactionType;;
+import com.duck.model.type.AppSettings.TransactionType;
 
 public class TransactionConfig {
     private AppSettings.TransactionType type;
@@ -9,6 +9,8 @@ public class TransactionConfig {
     private List<String> category;
     private Range range;
     private Account account;
+
+    public TransactionConfig() {}
 
     public TransactionConfig(AppSettings.TransactionType type, Period period, List<String> category, Range range, Account account) {
         this.type = type;

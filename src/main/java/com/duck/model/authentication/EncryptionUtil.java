@@ -6,7 +6,7 @@ import java.util.Base64;
 
 public class EncryptionUtil {
     private static final String ALGORITHM = "AES";
-    private static final String SECRET_KEY = "DuckSecurityKey12"; 
+    private static final String SECRET_KEY = "DuckSecurityKey1"; 
 
     public static String encrypt(String data) throws Exception {
         SecretKeySpec spec = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);

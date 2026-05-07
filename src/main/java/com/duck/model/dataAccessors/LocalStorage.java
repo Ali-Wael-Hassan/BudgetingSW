@@ -3,7 +3,9 @@ package com.duck.model.dataAccessors;
 import com.duck.model.records.Budget;
 import com.duck.model.type.*;
 import com.duck.model.type.AppSettings.Message;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
@@ -14,6 +16,8 @@ import java.util.List;
 public class LocalStorage implements StorageStrategy {
     private static LocalStorage instance;
     private final String FILE_PATH = "local_storage.json";
+
+    @JsonIgnore
     private final ObjectMapper mapper;
 
     private List<Account> accounts = new ArrayList<>();
@@ -26,8 +30,11 @@ public class LocalStorage implements StorageStrategy {
     private LocalStorage() {
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
+        this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         
         loadFromFile();
+
+        System.out.println("Accounts Size: " + accounts.size());
 
         if (categories.isEmpty()) {
             categories.add("Food");
@@ -111,6 +118,7 @@ public class LocalStorage implements StorageStrategy {
             }
             return AppSettings.Message.ERROR;
         } catch (Exception e) {
+            e.printStackTrace();
             return AppSettings.Message.ERROR;
         }
     }

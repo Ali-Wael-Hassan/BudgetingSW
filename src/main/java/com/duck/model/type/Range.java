@@ -4,6 +4,8 @@ public class Range {
     private float minValue; 
     private float maxValue;
 
+    public Range() {}
+
     public Range(float minValue, float maxValue) {
         if (minValue <= maxValue) {
             this.minValue = minValue;

@@ -17,11 +17,19 @@ import com.duck.model.type.AppSettings.GoalEvent;
 import com.duck.model.type.AppSettings.Message;
 
 public class SavingGoalsController implements PropertyChangeListener {
-    private List<SavingGoal> goals;
+    private List<SavingGoal> goals = new ArrayList<>();
     private final PropertyChangeSupport support;
     
     public SavingGoalsController() {
         support =  new PropertyChangeSupport(this);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 
     private Message validateGoal(SavingGoal savingGoal) {
