@@ -94,7 +94,8 @@ public class BudgetController implements PropertyChangeListener {
             if(!LocalStorage.getInstance().getCategories().contains(budget.getCategory()))
                 LocalStorage.getInstance().insert(DataKey.CATEGORIES, budget.getCategory());
 
-            LocalStorage.getInstance().insert(DataKey.BUDGETS, budget);
+            LocalStorage.getInstance().save(DataKey.BUDGETS, new ArrayList<>(budgets));
+            support.firePropertyChange(BudgetEvent.BUDGET_UPDATED.getName(), null, budget);
             return Message.SUCCESS;
         }
         return check;

@@ -23,25 +23,25 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
         </padding>
 
-        <!-- Category row -->
+        <!-- Goal name row -->
         <HBox alignment="CENTER_LEFT">
-            <Label fx:id="categoryLabel" styleClass="card-category" text="CATEGORY" />
+            <Label fx:id="goalNameLabel" styleClass="card-category" />
             <Region HBox.hgrow="ALWAYS" />
             <Region styleClass="icon-category-placeholder"
                     minWidth="24" minHeight="24"
                     maxWidth="24" maxHeight="24" />
         </HBox>
 
-        <!-- Spent / limit amounts -->
+        <!-- Current / target amounts -->
         <HBox alignment="BASELINE_LEFT" spacing="5.0">
-            <Label fx:id="spentLabel" styleClass="card-amount-spent" />
-            <Label fx:id="limitLabel" styleClass="card-amount-limit" />
+            <Label fx:id="currentLabel" styleClass="card-amount-spent" />
+            <Label fx:id="targetLabel" styleClass="card-amount-limit" />
         </HBox>
 
         <!-- Progress section -->
         <VBox spacing="8.0">
             <HBox>
-                <Label fx:id="utilizedLabel"  styleClass="card-text-small"   text="0% Utilized" />
+                <Label fx:id="progressLabel"  styleClass="card-text-small"   text="0%" />
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="statusLabel"    styleClass="card-status-text"  text="On Track" />
             </HBox>
@@ -51,8 +51,8 @@
                          styleClass="custom-progress-bar" />
         </VBox>
 
-        <!-- Days remaining -->
-        <Label fx:id="daysRemainingLabel" styleClass="card-text-small" text="0 days remaining in cycle" />
+        <!-- Days to deadline -->
+        <Label fx:id="daysLabel" styleClass="card-text-small" text="0 days remaining" />
     </VBox>
 
     <!-- Left border colour indicator (coloured by Controller based on status) -->

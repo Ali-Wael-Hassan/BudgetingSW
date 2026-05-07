@@ -88,7 +88,7 @@ public class SavingGoalsController implements PropertyChangeListener {
         Message check = validateGoal(savingGoal);
         if (check == Message.SUCCESS) {
             goals.add(savingGoal);
-            LocalStorage.getInstance().insert(DataKey.GOALS, savingGoal);
+            LocalStorage.getInstance().save(DataKey.GOALS, new ArrayList<>(goals));
             return Message.SUCCESS;
         }
 

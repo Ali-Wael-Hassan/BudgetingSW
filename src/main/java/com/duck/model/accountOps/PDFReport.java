@@ -107,6 +107,13 @@ public class PDFReport implements ReportGenerator {
             }
         }
 
+        // 4. Filter by Account
+        if (config.getAccount() != null) {
+            if (!config.getAccount().equals(transaction.getAccount())) {
+                return false;
+            }
+        }
+
         return true; // Passed all active filters
     }
 

@@ -27,7 +27,7 @@
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="14">
                                     <children>
-                                        <StackPane styleClass="user-avatar">
+                                        <StackPane fx:id="sidebarAvatarContainer" styleClass="user-avatar">
                                             <children>
                                                 <Circle radius="24" fill="#1F2937" />
                                                 <SVGPath styleClass="avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -47,11 +47,11 @@
                         <!-- Menu Items -->
                         <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
                             <children>
-                                <Button text="Dashboard"    styleClass="menu-button" />
-                                <Button text="Transactions" styleClass="menu-button" />
+                                <Button text="Dashboard"    styleClass="menu-button" onAction="#navigateToDashboard" />
+                                <Button text="Transactions" styleClass="menu-button" onAction="#navigateToTransactions" />
                                 <Button text="Budgets"      styleClass="menu-button-active" />
-                                <Button text="Saving Goals" styleClass="menu-button" />
-                                <Button text="Reports"      styleClass="menu-button" />
+                                <Button text="Saving Goals" styleClass="menu-button" onAction="#navigateToGoals" />
+                                <Button text="Reports"      styleClass="menu-button" onAction="#navigateToReports" />
                             </children>
                         </VBox>
 
@@ -90,7 +90,7 @@
                                                 <SVGPath styleClass="notification-icon" content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
                                             </children>
                                         </StackPane>
-                                        <Button text="Profile" styleClass="menu-button" />
+                                        <Button text="Profile" styleClass="menu-button" onAction="#navigateToProfile" />
                                     </children>
                                 </HBox>
                             </children>

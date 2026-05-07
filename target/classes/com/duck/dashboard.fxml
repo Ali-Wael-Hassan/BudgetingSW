@@ -24,7 +24,7 @@
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="14">
                                     <children>
-                                        <StackPane styleClass="user-avatar">
+                                        <StackPane fx:id="sidebarAvatarContainer" styleClass="user-avatar">
                                             <children>
                                                 <Circle radius="24" fill="#1F2937" />
                                                 <SVGPath styleClass="avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -55,7 +55,7 @@
 
                         <VBox styleClass="sidebar-bottom">
                             <children>
-                                <Button text="+ Add Transaction" styleClass="add-transaction-btn" maxWidth="Infinity" onAction="#handleAddTransaction" />
+                                <Button text="+ New Category" styleClass="add-transaction-btn" maxWidth="Infinity" onAction="#handleAddCategory" />
                             </children>
                         </VBox>
                     </children>
@@ -108,8 +108,8 @@
                                                         </HBox>
                                                         <HBox spacing="12" styleClass="balance-buttons">
                                                             <children>
-                                                                <Button text="Transfer" styleClass="btn-transfer" />
-                                                                <Button text="Deposit" styleClass="btn-deposit" />
+                                                                <Button text="Transfer" styleClass="btn-transfer" onAction="#handleTransfer" />
+                                                                <Button text="Deposit" styleClass="btn-deposit" onAction="#handleDeposit" />
                                                             </children>
                                                         </HBox>
                                                     </children>
@@ -128,6 +128,9 @@
                                                                 <Label fx:id="spendingAmountLabel" styleClass="spending-amount" />
                                                                 <Label fx:id="spendingLimitLabel" styleClass="spending-limit" />
                                                             </children>
+                                                        </HBox>
+                                                        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="income-amount-section">
+                                                            <Label fx:id="incomeAmountLabel" styleClass="spending-income" />
                                                         </HBox>
                                                         <HBox spacing="8">
                                                             <children>

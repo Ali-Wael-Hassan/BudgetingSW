@@ -13,7 +13,8 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.SVGPath?>
 
-<StackPane xmlns="http://javafx.com/javafx/8.0.171"
+<StackPane fx:id="rootPane"
+           xmlns="http://javafx.com/javafx/8.0.171"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.duck.ProfileController"
            styleClass="dashboard-root">
@@ -28,7 +29,7 @@
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="14">
                                     <children>
-                                        <StackPane styleClass="user-avatar">
+                                        <StackPane fx:id="sidebarAvatarContainer" styleClass="user-avatar">
                                             <children>
                                                 <Circle radius="24" fill="#1F2937" />
                                                 <SVGPath styleClass="avatar-icon"
@@ -49,20 +50,20 @@
                         <!-- Menu Items -->
                         <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
                             <children>
-                                <Button text="Dashboard"    styleClass="menu-button" />
-                                <Button text="Transactions" styleClass="menu-button" />
-                                <Button text="Budgets"      styleClass="menu-button" />
-                                <Button text="Saving Goals" styleClass="menu-button" />
-                                <Button text="Reports"      styleClass="menu-button" />
+                                <Button text="Dashboard"    styleClass="menu-button" onAction="#navigateToDashboard" />
+                                <Button text="Transactions" styleClass="menu-button" onAction="#navigateToTransactions" />
+                                <Button text="Budgets"      styleClass="menu-button" onAction="#navigateToBudgets" />
+                                <Button text="Saving Goals" styleClass="menu-button" onAction="#navigateToGoals" />
+                                <Button text="Reports"      styleClass="menu-button" onAction="#navigateToReports" />
                             </children>
                         </VBox>
 
                         <!-- Add Transaction Button -->
                         <VBox styleClass="sidebar-bottom">
                             <children>
-                                <Button text="+ Add Transaction"
+                                <Button text="+ New Category"
                                         styleClass="add-transaction-btn"
-                                        onAction="#handleAddTransaction" />
+                                        onAction="#handleAddCategory" />
                             </children>
                         </VBox>
                     </children>
@@ -122,11 +123,11 @@
                                             <children>
                                                 <HBox spacing="24" alignment="CENTER_LEFT">
                                                     <children>
-                                                        <StackPane styleClass="profile-avatar-large">
+                                                        <StackPane fx:id="profileAvatarContainer" styleClass="profile-avatar-large">
                                                             <children>
                                                                 <Circle radius="50" fill="#1F2937" />
                                                                 <SVGPath styleClass="profile-avatar-icon"
-                                                                         content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                                                         content="M12 12c2.21 0 4-1.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                                             </children>
                                                         </StackPane>
                                                         <VBox spacing="8" HBox.hgrow="ALWAYS">
@@ -209,31 +210,9 @@
                                                     </children>
                                                 </VBox>
 
-                                                <!-- CARD 3: Notifications -->
+                                                <!-- CARD 3: Security -->
                                                 <VBox styleClass="settings-card"
                                                       GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                                    <children>
-                                                        <HBox alignment="CENTER_LEFT" spacing="12">
-                                                            <children>
-                                                                <StackPane styleClass="settings-icon">
-                                                                    <children>
-                                                                        <Circle radius="20" fill="#1F2937" />
-                                                                        <SVGPath styleClass="settings-icon-svg"
-                                                                                 content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
-                                                                    </children>
-                                                                </StackPane>
-                                                                <Label text="Notifications" styleClass="settings-card-title" />
-                                                            </children>
-                                                        </HBox>
-                                                        <Label text="Manage your notification preferences" styleClass="settings-card-desc" />
-                                                        <!-- notification toggle rows built by controller -->
-                                                        <VBox fx:id="notificationOptions" spacing="16" styleClass="notification-options" />
-                                                    </children>
-                                                </VBox>
-
-                                                <!-- CARD 4: Security -->
-                                                <VBox styleClass="settings-card"
-                                                      GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" spacing="12">
                                                             <children>

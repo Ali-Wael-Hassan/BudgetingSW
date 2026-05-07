@@ -29,4 +29,12 @@ public class Period {
     public LocalDate getEndDate() {
         return this.endDate;
     }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 }

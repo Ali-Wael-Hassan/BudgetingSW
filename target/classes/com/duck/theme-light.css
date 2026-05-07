@@ -1,0 +1,92 @@
+/* Light mode color overrides */
+.dashboard-root,
+.dashboard-container {
+    -fx-background-color: #F3F4F6;
+}
+
+.sidebar {
+    -fx-background-color: #FFFFFF;
+}
+
+.main-content {
+    -fx-background-color: #F9FAFB;
+}
+
+.search-box {
+    -fx-background-color: #E5E7EB;
+}
+
+.search-input {
+    -fx-text-fill: #111827;
+    -fx-prompt-text-fill: #9CA3AF;
+}
+
+.profile-card,
+.settings-card,
+.goal-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D1D5DB;
+}
+
+.profile-name,
+.settings-card-title,
+.page-title,
+.section-title,
+.card-value,
+.goal-title {
+    -fx-text-fill: #111827;
+}
+
+.profile-email,
+.settings-card-desc,
+.page-subtitle,
+.card-title,
+.goal-days-left,
+.profile-subtitle {
+    -fx-text-fill: #6B7280;
+}
+
+.menu-button {
+    -fx-text-fill: #6B7280;
+}
+
+.menu-button:hover {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #111827;
+}
+
+.theme-toggle,
+.currency-toggle {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #4B5563;
+}
+
+.theme-toggle:selected,
+.currency-toggle:selected {
+    -fx-background-color: #10B981;
+    -fx-text-fill: #FFFFFF;
+}
+
+.security-btn {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+}
+
+.notification-label {
+    -fx-text-fill: #111827;
+}
+
+.notification-desc,
+.security-desc {
+    -fx-text-fill: #6B7280;
+}
+
+.security-label,
+.danger-label {
+    -fx-text-fill: #111827;
+}
+
+.danger-zone {
+    -fx-border-color: #FCA5A5;
+    -fx-background-color: #FEF2F2;
+}

@@ -93,7 +93,7 @@ public class LocalStorage implements StorageStrategy {
             if (currentStorage instanceof List && data instanceof List) {
                 List targetList = (List) currentStorage;
                 targetList.clear();
-                targetList.addAll((List) data);
+                targetList.addAll(new ArrayList<>((List) data));
                 
                 saveToFile();
                 return AppSettings.Message.SUCCESS;

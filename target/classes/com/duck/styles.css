@@ -619,6 +619,12 @@
     -fx-text-fill: #6B7280;
 }
 
+.spending-income {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #22c55e;
+}
+
 .spending-info {
     -fx-font-size: 12px;
     -fx-text-fill: #6B7280;
@@ -1033,6 +1039,19 @@
 
 .export-btn:hover {
     -fx-background-color: #059669;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #D1D5DB;
+    -fx-font-size: 14px;
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.nav-btn:hover {
+    -fx-background-color: #374151;
 }
 
 .report-card {

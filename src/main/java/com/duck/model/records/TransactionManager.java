@@ -1,8 +1,8 @@
 package com.duck.model.records;
 
-import java.beans.PropertyChangeSupport;
-import java.lang.ProcessBuilder.Redirect.Type;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ import com.duck.model.type.AppSettings.Message;
 import com.duck.model.type.AppSettings.TransactionEvent;
 import com.duck.model.type.AppSettings.TransactionType;
 
-public class TransactionManager {
+public class TransactionManager implements PropertyChangeListener {
 
     private List<Transaction> transactions = new ArrayList<>();
     private final PropertyChangeSupport support;
@@ -59,7 +59,10 @@ public class TransactionManager {
         
         if (check == Message.SUCCESS) {
             transactions.add(transaction);
-            
+
+            if(!LocalStorage.getInstance().getCategories().contains(transaction.getCategory()))
+                LocalStorage.getInstance().insert(DataKey.CATEGORIES, transaction.getCategory());
+
             if (transaction.getType() == TransactionType.INCOME)
                 LocalStorage.getInstance().insert(DataKey.INCOME, transaction);
             else
@@ -79,17 +82,23 @@ public class TransactionManager {
         if (config == null) return transactions;
 
         for (Transaction t : transactions) {
-            // Check if transaction matches the account in config
-            boolean accountMatch = config.getAccount() == null || t.getAccount().equals(config.getAccount());
-            
-            // Check if transaction falls within date range
-            boolean dateMatch = true; 
-            if (config.getPeriod() != null) {
-                dateMatch = config.getPeriod().contains(t.getDate());
-            }
+            try {
+                boolean accountMatch = config.getAccount() == null || t.getAccount().equals(config.getAccount());
+                
+                boolean dateMatch = true; 
+                if (config.getPeriod() != null) {
+                    dateMatch = config.getPeriod().contains(t.getDate());
+                }
 
-            if (accountMatch && dateMatch) {
-                filteredTransactions.add(t);
+                boolean typeMatch = true;
+                if (config.getType() != null) {
+                    typeMatch = t.getType() == config.getType();
+                }
+
+                if (accountMatch && dateMatch && typeMatch) {
+                    filteredTransactions.add(t);
+                }
+            } catch (Exception ignored) {
             }
         }
 
@@ -98,5 +107,19 @@ public class TransactionManager {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("token".equals(evt.getPropertyName())) {
+            String newToken = (String) evt.getNewValue();
+            if (newToken != null) {
+                transactions.clear();
+                transactions.addAll(LocalStorage.getInstance().getIncome());
+                transactions.addAll(LocalStorage.getInstance().getExpenses());
+            } else if (transactions != null) {
+                transactions.clear();
+            }
+        }
     }
 }

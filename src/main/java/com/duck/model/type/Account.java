@@ -1,5 +1,7 @@
 package com.duck.model.type;
 
+import java.util.Objects;
+
 public class Account {
     private String email;
     private String userName;
@@ -27,6 +29,8 @@ public class Account {
 
     public AccountConfig getAccountConfig() { return this.accountConfig; }
 
+    public void setEmail(String email) { this.email = email; }
+
     public void setPassword(String password) { this.password = password; }
 
     public void setBalance(float balance) { this.balance = balance; }
@@ -34,4 +38,17 @@ public class Account {
     public void setAccountConfig(AccountConfig accountConfig) { this.accountConfig = accountConfig; }
 
     public void setUserName(String userName) { this.userName = userName; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account)) return false;
+        Account account = (Account) o;
+        return Objects.equals(email, account.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
 }

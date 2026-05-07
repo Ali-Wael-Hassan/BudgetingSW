@@ -6,8 +6,10 @@ import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.records.BudgetController;
 import com.duck.model.records.SavingGoalsController;
 import com.duck.model.records.TransactionManager;
+import com.duck.model.type.Account;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class ApplicationState {
 
@@ -43,6 +45,10 @@ public class ApplicationState {
         transactionManager.addPropertyChangeListener(goalsController);
     }
 
+    public void addTransactionListener(PropertyChangeListener listener) {
+        transactionManager.addPropertyChangeListener(listener);
+    }
+
     private void onBudgetEvent(java.beans.PropertyChangeEvent evt) {
     }
 
@@ -65,6 +71,7 @@ public class ApplicationState {
         budgetController.propertyChange(evt);
         goalsController.propertyChange(evt);
         accountManager.propertyChange(evt);
+        transactionManager.propertyChange(evt);
     }
 
     public LocalStorage getStorage() {
@@ -85,5 +92,19 @@ public class ApplicationState {
 
     public AccountManager getAccountManager() {
         return accountManager;
+    }
+
+    public Account getCurrentAccount() {
+        String token = Session.getInstance().getToken();
+        if (token == null) return null;
+        try {
+            String[] parts = token.split("_");
+            String email = parts.length >= 2 ? parts[1] : null;
+            if (email == null) return null;
+            for (Account acc : storage.getAccounts()) {
+                if (acc.getEmail().equalsIgnoreCase(email)) return acc;
+            }
+        } catch (Exception ignored) {}
+        return null;
     }
 }
