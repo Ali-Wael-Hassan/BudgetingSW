@@ -15,9 +15,10 @@ import com.duck.model.type.Transaction;
 import com.duck.model.type.AppSettings.DataKey;
 import com.duck.model.type.AppSettings.GoalEvent;
 import com.duck.model.type.AppSettings.Message;
+import com.duck.model.type.SavingGoal;
 
 public class SavingGoalsController implements PropertyChangeListener {
-    private List<SavingGoal> goals = new ArrayList<>();
+    private List<SavingGoal> goals = new ArrayList<SavingGoal>();
     private final PropertyChangeSupport support;
     
     public SavingGoalsController() {
@@ -118,13 +119,18 @@ public class SavingGoalsController implements PropertyChangeListener {
 
     public List<SavingGoal> getAllSavings(Account account) {
         List<SavingGoal> accountGoals = new ArrayList<>();
-    
+
         for (SavingGoal goal : goals) {
             if (goal.getAccount() != null && goal.getAccount().equals(account)) {
                 accountGoals.add(goal);
             }
         }
         return accountGoals;
+    }
+
+    public List<SavingGoal> getAllGoals() {
+        goals = LocalStorage.getInstance().getGoals();
+        return goals;
     }
 
     @Override

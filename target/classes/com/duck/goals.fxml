@@ -8,10 +8,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.DatePicker?>
 
 <BorderPane styleClass="main-background"
             stylesheets="@styles.css"
-            xmlns="http://javafx.com/javafx/17"
+            xmlns="http://javafx.com/javafx/13"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.duck.GoalsController">
     <top>
@@ -20,18 +21,34 @@
                 <Insets bottom="20.0" left="30.0" right="30.0" top="30.0" />
             </padding>
 
-            <HBox alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <Button styleClass="btn-filter" text="← Back" onAction="#handleBack" />
+
                 <VBox spacing="5.0">
-                    <!-- &amp; is the correct XML escape for & — already correct in original -->
-                    <Label styleClass="page-title"    text="Budgets &amp; Goals" />
+                    <Label styleClass="page-title" text="Goals" />
                     <Label styleClass="page-subtitle" text="Manage your financial thresholds and track saving targets." />
                 </VBox>
+
                 <Region HBox.hgrow="ALWAYS" />
+
                 <HBox spacing="15.0" alignment="CENTER_LEFT">
-                    <Button styleClass="btn-filter"  text="Filter"       onAction="#handleFilter" />
-                    <Button styleClass="btn-primary" text="+ New Budget" onAction="#handleNewBudget" />
+                    <Button styleClass="btn-filter" text="Filter" onAction="#handleFilter" />
+                    <Button styleClass="btn-primary" text="+ New Goal" onAction="#handleAddGoal" />
                 </HBox>
             </HBox>
+
+            <!-- Filter dropdown panel -->
+            <VBox fx:id="filterPanel" spacing="10.0" managed="false" visible="false"
+                style="-fx-background-color: #1e1e1e; -fx-background-radius: 8; -fx-padding: 15;">
+                <HBox spacing="15.0" alignment="CENTER_LEFT">
+                    <Label text="From:" styleClass="card-text-small" />
+                    <DatePicker fx:id="fromDatePicker" promptText="Start date" />
+                    <Label text="To:" styleClass="card-text-small" />
+                    <DatePicker fx:id="toDatePicker" promptText="End date" />
+                    <Button styleClass="btn-primary" text="Apply" onAction="#handleApplyFilter" />
+                    <Button styleClass="btn-filter" text="Clear" onAction="#handleClearFilter" />
+                </HBox>
+            </VBox>
 
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                 <padding>
@@ -40,7 +57,7 @@
                 <Region styleClass="icon-active-budgets"
                         minWidth="20" minHeight="20"
                         maxWidth="20" maxHeight="20" />
-                <Label styleClass="section-title" text="Active Budgets" />
+                <Label styleClass="section-title" text="Active Goals" />
             </HBox>
         </VBox>
     </top>
@@ -50,7 +67,6 @@
                     styleClass="transparent-scroll-pane"
                     BorderPane.alignment="CENTER">
             <content>
-                <!-- Cards injected here dynamically by GoalsController -->
                 <FlowPane fx:id="cardsContainer" hgap="20.0" vgap="20.0">
                     <padding>
                         <Insets bottom="30.0" left="30.0" right="30.0" top="10.0" />

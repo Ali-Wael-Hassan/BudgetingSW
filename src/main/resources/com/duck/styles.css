@@ -87,15 +87,17 @@
 
 /* Goal Card styling */
 .goal-card {
-    -fx-background-color: #1A1D1F;
-    -fx-background-radius: 8px;
+    -fx-background-color: #1A1D21;
+    -fx-background-radius: 12px;
+    -fx-padding: 15; /* Reduced from 20 to give text more room */
     -fx-border-color: #2D3135;
-    -fx-border-radius: 8px;
-    -fx-border-width: 1px;
-    -fx-pref-width: 350px;
+    -fx-border-width: 1;
+    -fx-border-radius: 12px;
+    
+    /* Change fixed width to min-width or a larger pref-width */
+    -fx-min-width: 220px; 
     -fx-pref-height: 200px;
-    /* subtle drop shadow */
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 5);
+    -fx-alignment: CENTER;
 }
 
 /* Card typography */

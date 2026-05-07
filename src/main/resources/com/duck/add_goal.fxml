@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15.0" style="-fx-background-color: white;" stylesheets="@styles.css" 
+      xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.duck.AddGoalController">
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+    <children>
+        <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create New Saving Goal" />
+        
+        <VBox spacing="5.0">
+            <Label text="Goal Name (Category)" />
+            <TextField fx:id="categoryField" promptText="e.g. New Car" />
+        </VBox>
+        
+        <VBox spacing="5.0">
+            <Label text="Target Amount ($)" />
+            <TextField fx:id="limitField" promptText="5000.00" />
+        </VBox>
+        
+        <VBox spacing="5.0">
+            <Label text="Deadline" />
+            <DatePicker fx:id="deadlinePicker" maxWidth="Infinity" />
+        </VBox>
+        
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <children>
+                <Button onAction="#handleCancel" styleClass="btn-filter" text="Cancel" />
+                <Button onAction="#handleSave" styleClass="btn-primary" text="Save Goal" />
+            </children>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+        </HBox>
+    </children>
+</VBox>

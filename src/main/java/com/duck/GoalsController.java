@@ -2,113 +2,114 @@ package com.duck;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.DatePicker;
 import javafx.scene.layout.FlowPane;
-
+import javafx.scene.layout.VBox;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import com.duck.model.records.SavingGoalsController;
+import com.duck.model.type.SavingGoal;
 
-public class GoalsController implements Initializable {
+public class GoalsController {
 
     @FXML private FlowPane cardsContainer;
+    @FXML private VBox filterPanel;
+    @FXML private DatePicker fromDatePicker;
+    @FXML private DatePicker toDatePicker;
 
-    // ── Goal data model ────────────────────────────────────────────
-    public static class Goal {
-        public String    category;       // e.g. "Food", "Housing"
-        public double    spent;
-        public double    limit;
-        public int       daysRemaining;
-        public LocalDate cycleEnd;
-
-        public Goal(String category, double spent, double limit, int daysRemaining) {
-            this.category      = category;
-            this.spent         = spent;
-            this.limit         = limit;
-            this.daysRemaining = daysRemaining;
-        }
-
-        public double percent()  { return limit > 0 ? spent / limit : 0; }
-        public boolean isOver()  { return spent >  limit; }
-        public boolean isWarn()  { return !isOver() && percent() >= 0.75; }
-
-        /** "On Track" | "Warning" | "Over Budget" */
-        public String statusText() {
-            if (isOver()) return "Over Budget";
-            if (isWarn()) return "Warning";
-            return "On Track";
-        }
-
-        /** CSS style class applied to the left border Region */
-        public String borderStyle() {
-            if (isOver()) return "status-border-red";
-            if (isWarn()) return "status-border-yellow";
-            return "status-border-green";
-        }
-    }
-
-    private final List<Goal> goals = new ArrayList<>();
-
-    // ── Lifecycle ──────────────────────────────────────────────────
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Seed data — matches the hard-coded cards in the original design
-        goals.add(new Goal("Food",           280,  400,  18));
-        goals.add(new Goal("Housing",        450,  600,  18));
-        goals.add(new Goal("Transportation", 180,  250,  18));
-        goals.add(new Goal("Utilities",      150,  200,  18));
-        goals.add(new Goal("Entertainment",  120,  150,  18));
-        goals.add(new Goal("Shopping",       200,  150,  18));  // over budget
-
-        renderCards();
-    }
-
-    // ── FXML handlers ──────────────────────────────────────────────
+    private final SavingGoalsController savingGoalsController = new SavingGoalsController();
 
     @FXML
-    private void handleNewBudget() {
-        // TODO: open a dialog to collect category / limit, then add to list
-        // Demo: add a placeholder card
-        goals.add(new Goal("New Category", 0, 100, 30));
-        renderCards();
+    public void initialize() {
+        refreshGoals();
     }
 
     @FXML
     private void handleFilter() {
-        // TODO: implement filter dialog / toggle
-        System.out.println("Filter clicked");
+        boolean isVisible = filterPanel.isVisible();
+        filterPanel.setVisible(!isVisible);
+        filterPanel.setManaged(!isVisible);
     }
 
-    // ── Rendering ──────────────────────────────────────────────────
+    @FXML
+    private void handleApplyFilter() {
+        LocalDate from = fromDatePicker.getValue();
+        LocalDate to = toDatePicker.getValue();
 
-    private void renderCards() {
+        List<SavingGoal> goals = savingGoalsController.getAllGoals();
+
+        List<SavingGoal> filtered = goals.stream()
+            .filter(goal -> {
+                LocalDate deadline = goal.getDeadline();
+                if (deadline == null) return false;
+                if (from != null && deadline.isBefore(from)) return false;
+                if (to != null && deadline.isAfter(to)) return false;
+                return true;
+            })
+            .collect(Collectors.toList());
+
+        renderGoals(filtered);
+    }
+
+    @FXML
+    private void handleClearFilter() {
+        fromDatePicker.setValue(null);
+        toDatePicker.setValue(null);
+        refreshGoals();
+        // Optionally close the panel after clearing
+        filterPanel.setVisible(false);
+        filterPanel.setManaged(false);
+    }
+
+    @FXML
+    private void handleAddGoal() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add_goal.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Add New Saving Goal");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(loader.load()));
+            stage.showAndWait();
+            refreshGoals();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("dashboard.fxml")); // ← your actual dashboard fxml
+            Stage stage = (Stage) cardsContainer.getScene().getWindow();
+            stage.setScene(new Scene(loader.load()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void refreshGoals() {
+        List<SavingGoal> goals = savingGoalsController.getAllGoals();
+        renderGoals(goals);
+    }
+
+    private void renderGoals(List<SavingGoal> goals) {
         cardsContainer.getChildren().clear();
-
-        for (Goal goal : goals) {
+        for (SavingGoal goal : goals) {
             try {
-                URL fxmlUrl = getClass().getResource("/com/duck/goal_card.fxml");
-                if (fxmlUrl == null) {
-                    throw new IllegalStateException("goal_card.fxml resource not found: /com/duck/goal_card.fxml");
-                }
-
-                FXMLLoader loader = new FXMLLoader(fxmlUrl);
-                Node card = loader.load();
-
-
-                // Pass data to the card's own controller
-                GoalCardController cardCtrl = loader.getController();
-                cardCtrl.setGoal(goal);
-
-                cardsContainer.getChildren().add(card);
-
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("goal_card.fxml"));
+                Node goalNode = loader.load();
+                GoalCardController controller = loader.getController();
+                controller.setGoal(goal);
+                cardsContainer.getChildren().add(goalNode);
             } catch (IOException e) {
-                throw new RuntimeException("Failed to load goal card FXML", e);
+                e.printStackTrace();
             }
-
         }
     }
 }
