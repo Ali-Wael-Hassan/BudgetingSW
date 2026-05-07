@@ -35,10 +35,28 @@ import java.util.List;
 import java.util.Optional;
 
 import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
 
 public class DialogHelper {
 
     private static final String CSS = DialogHelper.class.getResource("styles.css").toExternalForm();
+    private static String lightCss;
+
+    private static String getLightCss() {
+        if (lightCss == null) {
+            java.net.URL url = DialogHelper.class.getResource("theme-light.css");
+            if (url != null) lightCss = url.toExternalForm();
+        }
+        return lightCss;
+    }
+
+    public static void addThemeStylesheets(Dialog<?> dialog) {
+        dialog.getDialogPane().getStylesheets().add(CSS);
+        String lc = getLightCss();
+        if (lc != null) {
+            dialog.getDialogPane().getStylesheets().add(lc);
+        }
+    }
 
     public static Transaction showTransactionDialog(Account account) {
         return showTransactionDialog(account, null);
@@ -81,13 +99,10 @@ public class DialogHelper {
         datePicker.getStyleClass().add("text-input");
         datePicker.setMaxWidth(Double.MAX_VALUE);
 
-        DatePicker periodStartPicker = new DatePicker(LocalDate.now().withDayOfMonth(1));
-        periodStartPicker.getStyleClass().add("text-input");
-        periodStartPicker.setMaxWidth(Double.MAX_VALUE);
-
-        DatePicker periodEndPicker = new DatePicker(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()));
-        periodEndPicker.getStyleClass().add("text-input");
-        periodEndPicker.setMaxWidth(Double.MAX_VALUE);
+        Label errorLabel = new Label();
+        errorLabel.getStyleClass().add("error-message");
+        errorLabel.setManaged(false);
+        errorLabel.setVisible(false);
 
         VBox form = new VBox(16);
         form.setPadding(new Insets(20));
@@ -98,8 +113,7 @@ public class DialogHelper {
                 styledField("Category", categoryCombo),
                 styledField("Amount ($)", amountField),
                 styledField("Date", datePicker),
-                styledField("Period Start", periodStartPicker),
-                styledField("Period End", periodEndPicker)
+                errorLabel
         );
 
         dialog.getDialogPane().setContent(form);
@@ -107,27 +121,46 @@ public class DialogHelper {
 
         ButtonType createBtn = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createBtn, ButtonType.CANCEL);
+        dialog.getDialogPane().applyCss();
+        dialog.getDialogPane().layout();
+        styleDialogButtons(dialog);
 
-        dialog.setResultConverter(btn -> {
-            if (btn != createBtn) return null;
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(createBtn);
+        okButton.addEventFilter(ActionEvent.ACTION, event -> {
+            errorLabel.setVisible(false);
+            errorLabel.setManaged(false);
             try {
-                float amount = Float.parseFloat(amountField.getText().trim());
-                if (amount <= 0) return null;
-                TransactionType type = incomeBtn.isSelected() ? TransactionType.INCOME : TransactionType.EXPENSE;
                 String category = categoryCombo.getValue();
                 LocalDate date = datePicker.getValue();
-                LocalDate pStart = periodStartPicker.getValue();
-                LocalDate pEnd = periodEndPicker.getValue();
-                if (category == null || date == null || pStart == null || pEnd == null) return null;
+                if (category == null || category.trim().isEmpty()) {
+                    showError(errorLabel, "Please select a category.");
+                    event.consume(); return;
+                }
+                if (date == null) {
+                    showError(errorLabel, "Please select a date.");
+                    event.consume(); return;
+                }
+                if (date.isAfter(LocalDate.now())) {
+                    showError(errorLabel, "Date cannot be in the future.");
+                    event.consume(); return;
+                }
+                float amount = Float.parseFloat(amountField.getText().trim());
+                if (amount <= 0) {
+                    showError(errorLabel, "Amount must be greater than zero.");
+                    event.consume(); return;
+                }
+                TransactionType type = incomeBtn.isSelected() ? TransactionType.INCOME : TransactionType.EXPENSE;
                 if (!categories.contains(category))
                     LocalStorage.getInstance().insert(DataKey.CATEGORIES, category);
-                Period period = new Period(pStart, pEnd);
+                Period period = new Period(date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
                 TransactionConfig config = new TransactionConfig(type, period, List.of(category), null, account);
-                return new Transaction(config, date, amount);
+                dialog.setResult(new Transaction(config, date, amount));
             } catch (NumberFormatException e) {
-                return null;
+                showError(errorLabel, "Amount must be a valid number.");
+                event.consume();
             }
         });
+        dialog.setResultConverter(btn -> btn == createBtn ? dialog.getResult() : null);
 
         Optional<Transaction> result = dialog.showAndWait();
         return result.orElse(null);
@@ -166,6 +199,11 @@ public class DialogHelper {
         thresholdField.setPromptText("e.g. 0.75 = 75%");
         thresholdField.getStyleClass().add("text-input");
 
+        Label errorLabel = new Label();
+        errorLabel.getStyleClass().add("error-message");
+        errorLabel.setManaged(false);
+        errorLabel.setVisible(false);
+
         VBox form = new VBox(16);
         form.setPadding(new Insets(20));
         form.getStyleClass().add("auth-card");
@@ -175,7 +213,8 @@ public class DialogHelper {
                 styledField("Budget Limit ($)", amountField),
                 styledField("Start Date", startPicker),
                 styledField("End Date", endPicker),
-                styledField("Alert Threshold", thresholdField)
+                styledField("Alert Threshold", thresholdField),
+                errorLabel
         );
 
         dialog.getDialogPane().setContent(form);
@@ -183,28 +222,59 @@ public class DialogHelper {
 
         ButtonType createBtn = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createBtn, ButtonType.CANCEL);
+        dialog.getDialogPane().applyCss();
+        dialog.getDialogPane().layout();
+        styleDialogButtons(dialog);
 
-        dialog.setResultConverter(btn -> {
-            if (btn != createBtn) return null;
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(createBtn);
+        okButton.addEventFilter(ActionEvent.ACTION, event -> {
+            errorLabel.setVisible(false);
+            errorLabel.setManaged(false);
             try {
-                float amount = Float.parseFloat(amountField.getText().trim());
-                if (amount <= 0) return null;
-                float threshold = Float.parseFloat(thresholdField.getText().trim());
-                if (threshold <= 0) threshold = 0.75f;
                 String category = categoryCombo.getValue();
                 LocalDate start = startPicker.getValue();
                 LocalDate end = endPicker.getValue();
-                if (category == null || start == null || end == null) return null;
+                if (category == null || category.trim().isEmpty()) {
+                    showError(errorLabel, "Please select or enter a category.");
+                    event.consume(); return;
+                }
+                if (start == null) {
+                    showError(errorLabel, "Please select a start date.");
+                    event.consume(); return;
+                }
+                if (end == null) {
+                    showError(errorLabel, "Please select an end date.");
+                    event.consume(); return;
+                }
+                if (end.isBefore(start)) {
+                    showError(errorLabel, "Start date must be before end date.");
+                    event.consume(); return;
+                }
+                float amount = Float.parseFloat(amountField.getText().trim());
+                if (amount <= 0) {
+                    showError(errorLabel, "Budget amount must be greater than zero.");
+                    event.consume(); return;
+                }
+                float threshold;
+                try {
+                    threshold = Float.parseFloat(thresholdField.getText().trim());
+                    if (threshold <= 0) threshold = 0.75f;
+                } catch (NumberFormatException e) {
+                    showError(errorLabel, "Alert threshold must be a valid number.");
+                    event.consume(); return;
+                }
                 if (!categories.contains(category))
                     LocalStorage.getInstance().insert(DataKey.CATEGORIES, category);
                 Period period = new Period(start, end);
                 Budget budget = new Budget(category, amount, period, threshold);
                 budget.setAccount(account);
-                return budget;
+                dialog.setResult(budget);
             } catch (NumberFormatException e) {
-                return null;
+                showError(errorLabel, "Budget amount must be a valid number.");
+                event.consume();
             }
         });
+        dialog.setResultConverter(btn -> btn == createBtn ? dialog.getResult() : null);
 
         Optional<Budget> result = dialog.showAndWait();
         return result.orElse(null);
@@ -233,6 +303,11 @@ public class DialogHelper {
         deadlinePicker.getStyleClass().add("text-input");
         deadlinePicker.setMaxWidth(Double.MAX_VALUE);
 
+        Label errorLabel = new Label();
+        errorLabel.getStyleClass().add("error-message");
+        errorLabel.setManaged(false);
+        errorLabel.setVisible(false);
+
         VBox form = new VBox(16);
         form.setPadding(new Insets(20));
         form.getStyleClass().add("auth-card");
@@ -241,7 +316,8 @@ public class DialogHelper {
                 styledField("Goal Name", nameField),
                 styledField("Target Amount ($)", targetField),
                 styledField("Current Amount ($)", currentField),
-                styledField("Deadline", deadlinePicker)
+                styledField("Deadline", deadlinePicker),
+                errorLabel
         );
 
         dialog.getDialogPane().setContent(form);
@@ -249,23 +325,50 @@ public class DialogHelper {
 
         ButtonType createBtn = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createBtn, ButtonType.CANCEL);
+        dialog.getDialogPane().applyCss();
+        dialog.getDialogPane().layout();
+        styleDialogButtons(dialog);
 
-        dialog.setResultConverter(btn -> {
-            if (btn != createBtn) return null;
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(createBtn);
+        okButton.addEventFilter(ActionEvent.ACTION, event -> {
+            errorLabel.setVisible(false);
+            errorLabel.setManaged(false);
             try {
                 String name = nameField.getText().trim();
-                if (name.isEmpty()) return null;
+                if (name.isEmpty()) {
+                    showError(errorLabel, "Please enter a goal name.");
+                    event.consume(); return;
+                }
                 float target = Float.parseFloat(targetField.getText().trim());
-                if (target <= 0) return null;
+                if (target <= 0) {
+                    showError(errorLabel, "Target amount must be greater than zero.");
+                    event.consume(); return;
+                }
                 float current = Float.parseFloat(currentField.getText().trim());
-                if (current < 0) return null;
+                if (current < 0) {
+                    showError(errorLabel, "Current amount cannot be negative.");
+                    event.consume(); return;
+                }
+                if (current > target) {
+                    showError(errorLabel, "Current amount cannot exceed the target amount.");
+                    event.consume(); return;
+                }
                 LocalDate deadline = deadlinePicker.getValue();
-                if (deadline == null || deadline.isBefore(LocalDate.now())) return null;
-                return new SavingGoal(name, target, current, deadline, account);
+                if (deadline == null) {
+                    showError(errorLabel, "Please select a deadline.");
+                    event.consume(); return;
+                }
+                if (deadline.isBefore(LocalDate.now())) {
+                    showError(errorLabel, "Deadline must be in the future.");
+                    event.consume(); return;
+                }
+                dialog.setResult(new SavingGoal(name, target, current, deadline, account));
             } catch (NumberFormatException e) {
-                return null;
+                showError(errorLabel, "Please enter valid numbers for amounts.");
+                event.consume();
             }
         });
+        dialog.setResultConverter(btn -> btn == createBtn ? dialog.getResult() : null);
 
         Optional<SavingGoal> result = dialog.showAndWait();
         return result.orElse(null);
@@ -288,13 +391,19 @@ public class DialogHelper {
         confirmField.setPromptText("Confirm new password");
         confirmField.getStyleClass().add("text-input");
 
+        Label errorLabel = new Label();
+        errorLabel.getStyleClass().add("error-message");
+        errorLabel.setManaged(false);
+        errorLabel.setVisible(false);
+
         VBox form = new VBox(16);
         form.setPadding(new Insets(20));
         form.getStyleClass().add("auth-card");
         form.getChildren().addAll(
                 styledField("Current Password", oldField),
                 styledField("New Password", newField),
-                styledField("Confirm New Password", confirmField)
+                styledField("Confirm New Password", confirmField),
+                errorLabel
         );
 
         dialog.getDialogPane().setContent(form);
@@ -302,16 +411,32 @@ public class DialogHelper {
 
         ButtonType changeBtn = new ButtonType("Change", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(changeBtn, ButtonType.CANCEL);
+        dialog.getDialogPane().applyCss();
+        dialog.getDialogPane().layout();
+        styleDialogButtons(dialog);
 
-        dialog.setResultConverter(btn -> {
-            if (btn != changeBtn) return null;
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(changeBtn);
+        okButton.addEventFilter(ActionEvent.ACTION, event -> {
+            errorLabel.setVisible(false);
+            errorLabel.setManaged(false);
             String oldPwd = oldField.getText();
             String newPwd = newField.getText();
             String confirm = confirmField.getText();
-            if (oldPwd.isEmpty() || newPwd.isEmpty() || confirm.isEmpty()) return null;
-            if (!newPwd.equals(confirm)) return null;
-            return new String[]{oldPwd, newPwd};
+            if (oldPwd.isEmpty() || newPwd.isEmpty() || confirm.isEmpty()) {
+                showError(errorLabel, "All fields are required.");
+                event.consume(); return;
+            }
+            if (!newPwd.equals(confirm)) {
+                showError(errorLabel, "New passwords do not match.");
+                event.consume(); return;
+            }
+            if (newPwd.length() < 6) {
+                showError(errorLabel, "Password must be at least 6 characters.");
+                event.consume(); return;
+            }
+            dialog.setResult(new String[]{oldPwd, newPwd});
         });
+        dialog.setResultConverter(btn -> btn == changeBtn ? dialog.getResult() : null);
 
         java.util.Optional<String[]> result = dialog.showAndWait();
         return result.orElse(null);
@@ -386,17 +511,23 @@ public class DialogHelper {
 
         ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+        dialog.getDialogPane().applyCss();
+        dialog.getDialogPane().layout();
+        styleDialogButtons(dialog);
 
-        dialog.setResultConverter(btn -> {
-            if (btn != saveBtn) return null;
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(saveBtn);
+        okButton.addEventFilter(ActionEvent.ACTION, event -> {
             String name = nameField.getText().trim();
-            if (name.isEmpty()) return null;
+            if (name.isEmpty()) {
+                event.consume(); return;
+            }
             if (account.getAccountConfig() == null) {
                 account.setAccountConfig(new com.duck.model.type.AccountConfig());
             }
             account.setUserName(name);
-            return account;
+            dialog.setResult(account);
         });
+        dialog.setResultConverter(btn -> btn == saveBtn ? dialog.getResult() : null);
 
         java.util.Optional<Account> result = dialog.showAndWait();
         return result.orElse(null);
@@ -404,8 +535,8 @@ public class DialogHelper {
 
     private static StackPane createDefaultAvatarSvg() {
         StackPane sp = new StackPane();
+        sp.getStyleClass().add("default-avatar");
         Circle circle = new Circle(40);
-        circle.setFill(javafx.scene.paint.Color.web("#1F2937"));
         javafx.scene.shape.SVGPath svg = new javafx.scene.shape.SVGPath();
         svg.setContent("M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z");
         svg.setFill(javafx.scene.paint.Color.web("#6B7280"));
@@ -432,18 +563,40 @@ public class DialogHelper {
 
         ButtonType createBtn = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(createBtn, ButtonType.CANCEL);
+        dialog.getDialogPane().applyCss();
+        dialog.getDialogPane().layout();
+        styleDialogButtons(dialog);
 
-        dialog.setResultConverter(btn -> {
-            if (btn != createBtn) return null;
+        Button okButton = (Button) dialog.getDialogPane().lookupButton(createBtn);
+        okButton.addEventFilter(ActionEvent.ACTION, event -> {
             String name = nameField.getText().trim();
-            return name.isEmpty() ? null : name;
+            if (name.isEmpty()) {
+                event.consume(); return;
+            }
+            dialog.setResult(name);
         });
+        dialog.setResultConverter(btn -> btn == createBtn ? dialog.getResult() : null);
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             if (!LocalStorage.getInstance().getCategories().contains(name))
                 LocalStorage.getInstance().insert(DataKey.CATEGORIES, name);
         });
+    }
+
+    public static void styleDialogButtons(Dialog<?> dialog) {
+        dialog.getDialogPane().getButtonTypes().forEach(btnType -> {
+            Button btn = (Button) dialog.getDialogPane().lookupButton(btnType);
+            if (btn != null) {
+                btn.getStyleClass().add("dialog-button");
+            }
+        });
+    }
+
+    private static void showError(Label errorLabel, String message) {
+        errorLabel.setText(message);
+        errorLabel.setManaged(true);
+        errorLabel.setVisible(true);
     }
 
     private static VBox styledField(String labelText, javafx.scene.Node input) {

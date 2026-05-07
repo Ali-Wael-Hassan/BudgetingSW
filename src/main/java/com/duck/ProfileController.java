@@ -52,7 +52,7 @@ public class ProfileController implements Initializable, PropertyChangeListener 
     private static final String[][] CURRENCIES = {
         {"$ USD", "USD"},
         {"\u20AC EUR", "EUR"},
-        {"\u062C.\u0645 EGP", "EGP"},
+        {"EGP", "EGP"},
     };
 
     @Override
@@ -120,6 +120,9 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         confirm.setContentText("This will delete all your transactions, budgets, goals, and account data. This cannot be undone.");
         confirm.getDialogPane().getStylesheets().add(
                 getClass().getResource("styles.css").toExternalForm());
+        confirm.getDialogPane().applyCss();
+        DialogHelper.styleDialogButtons(confirm);
+        confirm.getDialogPane().lookupButton(ButtonType.OK);
         if (confirm.showAndWait().orElse(null) == ButtonType.OK) {
             AppSettings.Message msg = accountManager.deleteAccount(currentAccount);
             if (msg == AppSettings.Message.SUCCESS) {
@@ -157,6 +160,9 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         confirm.setContentText("You will need to log in again to access your data.");
         confirm.getDialogPane().getStylesheets().add(
                 getClass().getResource("styles.css").toExternalForm());
+        confirm.getDialogPane().applyCss();
+        DialogHelper.styleDialogButtons(confirm);
+        confirm.getDialogPane().lookupButton(ButtonType.OK);
         if (confirm.showAndWait().orElse(null) == ButtonType.OK) {
             state.clearSession();
             App.showLogin();

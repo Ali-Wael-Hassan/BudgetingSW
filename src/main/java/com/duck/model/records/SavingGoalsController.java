@@ -176,7 +176,7 @@ public class SavingGoalsController implements PropertyChangeListener {
             float newAmount = activeGoal.getCurrentAmount() + amount;
             activeGoal.setCurrentAmount(newAmount);
 
-            LocalStorage.getInstance().save(DataKey.GOALS, goals);
+            LocalStorage.getInstance().save(DataKey.GOALS, new ArrayList<>(goals));
 
             System.out.println("Added " + amount + " to goal: " + activeGoal.getName() + ". New balance: " + newAmount);
             

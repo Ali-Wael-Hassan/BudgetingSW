@@ -1,41 +1,42 @@
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\App.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\BudgetController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\DashboardController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\GoalCardController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\GoalsController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\LoginController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\accountOps\AccountManager.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\accountOps\PDFReport.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\accountOps\ReportGenerator.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\AppAuth.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\Auth.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\EncryptionUtil.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\Login.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\Recognition.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\Session.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\authentication\SignUp.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\dataAccessors\LocalStorage.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\dataAccessors\StorageStrategy.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\records\Budget.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\records\BudgetController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\records\IObserver.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\records\SavingGoalsController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\records\TransactionManager.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\Account.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\AccountConfig.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\AppSettings.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\Email.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\Period.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\Range.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\ReportConfig.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\SavingGoal.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\Transaction.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\TransactionConfig.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\model\type\UserName.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\PrimaryController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\ProfileController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\ReportsController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\SecondaryController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\SignUpController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\com\duck\TransactionsController.java
-D:\College\level 2 second term\SoftWare\A2\BudgetingSW\src\main\java\module-info.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\LoginController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\authentication\AppAuth.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\ProfileController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\authentication\SignUp.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\TransactionsController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\GoalsController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\DialogHelper.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\Range.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\GoalCardController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\accountOps\ReportGenerator.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\records\BudgetController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\dataAccessors\StorageStrategy.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\CurrencyUtil.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\accountOps\AccountManager.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\module-info.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\records\SavingGoalsController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\TransactionConfig.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\ReportConfig.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\authentication\Session.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\ReportsController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\authentication\EncryptionUtil.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\authentication\Recognition.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\records\Budget.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\SecondaryController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\SignUpController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\ApplicationState.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\dataAccessors\LocalStorage.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\Account.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\Transaction.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\authentication\Login.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\PrimaryController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\AccountConfig.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\AppSettings.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\AvatarHelper.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\Period.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\App.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\records\TransactionManager.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\type\SavingGoal.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\accountOps\PDFReport.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\model\authentication\Auth.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\BudgetController.java
+D:\Development\GitHub_Repos\BudgetingSW - Copy\src\main\java\com\duck\DashboardController.java

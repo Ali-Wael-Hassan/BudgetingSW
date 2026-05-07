@@ -45,7 +45,17 @@ public class GoalsController implements Initializable, PropertyChangeListener {
         currentAccount = state.getCurrentAccount();
         if (currentAccount == null) return;
         AvatarHelper.setSidebarAvatar(sidebarAvatarContainer, currentAccount);
+        applyTheme();
         renderCards();
+    }
+
+    private void applyTheme() {
+        if (currentAccount == null) return;
+        com.duck.model.type.AppSettings.Mode mode = com.duck.model.type.AppSettings.Mode.DARK;
+        if (currentAccount.getAccountConfig() != null && currentAccount.getAccountConfig().getMode() != null) {
+            mode = currentAccount.getAccountConfig().getMode();
+        }
+        App.setTheme(mode);
     }
 
     private void renderCards() {

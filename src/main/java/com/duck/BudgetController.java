@@ -3,13 +3,17 @@ package com.duck;
 import com.duck.model.authentication.Session;
 import com.duck.model.type.Account;
 
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 
@@ -78,8 +82,18 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         currentAccount = state.getCurrentAccount();
         AvatarHelper.setSidebarAvatar(sidebarAvatarContainer, currentAccount);
         monthLabel.setText(currentMonth.format(MONTH_FMT));
+        applyTheme();
         loadBudgets();
         render();
+    }
+
+    private void applyTheme() {
+        if (currentAccount == null) return;
+        com.duck.model.type.AppSettings.Mode mode = com.duck.model.type.AppSettings.Mode.DARK;
+        if (currentAccount.getAccountConfig() != null && currentAccount.getAccountConfig().getMode() != null) {
+            mode = currentAccount.getAccountConfig().getMode();
+        }
+        App.setTheme(mode);
     }
 
     @Override
@@ -99,6 +113,25 @@ public class BudgetController implements Initializable, PropertyChangeListener {
             if (result == com.duck.model.type.AppSettings.Message.SUCCESS) {
                 loadBudgets();
                 render();
+            } else {
+                String error;
+                switch (result) {
+                    case INVALID_BUDGET_AMOUNT: error = "Budget amount must be greater than zero."; break;
+                    case MULTIPLE_ACTIVE_BUDGETS_ERROR: error = "A budget for this category already exists in this period."; break;
+                    case INVALID_PERIOD: error = "Start date must be before end date."; break;
+                    case INVALID_THRESHOLD: error = "Alert threshold must be greater than zero."; break;
+                    case NEGATIVE_USED_AMOUNT: error = "Used amount cannot be negative."; break;
+                    default: error = "Failed to create budget. Please try again.";
+                }
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Validation Error");
+                alert.setHeaderText(null);
+                alert.setContentText(error);
+                alert.getDialogPane().getStylesheets().add(
+                        getClass().getResource("styles.css").toExternalForm());
+                alert.getDialogPane().applyCss();
+                alert.getDialogPane().lookupButton(ButtonType.OK);
+                alert.showAndWait();
             }
         }
     }
@@ -190,13 +223,26 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         summarySpentLabel.setText(String.format("$%.2f", totalSpent));
         summaryRemainingLabel.setText(String.format("$%.2f", remaining));
 
-        // Clamp progress bar width between 0% and 100%
         double pct = totalLimit > 0 ? Math.min(totalSpent / totalLimit, 1.0) : 0;
-        mainProgressFill.setMaxWidth(pct * 600);   // 600 px ≈ full bar width; CSS can override
+        mainProgressFill.maxWidthProperty().bind(Bindings.createDoubleBinding(() -> {
+            Parent p = mainProgressFill.getParent();
+            if (p instanceof Region) {
+                return ((Region) p).getWidth() * pct;
+            }
+            return 0.0;
+        }, mainProgressFill.parentProperty()));
     }
 
     private void renderGrid() {
         categoriesGrid.getChildren().clear();
+        categoriesGrid.getColumnConstraints().clear();
+
+        for (int col = 0; col < COLUMNS; col++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setPercentWidth(100.0 / COLUMNS);
+            cc.setHgrow(Priority.ALWAYS);
+            categoriesGrid.getColumnConstraints().add(cc);
+        }
 
         for (int i = 0; i < categories.size(); i++) {
             VBox card = buildCard(categories.get(i));
@@ -219,7 +265,6 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         StackPane iconPane = new StackPane();
         iconPane.getStyleClass().add("category-icon");
         Circle circle = new Circle(18);
-        circle.setFill(Color.web("#1F2937"));
         SVGPath svg = new SVGPath();
         svg.setContent(cat.svgPath);
         svg.getStyleClass().add("category-icon-svg");
@@ -256,9 +301,8 @@ public class BudgetController implements Initializable, PropertyChangeListener {
                          :                              "category-progress-fill-green";
         progressFill.getStyleClass().add(fillStyle);
 
-        // Width as a fraction of the card — CSS should drive the full width
         double clampedPct = Math.min(cat.percent() / 100.0, 1.0);
-        progressFill.setMaxWidth(clampedPct * 200); // 200 px reference; adjust to match CSS
+        progressFill.maxWidthProperty().bind(progressBg.widthProperty().multiply(clampedPct));
 
         progressBg.getChildren().add(progressFill);
         progressContainer.getChildren().add(progressBg);

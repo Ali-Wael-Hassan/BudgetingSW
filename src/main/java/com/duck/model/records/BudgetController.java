@@ -8,6 +8,7 @@ import java.beans.PropertyChangeSupport;
 
 import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.type.Account;
+import com.duck.model.type.Period;
 import com.duck.model.type.Transaction;
 import com.duck.model.type.AppSettings.BudgetEvent;
 import com.duck.model.type.AppSettings.DataKey;
@@ -56,7 +57,7 @@ public class BudgetController implements PropertyChangeListener {
         if (budget.getPeriod() == null) {
             return Message.NULL_PERIOD;
         }
-        if (budget.getPeriod() == null || budget.getPeriod().getEndDate().isBefore(budget.getPeriod().getStartDate())) {
+        if (budget.getPeriod().getEndDate().isBefore(budget.getPeriod().getStartDate())) {
             return Message.INVALID_PERIOD;
         }
     
@@ -70,21 +71,25 @@ public class BudgetController implements PropertyChangeListener {
             return Message.NULL_ACCOUNT;
         }
 
-        // 8. No two active budgets can have the same category (per account)
+        // 8. No two budgets can have the same category in overlapping periods (per account)
         for (Budget existingBudget : budgets) {
-            
             if (existingBudget.getAccount().equals(budget.getAccount())) {
-                
-                // check if the categories match
                 if (existingBudget.getCategory().equalsIgnoreCase(budget.getCategory())) {
-                    return Message.MULTIPLE_ACTIVE_BUDGETS_ERROR;
+                    Period ep = existingBudget.getPeriod();
+                    Period bp = budget.getPeriod();
+                    if (ep != null && bp != null && periodsOverlap(ep, bp)) {
+                        return Message.MULTIPLE_ACTIVE_BUDGETS_ERROR;
+                    }
                 }
             }
         }
     
         return Message.SUCCESS;
     }
-    
+
+    private boolean periodsOverlap(Period a, Period b) {
+        return !a.getEndDate().isBefore(b.getStartDate()) && !b.getEndDate().isBefore(a.getStartDate());
+    }
 
     public Message createBudget(Budget budget) {
         Message check = validateBudget(budget);
@@ -127,7 +132,7 @@ public class BudgetController implements PropertyChangeListener {
         if (validationResult == Message.SUCCESS) {
             budgets.add(index, updatedBudget);
 
-            LocalStorage.getInstance().save(DataKey.BUDGETS, budgets);
+            LocalStorage.getInstance().save(DataKey.BUDGETS, new ArrayList<>(budgets));
             
             support.firePropertyChange(BudgetEvent.BUDGET_UPDATED.getName(), budget, updatedBudget);
             
@@ -212,14 +217,14 @@ public class BudgetController implements PropertyChangeListener {
     
         activeBudget.setUsedAmount(newUsedAmount); 
 
-        LocalStorage.getInstance().save(DataKey.BUDGETS, budgets);
+        LocalStorage.getInstance().save(DataKey.BUDGETS, new ArrayList<>(budgets));
         
         System.out.println("Transaction applied to " + activeBudget.getCategory() + ". Total used: " + newUsedAmount);
     
         // 6. Check Limits (Exceeded vs Warning)
         if (activeBudget.getUsedAmount() >= activeBudget.getAmount()) {
             System.out.println("Alert! The budget for '" + activeBudget.getCategory() + "' has been exceeded!");
-            support.firePropertyChange(BudgetEvent.BUDGET_UPDATED.getName(), null, activeBudget);
+            support.firePropertyChange(BudgetEvent.BUDGET_EXCEEDED.getName(), null, activeBudget);
             
         } else if (activeBudget.getUsedAmount() >= activeBudget.getThreshold() * activeBudget.getAmount()) {
             System.out.println("Warning! The budget for '" + activeBudget.getCategory() + "' has reached its threshold!");

@@ -15,7 +15,9 @@ import com.duck.model.type.AppSettings;
 import com.duck.model.type.AppSettings.Currency;
 import com.duck.model.type.AppSettings.TransactionType;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -111,6 +113,7 @@ public class DashboardController implements PropertyChangeListener {
     }
 
     private void refreshDashboard() {
+        loadCurrentAccount();
         String sym = currencySymbol();
         if (balanceLabel != null) balanceLabel.setText(sym + "0.00");
         if (balanceBadgeLabel != null) balanceBadgeLabel.setText("0.0%");
@@ -205,12 +208,16 @@ public class DashboardController implements PropertyChangeListener {
             }
         }
 
-        String sym = currencySymbol();
-        if (spendingAmountLabel != null) spendingAmountLabel.setText(String.format(sym + "%,.0f spent", totalExpense));
-        if (spendingLimitLabel != null) spendingLimitLabel.setText(String.format("/ " + sym + "%,.0f budget", totalBudget));
+        Currency currency = getCurrency();
+        float convertedExpense = CurrencyUtil.convertFromUsd(totalExpense, currency);
+        float convertedIncome = CurrencyUtil.convertFromUsd(totalIncome, currency);
+        float convertedBudget = CurrencyUtil.convertFromUsd(totalBudget, currency);
+        String convSym = currencySymbol();
+        if (spendingAmountLabel != null) spendingAmountLabel.setText(String.format(convSym + "%,.0f spent", convertedExpense));
+        if (spendingLimitLabel != null) spendingLimitLabel.setText(String.format("/ " + convSym + "%,.0f budget", convertedBudget));
 
         if (incomeAmountLabel != null) {
-            incomeAmountLabel.setText(String.format(sym + "%,.0f earned", totalIncome));
+            incomeAmountLabel.setText(String.format(convSym + "%,.0f earned", convertedIncome));
             incomeAmountLabel.setStyle(totalIncome > 0 ? "-fx-text-fill: #22c55e;" : "-fx-text-fill: #6B7280;");
         }
 
@@ -221,7 +228,13 @@ public class DashboardController implements PropertyChangeListener {
             if (daysLeftLabel != null) daysLeftLabel.setText(daysRemaining + " days left");
             if (progressBarFill != null) {
                 double pct = Math.min(totalExpense / totalBudget, 1.0);
-                progressBarFill.setMaxWidth(pct * 600);
+                progressBarFill.maxWidthProperty().bind(Bindings.createDoubleBinding(() -> {
+                    javafx.scene.Parent p = progressBarFill.getParent();
+                    if (p instanceof Region) {
+                        return ((Region) p).getWidth() * pct;
+                    }
+                    return 0.0;
+                }, progressBarFill.parentProperty()));
             }
         } else {
             if (spendingInfoLabel != null) spendingInfoLabel.setText("No budgets set");
@@ -291,7 +304,9 @@ public class DashboardController implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        refreshDashboard();
+        if (currentAccount != null) {
+            refreshDashboard();
+        }
     }
 
     @FXML

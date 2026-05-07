@@ -249,7 +249,6 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         StackPane iconPane = new StackPane();
         iconPane.getStyleClass().add("expense-icon");
         Circle circle = new Circle(18);
-        circle.setFill(Color.web("#1F2937"));
         SVGPath svg = new SVGPath();
         svg.setContent(svgForCategory(t.getCategory()));
         svg.getStyleClass().add("expense-icon-svg");

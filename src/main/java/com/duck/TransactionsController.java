@@ -67,7 +67,17 @@ public class TransactionsController implements Initializable, PropertyChangeList
     public void initialize(URL location, ResourceBundle resources) {
         transactionManager.addPropertyChangeListener(this);
         loadCurrentAccount();
+        applyTheme();
         loadTransactions();
+    }
+
+    private void applyTheme() {
+        if (currentAccount == null) return;
+        com.duck.model.type.AppSettings.Mode mode = com.duck.model.type.AppSettings.Mode.DARK;
+        if (currentAccount.getAccountConfig() != null && currentAccount.getAccountConfig().getMode() != null) {
+            mode = currentAccount.getAccountConfig().getMode();
+        }
+        App.setTheme(mode);
     }
 
     @Override
@@ -234,7 +244,6 @@ public class TransactionsController implements Initializable, PropertyChangeList
         javafx.scene.layout.StackPane iconPane = new javafx.scene.layout.StackPane();
         iconPane.getStyleClass().add("transaction-icon");
         Circle circle = new Circle(20);
-        circle.setFill(javafx.scene.paint.Color.web("#1F2937"));
         SVGPath svg = new SVGPath();
         svg.setContent(t.svgPath);
         svg.getStyleClass().add("transaction-icon-svg");

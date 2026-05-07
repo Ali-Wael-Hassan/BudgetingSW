@@ -12,7 +12,7 @@ public class CurrencyUtil {
         switch (currency) {
             case USD: return "$";
             case EUR: return "\u20AC";
-            case EGP: return "\u062C.\u0645";
+            case EGP: return "EGP ";
             default: return "$";
         }
     }
