@@ -161,7 +161,7 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         ApplicationState state = ApplicationState.getInstance();
         com.duck.model.records.Budget budget = DialogHelper.showBudgetDialog(state.getCurrentAccount());
         if (budget != null) {
-            com.duck.model.type.AppSettings.Message result = state.getBudgetController().createBudget(budget);
+            com.duck.model.type.AppSettings.Message result = state.getBudgetManager().createBudget(budget);
             if (result == com.duck.model.type.AppSettings.Message.SUCCESS) {
                 loadBudgets();
                 render();
@@ -233,7 +233,7 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         LocalDate monthEnd = selectedMonth.atEndOfMonth();
 
         List<com.duck.model.records.Budget> modelBudgets =
-                ApplicationState.getInstance().getBudgetController().getAllBudgets(currentAccount);
+                ApplicationState.getInstance().getBudgetManager().getAllBudgets(currentAccount);
         for (com.duck.model.records.Budget b : modelBudgets) {
             com.duck.model.type.Period p = b.getPeriod();
             if (p == null) continue;
