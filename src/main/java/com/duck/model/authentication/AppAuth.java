@@ -2,25 +2,12 @@ package com.duck.model.authentication;
 
 import com.duck.model.type.*;
 import com.duck.model.type.AppSettings.Message;
-import com.duck.model.dataAccessors.StorageStrategy;
 import com.duck.model.dataAccessors.LocalStorage;
 import java.util.List;
 
 public class AppAuth implements Auth {
-    private StorageStrategy storage;
 
-    public AppAuth() {
-        this.storage = LocalStorage.getInstance();
-    }
-
-    @Override
-    public AppSettings.Message setStorageStrategy(StorageStrategy strategy) {
-        if (strategy != null) {
-            this.storage = strategy;
-            return AppSettings.Message.SUCCESS;
-        }
-        return AppSettings.Message.ERROR;
-    }
+    public AppAuth() {}
 
     @Override
     public AppSettings.Message emailExists(String email) {
@@ -57,7 +44,6 @@ public AppSettings.Message checkAgainstDataBase(Account account) {
             boolean checkDot = true;
 
             if (checkAt) {
-                // FIXED: Changed "." to "\\." because split uses Regex
                 String[] dotSplit = atSplit[1].split("\\."); 
                 checkDot = dotSplit.length >= 2; 
                 System.out.println("DB Check: Format Parts - AtSplit: " + atSplit.length + ", DotSplit: " + dotSplit.length);

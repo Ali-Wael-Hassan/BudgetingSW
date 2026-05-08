@@ -68,7 +68,6 @@ public class SavingGoalsController implements PropertyChangeListener {
         }
         
         // 7. Only ONE active saving goal allowed at a time
-        LocalDate today = LocalDate.now();
         
         for (SavingGoal existingGoal : goals) {
             if (existingGoal.isActive()) {
@@ -184,7 +183,6 @@ public class SavingGoalsController implements PropertyChangeListener {
             if (activeGoal.getCurrentAmount() >= activeGoal.getTargetAmount()) {
                 System.out.println("Congratulations! The saving goal '" + activeGoal.getName() + "' is fully funded!");
                 
-                // TODO: inside the controller
                 support.firePropertyChange(GoalEvent.GOAL_COMPLETED.getName(), null, activeGoal);
             }
         }

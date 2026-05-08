@@ -82,7 +82,10 @@ public class TransactionsController implements Initializable, PropertyChangeList
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        loadTransactions();
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("Data changed! Refreshing UI...");
+            loadTransactions();
+        });
     }
 
     private void loadCurrentAccount() {

@@ -1,7 +1,6 @@
 package com.duck.model.type;
 
 import java.time.LocalDate;
-import com.duck.model.type.Account;
 
 public class SavingGoal {
     private String name;

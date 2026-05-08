@@ -38,7 +38,10 @@ public class GoalsController implements Initializable, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        Platform.runLater(this::refresh);
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("Data changed! Refreshing UI...");
+            refresh();
+        });
     }
 
     private void refresh() {

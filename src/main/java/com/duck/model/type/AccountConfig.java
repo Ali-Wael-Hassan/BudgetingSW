@@ -1,10 +1,7 @@
 package com.duck.model.type;
 
-import java.awt.Image;
-
 public class AccountConfig {
 
-    private Image avatar;
     private String avatarPath;
     private AppSettings.Mode mode;
     private AppSettings.Currency curreny;
@@ -14,21 +11,17 @@ public class AccountConfig {
         this.curreny = AppSettings.Currency.USD;
     }
 
-    public AccountConfig(String displayName, Image avatar, AppSettings.Mode mode, AppSettings.Currency curreny) {
-        this.avatar = avatar;
+    public AccountConfig(String avatarPath, AppSettings.Mode mode, AppSettings.Currency curreny) {
+        this.avatarPath = avatarPath;
         this.mode = mode;
         this.curreny = curreny;
     }
-
-    public Image getAvatar() { return avatar; }
 
     public String getAvatarPath() { return avatarPath; }
 
     public AppSettings.Mode getMode() { return this.mode; }
 
     public AppSettings.Currency getCurrency() { return this.curreny; }
-
-    public void setAvatar(Image avatar) { this.avatar = avatar; }
 
     public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
 

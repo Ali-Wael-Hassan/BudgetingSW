@@ -7,7 +7,6 @@ import com.duck.model.type.Account;
 import com.duck.model.type.AppSettings.Message;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;

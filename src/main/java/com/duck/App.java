@@ -1,7 +1,7 @@
 package com.duck;
 
 import com.duck.model.authentication.Session;
-import com.duck.model.type.AppSettings;
+import com.duck.model.type.AppSettings.Mode;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -21,18 +21,15 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-    private static Stage primaryStage;
-    private static AppSettings.Mode currentTheme = AppSettings.Mode.DARK;
     private static String lightThemeCss;
 
-    public static void setTheme(AppSettings.Mode mode) {
-        currentTheme = mode;
+    public static void setTheme(Mode mode) {
         if (scene == null) return;
         if (lightThemeCss == null) {
             java.net.URL url = App.class.getResource("theme-light.css");
             if (url != null) lightThemeCss = url.toExternalForm();
         }
-        if (mode == AppSettings.Mode.LIGHT && lightThemeCss != null) {
+        if (mode == Mode.LIGHT && lightThemeCss != null) {
             if (!scene.getStylesheets().contains(lightThemeCss)) {
                 scene.getStylesheets().add(lightThemeCss);
             }
@@ -43,7 +40,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        primaryStage = stage;
         String token = Session.getInstance().getToken();
         Parent root;
         if (token != null && !token.isEmpty()) {

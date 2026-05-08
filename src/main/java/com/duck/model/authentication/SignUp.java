@@ -3,7 +3,6 @@ package com.duck.model.authentication;
 import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.type.*;
 import com.duck.model.type.AppSettings.DataKey;
-import com.duck.model.type.AppSettings.Message;
 
 public class SignUp extends Recognition {
     @Override

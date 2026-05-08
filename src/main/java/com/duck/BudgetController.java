@@ -3,7 +3,6 @@ package com.duck;
 import com.duck.model.authentication.Session;
 import com.duck.model.type.Account;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -97,9 +96,12 @@ public class BudgetController implements Initializable, PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        loadBudgets();
-        render();
+    public void propertyChange(PropertyChangeEvent evt) {   
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("Data changed! Refreshing UI...");
+            loadBudgets();
+            render();
+        });
     }
 
     // ── FXML handlers ──────────────────────────────────────────────

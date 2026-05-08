@@ -5,7 +5,6 @@ import com.duck.model.records.Budget;
 import com.duck.model.records.BudgetController;
 import com.duck.model.records.SavingGoalsController;
 import com.duck.model.records.TransactionManager;
-import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.type.Account;
 import com.duck.model.type.Period;
 import com.duck.model.type.SavingGoal;
@@ -17,7 +16,6 @@ import com.duck.model.type.AppSettings.TransactionType;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -30,7 +28,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import javafx.scene.layout.Priority;
 
 public class DashboardController implements PropertyChangeListener {
@@ -304,9 +301,10 @@ public class DashboardController implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (currentAccount != null) {
-            refreshDashboard();
-        }
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("Data changed! Refreshing UI...");
+            refreshDashboard(); 
+        });
     }
 
     @FXML

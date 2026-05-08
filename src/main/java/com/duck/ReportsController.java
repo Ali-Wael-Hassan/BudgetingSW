@@ -17,7 +17,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 
@@ -25,7 +24,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -69,7 +67,11 @@ public class ReportsController implements Initializable, PropertyChangeListener 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        Platform.runLater(this::refresh);
+        
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("Data changed! Refreshing UI...");
+            refresh();
+        });
     }
 
     private void refresh() {

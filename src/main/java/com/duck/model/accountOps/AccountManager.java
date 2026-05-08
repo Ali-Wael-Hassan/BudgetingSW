@@ -8,9 +8,6 @@ import com.duck.model.type.AccountConfig;
 import com.duck.model.type.AppSettings;
 import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.authentication.Session;
-import com.duck.model.records.Budget;
-import com.duck.model.type.SavingGoal;
-import com.duck.model.type.Transaction;
 
 public class AccountManager implements PropertyChangeListener {
     private List<Account> accounts;

@@ -2,7 +2,6 @@ package com.duck.model.dataAccessors;
 
 import com.duck.model.records.Budget;
 import com.duck.model.type.*;
-import com.duck.model.type.AppSettings.Message;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -33,8 +32,6 @@ public class LocalStorage implements StorageStrategy {
         this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         
         loadFromFile();
-
-        System.out.println("Accounts Size: " + accounts.size());
 
         if (categories.isEmpty()) {
             categories.add("Food");
@@ -91,9 +88,14 @@ public class LocalStorage implements StorageStrategy {
             Object currentStorage = fetch(key);
 
             if (currentStorage instanceof List && data instanceof List) {
-                List targetList = (List) currentStorage;
+                @SuppressWarnings("unchecked")
+                List<Object> targetList = (List<Object>) currentStorage;
                 targetList.clear();
-                targetList.addAll(new ArrayList<>((List) data));
+
+                if (data instanceof List) {
+                    List<?> dataList = (List<?>) data;
+                    targetList.addAll((List<? extends Object>) dataList);
+                }
                 
                 saveToFile();
                 return AppSettings.Message.SUCCESS;
@@ -111,7 +113,9 @@ public class LocalStorage implements StorageStrategy {
             Object storage = fetch(key);
 
             if (storage instanceof List) {
-                ((List) storage).add(data);
+                @SuppressWarnings("unchecked")
+                List<Object> typedStorage = (List<Object>) storage;
+                typedStorage.add(data);
                 
                 saveToFile();
                 return AppSettings.Message.SUCCESS;
