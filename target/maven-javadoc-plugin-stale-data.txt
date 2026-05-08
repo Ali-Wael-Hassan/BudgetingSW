@@ -1,0 +1,55 @@
+-Xdoclint:none
+@options
+@packages
+@argfile
+--class-path
+'C:/Users/M/.m2/repository/org/openjfx/javafx-controls/13/javafx-controls-13.jar;C:/Users/M/.m2/repository/org/openjfx/javafx-graphics/13/javafx-graphics-13.jar;C:/Users/M/.m2/repository/org/openjfx/javafx-base/13/javafx-base-13.jar;C:/Users/M/.m2/repository/org/openjfx/javafx-fxml/13/javafx-fxml-13.jar;C:/Users/M/.m2/repository/org/apache/pdfbox/fontbox/2.0.29/fontbox-2.0.29.jar;C:/Users/M/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar'
+--module-path
+'C:/Users/M/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.15.2/jackson-annotations-2.15.2.jar;C:/Users/M/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.2/jackson-datatype-jsr310-2.15.2.jar;D:/SWA/BudgetingSW/target/classes;C:/Users/M/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.15.2/jackson-databind-2.15.2.jar;C:/Users/M/.m2/repository/org/openjfx/javafx-fxml/13/javafx-fxml-13-win.jar;C:/Users/M/.m2/repository/org/openjfx/javafx-graphics/13/javafx-graphics-13-win.jar;C:/Users/M/.m2/repository/org/openjfx/javafx-base/13/javafx-base-13-win.jar;C:/Users/M/.m2/repository/org/openjfx/javafx-controls/13/javafx-controls-13-win.jar;C:/Users/M/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.15.2/jackson-core-2.15.2.jar;C:/Users/M/.m2/repository/org/apache/pdfbox/pdfbox/2.0.29/pdfbox-2.0.29.jar'
+--patch-module
+com.duck='D:/SWA/BudgetingSW/src/main/java'
+-encoding
+'UTF-8'
+-protected
+-source
+'11'
+--module-source-path
+'D:/SWA/BudgetingSW/target/site/apidocs/src'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'D:/SWA/BudgetingSW/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'budgetingsw 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/en/java/javase/11/docs/api' 'D:/SWA/BudgetingSW/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'budgetingsw 1.0-SNAPSHOT API'
+com.duck
+com.duck.model.accountOps
+com.duck.model.authentication
+com.duck.model.dataAccessors
+com.duck.model.records
+com.duck.model.type
+'D:/SWA/BudgetingSW/src/main/java/module-info.java'
+D:\SWA\BudgetingSW\target\site\apidocs\allclasses-index.html = 1778255353170
+D:\SWA\BudgetingSW\target\site\apidocs\allpackages-index.html = 1778255353171
+D:\SWA\BudgetingSW\target\site\apidocs\element-list = 1778255352889
+D:\SWA\BudgetingSW\target\site\apidocs\help-doc.html = 1778255353220
+D:\SWA\BudgetingSW\target\site\apidocs\index-all.html = 1778255353208
+D:\SWA\BudgetingSW\target\site\apidocs\index.html = 1778255353212
+D:\SWA\BudgetingSW\target\site\apidocs\javadoc.bat = 1778255282371
+D:\SWA\BudgetingSW\target\site\apidocs\member-search-index.js = 1778255353178
+D:\SWA\BudgetingSW\target\site\apidocs\module-search-index.js = 1778255353174
+D:\SWA\BudgetingSW\target\site\apidocs\overview-tree.html = 1778255353143
+D:\SWA\BudgetingSW\target\site\apidocs\package-search-index.js = 1778255353175
+D:\SWA\BudgetingSW\target\site\apidocs\search.html = 1778255353210
+D:\SWA\BudgetingSW\target\site\apidocs\tag-search-index.js = 1778255353178
+D:\SWA\BudgetingSW\target\site\apidocs\type-search-index.js = 1778255353176

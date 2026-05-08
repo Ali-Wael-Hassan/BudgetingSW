@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"m":"com.duck","l":"com.duck"},{"m":"com.duck","l":"com.duck.model.accountOps"},{"m":"com.duck","l":"com.duck.model.authentication"},{"m":"com.duck","l":"com.duck.model.dataAccessors"},{"m":"com.duck","l":"com.duck.model.records"},{"m":"com.duck","l":"com.duck.model.type"}];updateSearchResults();

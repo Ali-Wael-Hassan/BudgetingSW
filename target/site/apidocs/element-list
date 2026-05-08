@@ -1,0 +1,7 @@
+module:com.duck
+com.duck
+com.duck.model.accountOps
+com.duck.model.authentication
+com.duck.model.dataAccessors
+com.duck.model.records
+com.duck.model.type
