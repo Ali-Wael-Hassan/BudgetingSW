@@ -1,0 +1,87 @@
+BudgetingSW
+====================================
+
+=======================================================================
+GitHub Reopo: https://github.com/Ali-Wael-Hassan/BudgetingSW.git
+=======================================================================
+
+Project Overview
+-----------------
+BudgetingSW is a Java-based budgeting management tool that helps users manage their financial information. It provides a desktop UI (JavaFX) for navigating through the application, working with budgets/goals, tracking transactions, and viewing generated reports.
+
+The app uses a structured MVC-like approach:
+- UI screens are defined with FXML (JavaFX)
+- Controllers handle user interactions and screen logic
+- Model classes represent budgeting/authentication/data and support persistence
+
+---
+
+Development Tools
+------------------
+- Java: JDK 11 (project configured via Maven)
+- Build Tool: Maven
+- IDE: Vs Code
+- GUI: JavaFX
+
+---
+
+Project Structure
+-------------------
+src/
+  main/
+    java/            
+      com/duck/      
+        App.java                         
+        * Controllers (e.g., LoginController, DashboardController, etc.)
+        * Helpers/Utilities (e.g., CurrencyUtil, DialogHelper)
+        * Model layer (e.g., authentication, records, data accessors)
+
+    resources/
+      com/duck/
+        *.fxml            - JavaFX UI definitions (screens)
+        styles.css        - Main application styling
+        theme-light.css   - Light theme styling
+
+---
+
+DOCUMENTATION & MODELING
+=========================
+
+JavaDoc
+--------
+- We used JavaDoc to provide comprehensive API documentation for all classes and methods.
+- JavaDoc helps developers quickly understand what each class/method does, expected inputs/outputs, and overall system behavior.
+
+How to generate JavaDocs (Maven)
+=================================
+1) From the project root (where pom.xml is located), run:
+   mvn javadoc:javadoc
+2) The generated documentation will typically appear under:
+   target/site/apidocs/
+
+---
+
+PlantUML
+--------
+- We used PlantUML to design and generate the software architecture diagrams, following the “Diagrams as Code” idea.
+- Diagram types used:
+  * Class Diagrams: visualize the system’s structure and relationships
+  * Sequence Diagrams: model the logic of user interactions and object communication
+  * State Diagrams: track the various states of the application or specific budgeting entities
+
+---
+
+Build & Run (Quick Start)
+---------------------------
+1) Build the project:
+   mvn clean package
+2) Run the JavaFX application:
+   mvn clean javafx:run
+
+---
+
+Notes for build
+----------------
+- JavaFX FXML resources are loaded from src/main/resources.
+- The application’s entry point is com.duck.App.
+
