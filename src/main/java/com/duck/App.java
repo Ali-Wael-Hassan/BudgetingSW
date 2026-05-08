@@ -70,7 +70,7 @@ public class App extends Application {
         }
         scene = new Scene(root, 960, 720);
         scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
-        stage.setTitle("BudgetWise");
+        stage.setTitle("BudgetingSW");
         stage.setScene(scene);
         stage.show();
     }

@@ -38,7 +38,7 @@
                                         </StackPane>
                                         <VBox spacing="2">
                                             <children>
-                                                <Label text="BudgetWise"           styleClass="app-name" />
+                                                <Label text="BudgetingSW"           styleClass="app-name" />
                                                 <Label text="Financial Stewardship" styleClass="app-tagline" />
                                             </children>
                                         </VBox>
