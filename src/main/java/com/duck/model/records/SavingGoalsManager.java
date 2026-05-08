@@ -15,12 +15,14 @@ import com.duck.model.type.Transaction;
 import com.duck.model.type.AppSettings.DataKey;
 import com.duck.model.type.AppSettings.GoalEvent;
 import com.duck.model.type.AppSettings.Message;
+import com.duck.model.type.AppSettings.AccountEvent;
+import com.duck.model.type.AppSettings.TransactionEvent;
 
-public class SavingGoalsController implements PropertyChangeListener {
+public class SavingGoalsManager implements PropertyChangeListener {
     private List<SavingGoal> goals = new ArrayList<>();
     private final PropertyChangeSupport support;
     
-    public SavingGoalsController() {
+    public SavingGoalsManager() {
         support =  new PropertyChangeSupport(this);
     }
 
@@ -130,7 +132,7 @@ public class SavingGoalsController implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         System.out.println("SavingGoalsController: Property '" + evt.getPropertyName() + "' changed.");
 
-        if ("transaction".equals(evt.getPropertyName())) {
+        if (TransactionEvent.TRANSACTION_RECEIVED.getName().equals(evt.getPropertyName())) {
             Object newValue = evt.getNewValue();
         
             if (newValue instanceof Transaction) {
@@ -139,7 +141,7 @@ public class SavingGoalsController implements PropertyChangeListener {
             }
         }
 
-        if ("token".equals(evt.getPropertyName())) {
+        if (AccountEvent.TOKEN_CHANGED.getName().equals(evt.getPropertyName())) {
             String newToken = (String) evt.getNewValue();
             if (newToken != null) {
                 this.goals = LocalStorage.getInstance().getGoals();

@@ -101,7 +101,6 @@ public class AppSettings {
     }
 
     public enum BudgetEvent {
-        TRANSACTION_RECEIVED("transaction"),
         THRESHOLD_REACHED("budgetThresholdReached"),
         BUDGET_EXCEEDED("budgetExceeded"),
         BUDGET_UPDATED("budgetUpdated");

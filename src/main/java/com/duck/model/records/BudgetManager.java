@@ -14,12 +14,14 @@ import com.duck.model.type.AppSettings.BudgetEvent;
 import com.duck.model.type.AppSettings.DataKey;
 import com.duck.model.type.AppSettings.Message;
 import com.duck.model.type.AppSettings.TransactionType;
+import com.duck.model.type.AppSettings.AccountEvent;
+import com.duck.model.type.AppSettings.TransactionEvent;
 
-public class BudgetController implements PropertyChangeListener {
+public class BudgetManager implements PropertyChangeListener {
     private List<Budget> budgets = new ArrayList<>();
     private final PropertyChangeSupport support;
 
-    public BudgetController() {
+    public BudgetManager() {
         support =  new PropertyChangeSupport(this);
     }
 
@@ -158,7 +160,7 @@ public class BudgetController implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         System.out.println("BudgetController: Property '" + evt.getPropertyName() + "' changed.");
 
-        if ("transaction".equals(evt.getPropertyName())) {
+        if (TransactionEvent.TRANSACTION_RECEIVED.getName().equals(evt.getPropertyName())) {
             Object newValue = evt.getNewValue();
         
             if (newValue instanceof Transaction) {
@@ -167,7 +169,7 @@ public class BudgetController implements PropertyChangeListener {
             }
         }
 
-        if ("token".equals(evt.getPropertyName())) {
+        if (AccountEvent.TOKEN_CHANGED.getName().equals(evt.getPropertyName())) {
             String newToken = (String) evt.getNewValue();
             if (newToken != null) {
                 this.budgets = LocalStorage.getInstance().getBudgets();

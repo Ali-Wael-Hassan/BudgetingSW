@@ -14,6 +14,7 @@ import com.duck.model.type.AppSettings.DataKey;
 import com.duck.model.type.AppSettings.Message;
 import com.duck.model.type.AppSettings.TransactionEvent;
 import com.duck.model.type.AppSettings.TransactionType;
+import com.duck.model.type.AppSettings.AccountEvent;
 
 public class TransactionManager implements PropertyChangeListener {
 
@@ -111,7 +112,7 @@ public class TransactionManager implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("token".equals(evt.getPropertyName())) {
+        if (AccountEvent.TOKEN_CHANGED.getName().equals(evt.getPropertyName())) {
             String newToken = (String) evt.getNewValue();
             if (newToken != null) {
                 transactions.clear();

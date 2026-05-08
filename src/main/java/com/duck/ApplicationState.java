@@ -4,8 +4,8 @@ import com.duck.model.accountOps.AccountManager;
 import com.duck.model.authentication.Session;
 import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.records.Budget;
-import com.duck.model.records.BudgetController;
-import com.duck.model.records.SavingGoalsController;
+import com.duck.model.records.BudgetManager;
+import com.duck.model.records.SavingGoalsManager;
 import com.duck.model.records.TransactionManager;
 import com.duck.model.type.Account;
 import com.duck.model.type.AppSettings.BudgetEvent;
@@ -24,15 +24,15 @@ public class ApplicationState {
 
     private final LocalStorage storage;
     private final TransactionManager transactionManager;
-    private final BudgetController budgetController;
-    private final SavingGoalsController goalsController;
+    private final BudgetManager budgetController;
+    private final SavingGoalsManager goalsController;
     private final AccountManager accountManager;
 
     private ApplicationState() {
         this.storage = LocalStorage.getInstance();
         this.transactionManager = new TransactionManager();
-        this.budgetController = new BudgetController();
-        this.goalsController = new SavingGoalsController();
+        this.budgetController = new BudgetManager();
+        this.goalsController = new SavingGoalsManager();
         this.accountManager = new AccountManager();
 
         registerListeners();
@@ -141,11 +141,11 @@ public class ApplicationState {
         return transactionManager;
     }
 
-    public BudgetController getBudgetController() {
+    public BudgetManager getBudgetController() {
         return budgetController;
     }
 
-    public SavingGoalsController getGoalsController() {
+    public SavingGoalsManager getGoalsController() {
         return goalsController;
     }
 

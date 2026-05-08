@@ -6,6 +6,7 @@ import java.util.List;
 import com.duck.model.type.Account;
 import com.duck.model.type.AccountConfig;
 import com.duck.model.type.AppSettings;
+import com.duck.model.type.AppSettings.AccountEvent;
 import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.authentication.Session;
 
@@ -22,7 +23,7 @@ public class AccountManager implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("token".equals(evt.getPropertyName())) {
+        if (AccountEvent.TOKEN_CHANGED.getName().equals(evt.getPropertyName())) {
             String newToken = (String) evt.getNewValue();
             if (newToken != null) {
                 this.accounts = LocalStorage.getInstance().getAccounts();

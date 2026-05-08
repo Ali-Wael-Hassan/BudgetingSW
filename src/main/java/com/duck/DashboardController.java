@@ -2,8 +2,8 @@ package com.duck;
 
 import com.duck.model.authentication.Session;
 import com.duck.model.records.Budget;
-import com.duck.model.records.BudgetController;
-import com.duck.model.records.SavingGoalsController;
+import com.duck.model.records.BudgetManager;
+import com.duck.model.records.SavingGoalsManager;
 import com.duck.model.records.TransactionManager;
 import com.duck.model.type.Account;
 import com.duck.model.type.Period;
@@ -44,8 +44,8 @@ public class DashboardController implements PropertyChangeListener {
     @FXML private VBox goalsContainer;
 
     private final TransactionManager transactionManager;
-    private final BudgetController budgetController;
-    private final SavingGoalsController goalsController;
+    private final BudgetManager budgetController;
+    private final SavingGoalsManager goalsController;
     private final ApplicationState state;
 
     private Account currentAccount;

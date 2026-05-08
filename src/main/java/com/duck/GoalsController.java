@@ -1,6 +1,6 @@
 package com.duck;
 
-import com.duck.model.records.SavingGoalsController;
+import com.duck.model.records.SavingGoalsManager;
 import com.duck.model.type.Account;
 import com.duck.model.type.AppSettings.Message;
 import com.duck.model.type.SavingGoal;
@@ -27,7 +27,7 @@ public class GoalsController implements Initializable, PropertyChangeListener {
     @FXML private StackPane sidebarAvatarContainer;
 
     private final ApplicationState state = ApplicationState.getInstance();
-    private final SavingGoalsController goalsController = state.getGoalsController();
+    private final SavingGoalsManager goalsController = state.getGoalsController();
     private Account currentAccount;
 
     @Override
