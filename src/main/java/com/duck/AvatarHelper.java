@@ -9,11 +9,31 @@ import javafx.scene.shape.SVGPath;
 
 import java.io.File;
 
+/**
+ * Utility class for rendering account avatar images in sidebar containers.
+ * Falls back to a default SVG person icon when no avatar path is set or
+ * when loading the image fails.
+ */
 public class AvatarHelper {
+
+    // =========================================================================
+    // Constants
+    // =========================================================================
 
     private static final double SIDEBAR_SIZE = 48;
     private static final double SIDEBAR_RADIUS = 24;
 
+    // =========================================================================
+    // Public API
+    // =========================================================================
+
+    /**
+     * Sets the avatar image inside the given sidebar container.  Attempts
+     * to load the image from the account's avatar path.  If the path is
+     * null, empty, or cannot be loaded, a default person SVG icon is shown.
+     * @param container the StackPane to place the avatar in
+     * @param account   the account whose avatar to display, or null
+     */
     public static void setSidebarAvatar(StackPane container, Account account) {
         if (container == null) return;
         container.getChildren().clear();

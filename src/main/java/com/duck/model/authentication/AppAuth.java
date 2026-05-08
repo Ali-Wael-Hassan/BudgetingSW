@@ -5,10 +5,22 @@ import com.duck.model.type.AppSettings.Message;
 import com.duck.model.dataAccessors.LocalStorage;
 import java.util.List;
 
+/**
+ * Default authentication strategy backed by LocalStorage.
+ */
 public class AppAuth implements Auth {
 
     public AppAuth() {}
 
+    // =========================================================================
+    // Auth Implementation
+    // =========================================================================
+
+    /**
+     * Checks whether the given email is already registered.
+     * @param email the email to look up
+     * @return SUCCESS if found, NOT_FOUND otherwise, ERROR on failure
+     */
     @Override
     public AppSettings.Message emailExists(String email) {
         
@@ -28,6 +40,13 @@ public class AppAuth implements Auth {
         }
     }
 
+    /**
+     * Verifies the account's email format and matches the credentials
+     * against stored accounts.
+     * @param account the account with email and password to check
+     * @return SUCCESS on match, INVALID_EMAIL if format is bad,
+     *         NOT_FOUND if no match, ERROR on failure
+     */
     @Override
 public AppSettings.Message checkAgainstDataBase(Account account) {
     System.out.println("--- DB Check: Starting ---");
@@ -78,6 +97,12 @@ public AppSettings.Message checkAgainstDataBase(Account account) {
     }
 }
 
+    /**
+     * Evaluates password strength based on length and character rules.
+     * @param password the password to evaluate
+     * @return Weak if under 6 chars, Strong if it has digits and
+     *         uppercase, Medium otherwise
+     */
     @Override
     public String getPasswordStrength(String password) {
         if (password == null || password.length() < 6) return "Weak";
@@ -85,6 +110,10 @@ public AppSettings.Message checkAgainstDataBase(Account account) {
         return "Medium";
     }
 
+    /**
+     * Placeholder for request-limit enforcement.
+     * @return SUCCESS always
+     */
     @Override
     public AppSettings.Message reachedRequestLimit() {
         // Dummy Implementation

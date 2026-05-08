@@ -29,7 +29,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * FXML controller for the Reports screen.  Builds four report cards:
+ * cash flow pie chart, category donut breakdown, top five expenses, and
+ * savings goal progress.  Listens for data changes and auto-refreshes.
+ */
 public class ReportsController implements Initializable, PropertyChangeListener {
+
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
 
     @FXML private HBox  cashFlowChart;
     @FXML private Label monthLabel;
@@ -40,9 +49,17 @@ public class ReportsController implements Initializable, PropertyChangeListener 
     @FXML private VBox  expenseList;
     @FXML private VBox  goalsList;
 
+    // =========================================================================
+    // State
+    // =========================================================================
+
     private YearMonth selectedMonth;
     private static final DateTimeFormatter MONTH_FMT =
             DateTimeFormatter.ofPattern("MMMM yyyy");
+
+    // =========================================================================
+    // Category Icon SVG Paths
+    // =========================================================================
 
     private static final String SVG_HOUSE = "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z";
     private static final String SVG_CAR   = "M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z";
@@ -51,20 +68,40 @@ public class ReportsController implements Initializable, PropertyChangeListener 
     private static final String SVG_UTILITY = "M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 15h-2v-6H9v6H7v-7.81l5-4.5 5 4.5V18z";
     private static final String SVG_TV      = "M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z";
 
+    // =========================================================================
+    // Instance State
+    // =========================================================================
+
     private final ApplicationState state = ApplicationState.getInstance();
     private final TransactionManager transactionManager = state.getTransactionManager();
     private Account currentAccount;
 
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+
+    /**
+     * Initializes the controller.  Registers listeners on the transaction
+     * manager, budget controller, and goals controller.  Sets the default
+     * month to the current month and schedules a full refresh.
+     * @param location  unused
+     * @param resources unused
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         transactionManager.addPropertyChangeListener(this);
-        state.getBudgetController().addPropertyChangeListener(this);
-        state.getGoalsController().addPropertyChangeListener(this);
+        state.getBudgetManager().addPropertyChangeListener(this);
+        state.getGoalsManager().addPropertyChangeListener(this);
         selectedMonth = YearMonth.now();
         if (monthLabel != null) monthLabel.setText(selectedMonth.format(MONTH_FMT));
         Platform.runLater(this::refresh);
     }
 
+    /**
+     * Fired when underlying data changes.  Schedules a UI refresh on the
+     * JavaFX application thread.
+     * @param evt unused
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         
@@ -74,6 +111,7 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         });
     }
 
+    /** Rebuilds all four report cards with the latest data. */
     private void refresh() {
         currentAccount = state.getCurrentAccount();
         if (currentAccount == null) return;
@@ -84,14 +122,27 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         buildSavingsGoals();
     }
 
-    // ── Helpers ─────────────────────────────────────────────────────
+    // =========================================================================
+    // Data Helpers
+    // =========================================================================
 
+    /**
+     * Retrieves all transactions for the selected month, optionally filtered
+     * by type.
+     * @param type the transaction type filter, or null for all
+     * @return list of matching transactions
+     */
     private List<Transaction> getMonthTransactions(TransactionType type) {
         Period monthPeriod = new Period(selectedMonth.atDay(1), selectedMonth.atEndOfMonth());
         TransactionConfig config = new TransactionConfig(type, monthPeriod, null, null, currentAccount);
         return transactionManager.getTransactions(config);
     }
 
+    /**
+     * Returns an SVG path string for the given category name.
+     * @param category the transaction category
+     * @return the matching SVG path constant
+     */
     private String svgForCategory(String category) {
         if (category == null) return SVG_SHOP;
         String c = category.toLowerCase();
@@ -103,8 +154,11 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         return SVG_SHOP;
     }
 
-    // ── Card 1: Cash Flow (Pie Chart) ─────────────────────────────
+    // =========================================================================
+    // Card 1: Cash Flow Pie Chart
+    // =========================================================================
 
+    /** Builds the income vs expense pie chart for the selected month. */
     private void buildCashFlow() {
         cashFlowChart.getChildren().clear();
 
@@ -149,8 +203,11 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         cashFlowChart.getChildren().add(wrapper);
     }
 
-    // ── Card 2: Categories Donut ───────────────────────────────────
+    // =========================================================================
+    // Card 2: Category Donut Breakdown
+    // =========================================================================
 
+    /** Builds the expense breakdown by category with a legend and percentages. */
     private void buildCategoryDonut() {
         donutLegend.getChildren().clear();
 
@@ -216,8 +273,11 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         }
     }
 
-    // ── Card 3: Largest Expenses ───────────────────────────────────
+    // =========================================================================
+    // Card 3: Largest Expenses
+    // =========================================================================
 
+    /** Populates the top five largest expense entries for the selected month. */
     private void buildLargestExpenses() {
         expenseList.getChildren().clear();
 
@@ -243,6 +303,11 @@ public class ReportsController implements Initializable, PropertyChangeListener 
                 .forEach(t -> expenseList.getChildren().add(buildExpenseRow(t)));
     }
 
+    /**
+     * Builds a single HBox row for one expense entry.
+     * @param t the transaction to display
+     * @return a styled HBox with category icon, name, date, and amount
+     */
     private HBox buildExpenseRow(Transaction t) {
         HBox row = new HBox(12);
         row.setAlignment(Pos.CENTER_LEFT);
@@ -274,12 +339,15 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         return row;
     }
 
-    // ── Card 4: Savings Goals ──────────────────────────────────────
+    // =========================================================================
+    // Card 4: Savings Goals
+    // =========================================================================
 
+    /** Populates the savings goals progress list for the current account. */
     private void buildSavingsGoals() {
         goalsList.getChildren().clear();
 
-        List<SavingGoal> goals = state.getGoalsController().getAllSavings(currentAccount);
+        List<SavingGoal> goals = state.getGoalsManager().getAllSavings(currentAccount);
 
         if (goals.isEmpty()) {
             Label empty = new Label("No savings goals");
@@ -293,6 +361,12 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Builds a vertical box row for one savings goal, showing name, amount,
+     * and a progress bar.
+     * @param g the saving goal to display
+     * @return a styled VBox with goal details
+     */
     private VBox buildGoalRow(SavingGoal g) {
         VBox box = new VBox(8);
 
@@ -323,11 +397,17 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         return box;
     }
 
+    // =========================================================================
+    // Actions
+    // =========================================================================
+
+    /** Opens the new-category dialog. */
     @FXML
     private void handleAddCategory() {
         DialogHelper.showNewCategoryDialog();
     }
 
+    /** Exports the current monthly report as a PDF and shows a confirmation dialog. */
     @FXML
     private void handleExport() {
         if (currentAccount == null) return;
@@ -349,28 +429,45 @@ public class ReportsController implements Initializable, PropertyChangeListener 
         alert.showAndWait();
     }
 
+    // =========================================================================
+    // Month Navigation
+    // =========================================================================
+
+    /** Moves the report view to the previous month. */
     @FXML private void handlePrevMonth() {
         selectedMonth = selectedMonth.minusMonths(1);
         monthLabel.setText(selectedMonth.format(MONTH_FMT));
         refresh();
     }
 
+    /** Moves the report view to the next month. */
     @FXML private void handleNextMonth() {
         selectedMonth = selectedMonth.plusMonths(1);
         monthLabel.setText(selectedMonth.format(MONTH_FMT));
         refresh();
     }
 
+    /** Resets the report view to the current month. */
     @FXML private void handleThisMonth() {
         selectedMonth = YearMonth.now();
         monthLabel.setText(selectedMonth.format(MONTH_FMT));
         refresh();
     }
 
+    // =========================================================================
+    // Screen Navigation
+    // =========================================================================
+
+    /** Navigates to the Dashboard screen. */
     @FXML private void navigateToDashboard() { App.showDashboard(); }
+    /** Navigates to the Transactions screen. */
     @FXML private void navigateToTransactions() { App.showTransactions(); }
+    /** Navigates to the Budgets screen. */
     @FXML private void navigateToBudgets() { App.showBudgets(); }
+    /** Navigates to the Goals screen. */
     @FXML private void navigateToGoals() { App.showGoals(); }
+    /** Navigates to the Reports screen. */
     @FXML private void navigateToReports() { App.showReports(); }
+    /** Navigates to the Profile screen. */
     @FXML private void navigateToProfile() { App.showProfile(); }
 }

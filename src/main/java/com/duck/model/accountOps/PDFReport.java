@@ -20,7 +20,18 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+/**
+ * Generates a PDF financial report.  Filters transactions by the
+ * given TransactionConfig, calculates category percentages, and
+ * writes the result to TransactionReport.pdf.
+ */
 public class PDFReport implements ReportGenerator {
+    /**
+     * Generates report data, exports to PDF, and returns the raw
+     * ReportConfig list.
+     * @param config the filter criteria for transactions
+     * @return list of ReportConfig entries with category percentages
+     */
     @Override
     public ArrayList<ReportConfig> generate(TransactionConfig config) {
         List<String> categories = LocalStorage.getInstance().getCategories();
@@ -80,6 +91,13 @@ public class PDFReport implements ReportGenerator {
         return reportData;
     }
 
+    /**
+     * Checks whether a transaction passes all active filters in the
+     * config (category, date period, amount range, and account).
+     * @param transaction the transaction to test
+     * @param config      the filter criteria
+     * @return true if the transaction passes all filters
+     */
     private boolean passesFilters(Transaction transaction, TransactionConfig config) {
             
         // 1. Filter by Category
@@ -117,6 +135,11 @@ public class PDFReport implements ReportGenerator {
         return true; // Passed all active filters
     }
 
+    /**
+     * Writes the report data to a PDF file at
+     * Documents/Reports/TransactionReport.pdf.
+     * @param data the category-percentage pairs to render
+     */
     private void exportToPdfFile(ArrayList<ReportConfig> data) {
         // Create PFD Document
         try (PDDocument document = new PDDocument()) {

@@ -1,5 +1,11 @@
 package com.duck.model.type;
 
+/**
+ * Holds all shared enumerations used throughout the application:
+ * data persistence keys, theme mode, currency, transaction type,
+ * operation result messages, and PropertyChangeEvent types for
+ * budgets, goals, accounts, and transactions.
+ */
 public class AppSettings {
     public enum DataKey {
         ACCOUNTS,
@@ -33,7 +39,6 @@ public class AppSettings {
         NULL_ACCOUNT,
         ACCOUNT_MISMATCH_ERROR,
         INVALID_EMAIL,
-        // Goals Specific Flags
         NULL_GOAL_ERROR,
         INVALID_NAME,
         INVALID_TARGET_AMOUNT,
@@ -42,7 +47,6 @@ public class AppSettings {
         NULL_DEADLINE,
         PAST_DEADLINE,
         MULTIPLE_ACTIVE_GOALS_ERROR,
-        // Budgets Specific Flags
         NULL_BUDGET_ERROR,
         INVALID_CATEGORY,
         INVALID_BUDGET_AMOUNT,
@@ -51,11 +55,9 @@ public class AppSettings {
         INVALID_PERIOD,
         INVALID_THRESHOLD,
         MULTIPLE_ACTIVE_BUDGETS_ERROR,
-        // Transaction Specific Flags
         NULL_TRANSACTION_ERROR,
         INVALID_TRANSACTION_AMOUNT,
         INVALID_DATE,
-
     }
 
     public enum GoalEvent {

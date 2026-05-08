@@ -4,7 +4,17 @@ import com.duck.model.dataAccessors.LocalStorage;
 import com.duck.model.type.*;
 import com.duck.model.type.AppSettings.DataKey;
 
+/**
+ * Handles the sign-up authentication flow.  Validates account fields
+ * and persists the new account to LocalStorage on success.
+ */
 public class SignUp extends Recognition {
+    /**
+     * Validates a new account's email, password, and balance, and
+     * checks that the email is not already registered.
+     * @param account the account to validate and register
+     * @return SUCCESS if all checks pass, ERROR otherwise
+     */
     @Override
     protected AppSettings.Message validate(Account account) {
             System.out.println("--- Starting SignUp Validation ---");
@@ -59,6 +69,10 @@ public class SignUp extends Recognition {
             return AppSettings.Message.SUCCESS;
     }
 
+    /**
+     * Returns the post-registration navigation target.
+     * @return SUCCESS
+     */
     @Override
     public AppSettings.Message redirection() {
         return AppSettings.Message.SUCCESS;

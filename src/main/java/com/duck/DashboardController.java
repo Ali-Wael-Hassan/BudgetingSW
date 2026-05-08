@@ -30,7 +30,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javafx.scene.layout.Priority;
 
+/**
+ * FXML controller for the Dashboard screen.  Aggregates and displays
+ * account balance, monthly income and spending, budget utilization, and
+ * active saving goals.  Listens for data model changes and refreshes
+ * automatically.
+ */
 public class DashboardController implements PropertyChangeListener {
+
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
 
     @FXML private StackPane sidebarAvatarContainer;
     @FXML private Label balanceLabel;
@@ -43,6 +53,10 @@ public class DashboardController implements PropertyChangeListener {
     @FXML private StackPane progressBarFill;
     @FXML private VBox goalsContainer;
 
+    // =========================================================================
+    // Instance State
+    // =========================================================================
+
     private final TransactionManager transactionManager;
     private final BudgetManager budgetController;
     private final SavingGoalsManager goalsController;
@@ -50,13 +64,23 @@ public class DashboardController implements PropertyChangeListener {
 
     private Account currentAccount;
 
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+
+    /** Constructs the controller and initializes model references from ApplicationState. */
     public DashboardController() {
         this.state = ApplicationState.getInstance();
         this.transactionManager = state.getTransactionManager();
-        this.budgetController = state.getBudgetController();
-        this.goalsController = state.getGoalsController();
+        this.budgetController = state.getBudgetManager();
+        this.goalsController = state.getGoalsManager();
     }
 
+    /**
+     * Initializes the controller.  Registers property change listeners,
+     * loads the current account, applies the theme, and refreshes all
+     * dashboard sections.
+     */
     @FXML
     public void initialize() {
         transactionManager.addPropertyChangeListener(this);
@@ -68,6 +92,7 @@ public class DashboardController implements PropertyChangeListener {
         refreshDashboard();
     }
 
+    /** Applies the account's preferred color theme. */
     private void applyTheme() {
         if (currentAccount == null) return;
         AppSettings.Mode mode = AppSettings.Mode.DARK;
@@ -77,6 +102,7 @@ public class DashboardController implements PropertyChangeListener {
         App.setTheme(mode);
     }
 
+    /** Resolves the current Account from the session token and sets the sidebar avatar. */
     private void loadCurrentAccount() {
         String token = Session.getInstance().getToken();
         if (token == null) return;
@@ -96,6 +122,11 @@ public class DashboardController implements PropertyChangeListener {
         AvatarHelper.setSidebarAvatar(sidebarAvatarContainer, currentAccount);
     }
 
+    /**
+     * Extracts the email portion from a session token.
+     * @param token the session token string (format: id_email)
+     * @return the email substring, or null if parsing fails
+     */
     private String extractEmailFromToken(String token) {
         try {
             String[] parts = token.split("_");
@@ -105,10 +136,37 @@ public class DashboardController implements PropertyChangeListener {
         }
     }
 
+    // =========================================================================
+    // Currency Helpers
+    // =========================================================================
+
+    /**
+     * Returns the currency symbol for the current account's setting.
+     * @return the currency symbol string
+     */
     private String currencySymbol() {
         return CurrencyUtil.getSymbol(getCurrency());
     }
 
+    /**
+     * Returns the current account's Currency setting, defaulting to USD.
+     * @return the active Currency enum value
+     */
+    private Currency getCurrency() {
+        if (currentAccount != null && currentAccount.getAccountConfig() != null
+                && currentAccount.getAccountConfig().getCurrency() != null) {
+            return currentAccount.getAccountConfig().getCurrency();
+        }
+        return Currency.USD;
+    }
+
+    // =========================================================================
+    // Data Refresh
+    // =========================================================================
+
+    /**
+     * Resets all dashboard labels and reloads balance, spending, and goals.
+     */
     private void refreshDashboard() {
         loadCurrentAccount();
         String sym = currencySymbol();
@@ -129,14 +187,24 @@ public class DashboardController implements PropertyChangeListener {
         loadGoals();
     }
 
-    private Currency getCurrency() {
-        if (currentAccount != null && currentAccount.getAccountConfig() != null
-                && currentAccount.getAccountConfig().getCurrency() != null) {
-            return currentAccount.getAccountConfig().getCurrency();
-        }
-        return Currency.USD;
+    /**
+     * Fired when underlying data changes.  Schedules a UI refresh on the
+     * JavaFX application thread.
+     * @param evt unused
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        javafx.application.Platform.runLater(() -> {
+            System.out.println("Data changed! Refreshing UI...");
+            refreshDashboard(); 
+        });
     }
 
+    // =========================================================================
+    // Balance
+    // =========================================================================
+
+    /** Calculates and displays the running balance and monthly net flow badge. */
     private void loadBalance() {
         TransactionConfig config = new TransactionConfig(null, null, null, null, currentAccount);
         List<Transaction> allTransactions = transactionManager.getTransactions(config);
@@ -178,6 +246,11 @@ public class DashboardController implements PropertyChangeListener {
         }
     }
 
+    // =========================================================================
+    // Monthly Spending
+    // =========================================================================
+
+    /** Calculates and displays monthly income, expenses, budget usage, and progress bar. */
     private void loadMonthlySpending() {
         YearMonth currentMonth = YearMonth.now();
         LocalDate start = currentMonth.atDay(1);
@@ -240,6 +313,11 @@ public class DashboardController implements PropertyChangeListener {
         }
     }
 
+    // =========================================================================
+    // Saving Goals
+    // =========================================================================
+
+    /** Displays all active saving goals as goal cards in the goals container. */
     private void loadGoals() {
         if (goalsContainer == null) return;
 
@@ -262,6 +340,12 @@ public class DashboardController implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Builds an HBox card for a single saving goal showing name, amounts,
+     * percentage, and days remaining.
+     * @param goal the saving goal to display
+     * @return a styled HBox card
+     */
     private HBox createGoalCard(SavingGoal goal) {
         HBox card = new HBox(16);
         card.getStyleClass().add("goal-card");
@@ -299,44 +383,17 @@ public class DashboardController implements PropertyChangeListener {
         return card;
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        javafx.application.Platform.runLater(() -> {
-            System.out.println("Data changed! Refreshing UI...");
-            refreshDashboard(); 
-        });
-    }
+    // =========================================================================
+    // Actions
+    // =========================================================================
 
-    @FXML
-    private void navigateToTransactions() {
-        App.showTransactions();
-    }
-
-    @FXML
-    private void navigateToBudgets() {
-        App.showBudgets();
-    }
-
-    @FXML
-    private void navigateToGoals() {
-        App.showGoals();
-    }
-
-    @FXML
-    private void navigateToReports() {
-        App.showReports();
-    }
-
-    @FXML
-    private void navigateToProfile() {
-        App.showProfile();
-    }
-
+    /** Opens the new-category dialog. */
     @FXML
     private void handleAddCategory() {
         DialogHelper.showNewCategoryDialog();
     }
 
+    /** Opens the deposit (income) transaction dialog and adds the transaction. */
     @FXML
     private void handleDeposit() {
         Transaction tx = DialogHelper.showTransactionDialog(currentAccount, TransactionType.INCOME);
@@ -346,6 +403,7 @@ public class DashboardController implements PropertyChangeListener {
         }
     }
 
+    /** Opens the transfer (expense) transaction dialog and adds the transaction. */
     @FXML
     private void handleTransfer() {
         Transaction tx = DialogHelper.showTransactionDialog(currentAccount, TransactionType.EXPENSE);
@@ -353,5 +411,39 @@ public class DashboardController implements PropertyChangeListener {
             transactionManager.addTransaction(tx);
             refreshDashboard();
         }
+    }
+
+    // =========================================================================
+    // Screen Navigation
+    // =========================================================================
+
+    /** Navigates to the Transactions screen. */
+    @FXML
+    private void navigateToTransactions() {
+        App.showTransactions();
+    }
+
+    /** Navigates to the Budgets screen. */
+    @FXML
+    private void navigateToBudgets() {
+        App.showBudgets();
+    }
+
+    /** Navigates to the Goals screen. */
+    @FXML
+    private void navigateToGoals() {
+        App.showGoals();
+    }
+
+    /** Navigates to the Reports screen. */
+    @FXML
+    private void navigateToReports() {
+        App.showReports();
+    }
+
+    /** Navigates to the Profile screen. */
+    @FXML
+    private void navigateToProfile() {
+        App.showProfile();
     }
 }

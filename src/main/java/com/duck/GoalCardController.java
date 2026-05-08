@@ -11,7 +11,16 @@ import javafx.scene.layout.Region;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * FXML controller for a single saving goal card.  Receives a SavingGoal
+ * and populates all UI elements including name, progress bar, amounts,
+ * days remaining, and status (Completed, On Track, Behind, Overdue).
+ */
 public class GoalCardController {
+
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
 
     @FXML private AnchorPane  cardRoot;
     @FXML private Label       goalNameLabel;
@@ -23,6 +32,16 @@ public class GoalCardController {
     @FXML private Label       daysLabel;
     @FXML private Region      statusBorder;
 
+    // =========================================================================
+    // Public API
+    // =========================================================================
+
+    /**
+     * Populates the card UI with data from the given SavingGoal.
+     * Computes progress percentage, days remaining, and derives a status
+     * (Completed, Overdue, Behind, or On Track) based on time and progress.
+     * @param goal the saving goal to display, or null to do nothing
+     */
     public void setGoal(SavingGoal goal) {
         if (goal == null) return;
 

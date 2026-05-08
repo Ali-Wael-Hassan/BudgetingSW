@@ -11,9 +11,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * FXML controller for the user registration screen.  Validates inputs,
+ * creates a new Account, and delegates authentication to the SignUp
+ * strategy.  Also manages show/hide toggles for password fields.
+ */
 public class SignUpController {
 
     private Recognition authEngine = new SignUp();
+
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
 
     @FXML private TextField fullNameField;
     @FXML private TextField emailField;
@@ -23,10 +32,19 @@ public class SignUpController {
     @FXML private TextField confirmPasswordTextField;
     @FXML private Label errorLabel;
 
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+
+    /** Constructs the controller and sets the authentication strategy. */
     public SignUpController() {
         authEngine.setAuthStrategy(new AppAuth());
     }
 
+    /**
+     * Initializes the form.  Binds the visible text fields to their hidden
+     * PasswordField counterparts for bidirectional text synchronization.
+     */
     @FXML
     private void initialize() {
         passwordTextField.setManaged(passwordTextField.isVisible());
@@ -35,6 +53,16 @@ public class SignUpController {
         confirmPasswordTextField.textProperty().bindBidirectional(confirmPasswordField.textProperty());
     }
 
+    // =========================================================================
+    // Account Creation
+    // =========================================================================
+
+    /**
+     * Validates the form inputs and creates a new account.
+     * Checks for valid email format, minimum password length,
+     * alphanumeric password content, and matching confirmation.
+     * On success the session is initialized and the dashboard is shown.
+     */
     @FXML
     private void handleCreateAccount() {
         String username = fullNameField.getText();
@@ -73,6 +101,10 @@ public class SignUpController {
         }
     }
 
+    /**
+     * Maps a Message flag to a user-facing error string and shows it.
+     * @param flag the result message from the authentication engine
+     */
     private void displayError(Message flag) {
         switch (flag) {
             case INVALID_EMAIL:
@@ -87,12 +119,22 @@ public class SignUpController {
         }
     }
 
+    // =========================================================================
+    // Navigation
+    // =========================================================================
+
+    /** Navigates back to the login screen. */
     @FXML
     private void handleSignIn() {
         clearError();
         App.showLogin();
     }
 
+    // =========================================================================
+    // UI Helpers
+    // =========================================================================
+
+    /** Toggles the visibility of the password field between text and masked. */
     @FXML
     private void handleTogglePassword() {
         boolean showing = passwordTextField.isVisible();
@@ -102,6 +144,7 @@ public class SignUpController {
         passwordField.setManaged(showing);
     }
 
+    /** Toggles the visibility of the confirm password field between text and masked. */
     @FXML
     private void handleToggleConfirmPassword() {
         boolean showing = confirmPasswordTextField.isVisible();
@@ -111,12 +154,17 @@ public class SignUpController {
         confirmPasswordField.setManaged(showing);
     }
 
+    /**
+     * Displays an error message on the form.
+     * @param message the error text to show
+     */
     private void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
         errorLabel.setManaged(true);
     }
 
+    /** Hides the error label. */
     private void clearError() {
         errorLabel.setText("");
         errorLabel.setVisible(false);

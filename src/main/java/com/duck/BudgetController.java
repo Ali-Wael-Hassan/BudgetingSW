@@ -26,9 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * FXML controller for the Budgets screen.  Displays a grid of category
+ * budget cards with spending progress bars, a summary bar, and month
+ * navigation.  Listens for data changes and refreshes automatically.
+ */
 public class BudgetController implements Initializable, PropertyChangeListener {
 
-    // ── FXML injections ────────────────────────────────────────────
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
+
     @FXML private Label     monthLabel;
     @FXML private Label     summaryTotalLabel;
     @FXML private Label     summarySpentLabel;
@@ -38,7 +46,10 @@ public class BudgetController implements Initializable, PropertyChangeListener {
     @FXML private GridPane  categoriesGrid;
     @FXML private ScrollPane contentScroll;
 
-    // ── SVG icon paths ─────────────────────────────────────────────
+    // =========================================================================
+    // Category Icon SVG Paths
+    // =========================================================================
+
     private static final String SVG_HOUSE   = "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z";
     private static final String SVG_FOOD    = "M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z";
     private static final String SVG_CAR     = "M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z";
@@ -46,13 +57,27 @@ public class BudgetController implements Initializable, PropertyChangeListener {
     private static final String SVG_TV      = "M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z";
     private static final String SVG_SHOP    = "M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z";
 
-    // ── Data model ─────────────────────────────────────────────────
+    // =========================================================================
+    // Inner Classes
+    // =========================================================================
+
+    /**
+     * Represents a single budget category with name, spent amount, limit,
+     * and an SVG icon path for display.
+     */
     public static class BudgetCategory {
         public String name;
         public double spent;
         public double limit;
         public String svgPath;
 
+        /**
+         * Constructs a BudgetCategory with the given values.
+         * @param name    the category name
+         * @param spent   the amount spent
+         * @param limit   the budget limit
+         * @param svgPath the SVG icon path
+         */
         public BudgetCategory(String name, double spent, double limit, String svgPath) {
             this.name    = name;
             this.spent   = spent;
@@ -60,9 +85,15 @@ public class BudgetController implements Initializable, PropertyChangeListener {
             this.svgPath = svgPath;
         }
 
+        /** @return the percentage of the budget used (0-100) */
         public double percent() { return limit > 0 ? (spent / limit) * 100.0 : 0; }
+        /** @return true if spent exceeds the limit */
         public boolean isOver() { return spent > limit; }
     }
+
+    // =========================================================================
+    // Instance State
+    // =========================================================================
 
     private final List<BudgetCategory> categories = new ArrayList<>();
     private static final int COLUMNS = 3;
@@ -73,11 +104,21 @@ public class BudgetController implements Initializable, PropertyChangeListener {
     private static final DateTimeFormatter MONTH_FMT =
             DateTimeFormatter.ofPattern("MMMM yyyy");
 
-    // ── Lifecycle ──────────────────────────────────────────────────
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+
+    /**
+     * Initializes the controller.  Registers a property change listener,
+     * loads the current account, sets the sidebar avatar, applies the
+     * theme, and loads budgets for the current month.
+     * @param location  unused
+     * @param resources unused
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ApplicationState state = ApplicationState.getInstance();
-        state.getBudgetController().addPropertyChangeListener(this);
+        state.getBudgetManager().addPropertyChangeListener(this);
         currentAccount = state.getCurrentAccount();
         AvatarHelper.setSidebarAvatar(sidebarAvatarContainer, currentAccount);
         monthLabel.setText(currentMonth.format(MONTH_FMT));
@@ -86,6 +127,7 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         render();
     }
 
+    /** Applies the account's preferred color theme. */
     private void applyTheme() {
         if (currentAccount == null) return;
         com.duck.model.type.AppSettings.Mode mode = com.duck.model.type.AppSettings.Mode.DARK;
@@ -95,6 +137,11 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         App.setTheme(mode);
     }
 
+    /**
+     * Fired when underlying data changes.  Schedules a UI refresh on the
+     * JavaFX application thread.
+     * @param evt unused
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {   
         javafx.application.Platform.runLater(() -> {
@@ -104,8 +151,11 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         });
     }
 
-    // ── FXML handlers ──────────────────────────────────────────────
+    // =========================================================================
+    // FXML Handlers
+    // =========================================================================
 
+    /** Opens the new budget dialog and creates the budget if validation passes. */
     @FXML
     private void handleAddBudget() {
         ApplicationState state = ApplicationState.getInstance();
@@ -138,6 +188,7 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         }
     }
 
+    /** Moves the budget view to the previous month. */
     @FXML
     private void handlePrevMonth() {
         currentMonth = currentMonth.minusMonths(1);
@@ -146,6 +197,7 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         render();
     }
 
+    /** Moves the budget view to the next month. */
     @FXML
     private void handleNextMonth() {
         currentMonth = currentMonth.plusMonths(1);
@@ -154,13 +206,11 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         render();
     }
 
-    @FXML private void navigateToDashboard() { App.showDashboard(); }
-    @FXML private void navigateToTransactions() { App.showTransactions(); }
-    @FXML private void navigateToBudgets() { App.showBudgets(); }
-    @FXML private void navigateToGoals() { App.showGoals(); }
-    @FXML private void navigateToReports() { App.showReports(); }
-    @FXML private void navigateToProfile() { App.showProfile(); }
+    // =========================================================================
+    // Data Loading
+    // =========================================================================
 
+    /** Loads all budgets overlapping the current month and populates the categories list. */
     private void loadBudgets() {
         categories.clear();
         String token = Session.getInstance().getToken();
@@ -198,6 +248,11 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         }
     }
 
+    /**
+     * Returns an SVG path string for the given category name.
+     * @param category the transaction category
+     * @return the matching SVG path constant
+     */
     private String svgForCategory(String category) {
         if (category == null) return SVG_SHOP;
         String c = category.toLowerCase();
@@ -209,13 +264,17 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         return SVG_SHOP;
     }
 
-    // ── Rendering ──────────────────────────────────────────────────
+    // =========================================================================
+    // Rendering
+    // =========================================================================
 
+    /** Updates the summary bar and regenerates the category grid. */
     private void render() {
         updateSummary();
         renderGrid();
     }
 
+    /** Updates the total limit, spent, remaining labels and the main progress bar. */
     private void updateSummary() {
         double totalLimit = categories.stream().mapToDouble(c -> c.limit).sum();
         double totalSpent = categories.stream().mapToDouble(c -> c.spent).sum();
@@ -235,6 +294,7 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         }, mainProgressFill.parentProperty()));
     }
 
+    /** Places each category card into the grid layout. */
     private void renderGrid() {
         categoriesGrid.getChildren().clear();
         categoriesGrid.getColumnConstraints().clear();
@@ -254,13 +314,16 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         }
     }
 
-    // ── Card builder ───────────────────────────────────────────────
-
+    /**
+     * Builds a single VBox card for a BudgetCategory with icon, name,
+     * spent/limit amounts, progress bar, and percentage label.
+     * @param cat the budget category to display
+     * @return a styled VBox card
+     */
     private VBox buildCard(BudgetCategory cat) {
         VBox card = new VBox(8);
         card.getStyleClass().add("category-card");
 
-        // ── Icon + name row
         HBox nameRow = new HBox(12);
         nameRow.setAlignment(Pos.CENTER_LEFT);
 
@@ -277,7 +340,6 @@ public class BudgetController implements Initializable, PropertyChangeListener {
 
         nameRow.getChildren().addAll(iconPane, nameLabel);
 
-        // ── Spent / limit row
         HBox amountRow = new HBox(8);
         amountRow.setAlignment(Pos.CENTER_LEFT);
         amountRow.getStyleClass().add("category-amount-row");
@@ -290,7 +352,6 @@ public class BudgetController implements Initializable, PropertyChangeListener {
 
         amountRow.getChildren().addAll(spentLabel, limitLabel);
 
-        // ── Progress bar
         StackPane progressContainer = new StackPane();
         progressContainer.getStyleClass().add("category-progress-container");
 
@@ -309,7 +370,6 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         progressBg.getChildren().add(progressFill);
         progressContainer.getChildren().add(progressBg);
 
-        // ── Percentage label
         String pctText = String.format("%.0f%%", cat.percent());
         Label pctLabel = new Label(pctText);
         pctLabel.getStyleClass().add(cat.isOver() ? "category-percent-over" : "category-percent");
@@ -317,4 +377,21 @@ public class BudgetController implements Initializable, PropertyChangeListener {
         card.getChildren().addAll(nameRow, amountRow, progressContainer, pctLabel);
         return card;
     }
+
+    // =========================================================================
+    // Screen Navigation
+    // =========================================================================
+
+    /** Navigates to the Dashboard screen. */
+    @FXML private void navigateToDashboard() { App.showDashboard(); }
+    /** Navigates to the Transactions screen. */
+    @FXML private void navigateToTransactions() { App.showTransactions(); }
+    /** Navigates to the Budgets screen. */
+    @FXML private void navigateToBudgets() { App.showBudgets(); }
+    /** Navigates to the Goals screen. */
+    @FXML private void navigateToGoals() { App.showGoals(); }
+    /** Navigates to the Reports screen. */
+    @FXML private void navigateToReports() { App.showReports(); }
+    /** Navigates to the Profile screen. */
+    @FXML private void navigateToProfile() { App.showProfile(); }
 }

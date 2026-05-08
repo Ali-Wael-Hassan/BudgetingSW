@@ -35,11 +35,24 @@ import java.util.Optional;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 
+/**
+ * Utility class with static methods for constructing and displaying modal
+ * dialogs.  Provides dialogs for creating transactions, budgets, saving
+ * goals, editing profiles, changing passwords, and adding categories.
+ */
 public class DialogHelper {
+
+    // =========================================================================
+    // Stylesheet Helpers
+    // =========================================================================
 
     private static final String CSS = DialogHelper.class.getResource("styles.css").toExternalForm();
     private static String lightCss;
 
+    /**
+     * Lazily loads and returns the light theme stylesheet URL.
+     * @return the light CSS URL, or null if not found
+     */
     private static String getLightCss() {
         if (lightCss == null) {
             java.net.URL url = DialogHelper.class.getResource("theme-light.css");
@@ -48,6 +61,10 @@ public class DialogHelper {
         return lightCss;
     }
 
+    /**
+     * Applies the application stylesheets (main CSS and light theme) to a dialog.
+     * @param dialog the dialog to style
+     */
     public static void addThemeStylesheets(Dialog<?> dialog) {
         dialog.getDialogPane().getStylesheets().add(CSS);
         String lc = getLightCss();
@@ -56,10 +73,26 @@ public class DialogHelper {
         }
     }
 
+    // =========================================================================
+    // Transaction Dialog
+    // =========================================================================
+
+    /**
+     * Shows a dialog to create a new transaction with no preset type.
+     * @param account the account to associate the transaction with
+     * @return a new Transaction, or null if cancelled
+     */
     public static Transaction showTransactionDialog(Account account) {
         return showTransactionDialog(account, null);
     }
 
+    /**
+     * Shows a dialog to create a new transaction with an optional preset type.
+     * Provides fields for type (Income / Expense), category, amount, and date.
+     * @param account the account to associate the transaction with
+     * @param preset  the preselected transaction type, or null for no default
+     * @return a new Transaction, or null if the dialog was cancelled
+     */
     public static Transaction showTransactionDialog(Account account, TransactionType preset) {
         if (account == null) return null;
 
@@ -164,6 +197,16 @@ public class DialogHelper {
         return result.orElse(null);
     }
 
+    // =========================================================================
+    // Budget Dialog
+    // =========================================================================
+
+    /**
+     * Shows a dialog to create a new budget with category, amount, date
+     * range, and alert threshold fields.
+     * @param account the account to associate the budget with
+     * @return a new Budget, or null if cancelled
+     */
     public static Budget showBudgetDialog(Account account) {
         if (account == null) return null;
 
@@ -278,6 +321,16 @@ public class DialogHelper {
         return result.orElse(null);
     }
 
+    // =========================================================================
+    // Saving Goal Dialog
+    // =========================================================================
+
+    /**
+     * Shows a dialog to create a new saving goal with name, target amount,
+     * current amount, and deadline fields.
+     * @param account the account to associate the goal with
+     * @return a new SavingGoal, or null if cancelled
+     */
     public static SavingGoal showGoalDialog(Account account) {
         if (account == null) return null;
 
@@ -372,6 +425,15 @@ public class DialogHelper {
         return result.orElse(null);
     }
 
+    // =========================================================================
+    // Change Password Dialog
+    // =========================================================================
+
+    /**
+     * Shows a dialog to change the account password.  Requires the current
+     * password, new password, and confirmation.
+     * @return a String array with [oldPassword, newPassword], or null if cancelled
+     */
     public static String[] showChangePasswordDialog() {
         Dialog<String[]> dialog = new Dialog<>();
         dialog.setTitle("Change Password");
@@ -440,6 +502,16 @@ public class DialogHelper {
         return result.orElse(null);
     }
 
+    // =========================================================================
+    // Edit Profile Dialog
+    // =========================================================================
+
+    /**
+     * Shows a dialog to edit the user profile.  Allows changing the display
+     * name and profile photo via a file chooser.
+     * @param account the account to edit
+     * @return the updated Account, or null if cancelled
+     */
     public static Account showEditProfileDialog(Account account) {
         if (account == null) return null;
 
@@ -531,6 +603,14 @@ public class DialogHelper {
         return result.orElse(null);
     }
 
+    // =========================================================================
+    // Avatar Helper
+    // =========================================================================
+
+    /**
+     * Creates a default avatar placeholder SVG (person silhouette).
+     * @return a StackPane containing the default avatar graphic
+     */
     private static StackPane createDefaultAvatarSvg() {
         StackPane sp = new StackPane();
         sp.getStyleClass().add("default-avatar");
@@ -542,6 +622,14 @@ public class DialogHelper {
         return sp;
     }
 
+    // =========================================================================
+    // New Category Dialog
+    // =========================================================================
+
+    /**
+     * Shows a dialog to create a new transaction category.  The category
+     * is saved to local storage if it does not already exist.
+     */
     public static void showNewCategoryDialog() {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("New Category");
@@ -582,6 +670,14 @@ public class DialogHelper {
         });
     }
 
+    // =========================================================================
+    // Dialog Styling Helpers
+    // =========================================================================
+
+    /**
+     * Applies the dialog-button style class to all buttons in a dialog.
+     * @param dialog the dialog whose buttons should be styled
+     */
     public static void styleDialogButtons(Dialog<?> dialog) {
         dialog.getDialogPane().getButtonTypes().forEach(btnType -> {
             Button btn = (Button) dialog.getDialogPane().lookupButton(btnType);
@@ -591,12 +687,23 @@ public class DialogHelper {
         });
     }
 
+    /**
+     * Shows an error message on a dialog label.
+     * @param errorLabel the label to display the error on
+     * @param message    the error text to show
+     */
     private static void showError(Label errorLabel, String message) {
         errorLabel.setText(message);
         errorLabel.setManaged(true);
         errorLabel.setVisible(true);
     }
 
+    /**
+     * Wraps a label and an input node in a styled VBox column.
+     * @param labelText the text for the label
+     * @param input     the input control (TextField, ComboBox, DatePicker, etc.)
+     * @return a VBox containing the label and input
+     */
     private static VBox styledField(String labelText, javafx.scene.Node input) {
         VBox box = new VBox(6);
         Label label = new Label(labelText);

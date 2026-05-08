@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Singleton JSON-file storage implementation.  Loads from and saves
+ * to local_storage.json on every mutation.
+ */
 public class LocalStorage implements StorageStrategy {
     private static LocalStorage instance;
     private final String FILE_PATH = "local_storage.json";
@@ -26,6 +30,11 @@ public class LocalStorage implements StorageStrategy {
     private List<String> categories = new ArrayList<>();
     private List<SavingGoal> goals = new ArrayList<>();
 
+    /**
+     * Private constructor.  Configures the ObjectMapper with JSR-310
+     * support and lenient deserialization, then loads existing data
+     * from the JSON file.  Seeds default categories if none exist.
+     */
     private LocalStorage() {
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
@@ -40,6 +49,11 @@ public class LocalStorage implements StorageStrategy {
         }
     }
 
+    /**
+     * Returns the singleton LocalStorage instance, creating it if
+     * necessary.
+     * @return the singleton instance
+     */
     public static synchronized LocalStorage getInstance() {
         if (instance == null) {
             instance = new LocalStorage();
@@ -47,10 +61,21 @@ public class LocalStorage implements StorageStrategy {
         return instance;
     }
 
+    // =========================================================================
+    // File I/O
+    // =========================================================================
+
+    /**
+     * Serialises this object to the JSON file.
+     */
     private void saveToFile() throws IOException {
         mapper.writeValue(new File(FILE_PATH), this);
     }
 
+    /**
+     * Deserialises persisted data from the JSON file into the
+     * in-memory lists.  Silently returns if the file does not exist.
+     */
     private void loadFromFile() {
         File file = new File(FILE_PATH);
         if (file.exists()) {
@@ -68,6 +93,15 @@ public class LocalStorage implements StorageStrategy {
         }
     }
 
+    // =========================================================================
+    // StorageStrategy Implementation
+    // =========================================================================
+
+    /**
+     * Returns the in-memory list for the given DataKey.
+     * @param key the data key to look up
+     * @return the matching list, or null if the key is unknown
+     */
     @Override
     public Object fetch(AppSettings.DataKey key) {
         switch (key) {
@@ -81,6 +115,13 @@ public class LocalStorage implements StorageStrategy {
         }
     }
 
+    /**
+     * Replaces the entire in-memory list for the given key with a new
+     * list and persists to file.
+     * @param key  the data key to overwrite
+     * @param data the new List to store
+     * @return SUCCESS or ERROR
+     */
     @Override
     public AppSettings.Message save(AppSettings.DataKey key, Object data) {
         try {
@@ -106,6 +147,13 @@ public class LocalStorage implements StorageStrategy {
         }
     }
 
+    /**
+     * Appends a single item to the in-memory list for the given key
+     * and persists to file.
+     * @param key  the data key to append to
+     * @param data the item to add
+     * @return SUCCESS or ERROR
+     */
     @Override
     public AppSettings.Message insert(AppSettings.DataKey key, Object data) {
         try {
@@ -126,6 +174,10 @@ public class LocalStorage implements StorageStrategy {
             return AppSettings.Message.ERROR;
         }
     }
+
+    // =========================================================================
+    // Getters
+    // =========================================================================
 
     public List<Account> getAccounts() { return accounts; }
     public List<Transaction> getExpenses() { return expenses; }

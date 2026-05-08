@@ -21,21 +21,49 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * FXML controller for the Goals screen.  Loads and displays saving goal
+ * cards, listens for data model changes, and handles new goal creation
+ * with validation and error reporting.
+ */
 public class GoalsController implements Initializable, PropertyChangeListener {
+
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
 
     @FXML private FlowPane cardsContainer;
     @FXML private StackPane sidebarAvatarContainer;
 
+    // =========================================================================
+    // Instance State
+    // =========================================================================
+
     private final ApplicationState state = ApplicationState.getInstance();
-    private final SavingGoalsManager goalsController = state.getGoalsController();
+    private final SavingGoalsManager goalsController = state.getGoalsManager();
     private Account currentAccount;
 
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+
+    /**
+     * Initializes the controller.  Registers a property change listener on
+     * the goals manager and schedules a full refresh.
+     * @param location  unused
+     * @param resources unused
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         goalsController.addPropertyChangeListener(this);
         Platform.runLater(this::refresh);
     }
 
+    /**
+     * Fired when the underlying goals data changes.  Schedules a UI refresh
+     * on the JavaFX application thread.
+     * @param evt unused
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         javafx.application.Platform.runLater(() -> {
@@ -44,6 +72,7 @@ public class GoalsController implements Initializable, PropertyChangeListener {
         });
     }
 
+    /** Rebuilds all goal cards with the latest data and applies the current theme. */
     private void refresh() {
         currentAccount = state.getCurrentAccount();
         if (currentAccount == null) return;
@@ -52,6 +81,7 @@ public class GoalsController implements Initializable, PropertyChangeListener {
         renderCards();
     }
 
+    /** Applies the account's preferred color theme. */
     private void applyTheme() {
         if (currentAccount == null) return;
         com.duck.model.type.AppSettings.Mode mode = com.duck.model.type.AppSettings.Mode.DARK;
@@ -61,6 +91,11 @@ public class GoalsController implements Initializable, PropertyChangeListener {
         App.setTheme(mode);
     }
 
+    // =========================================================================
+    // Rendering
+    // =========================================================================
+
+    /** Loads each saving goal as a goal_card.fxml node and adds it to the container. */
     private void renderCards() {
         cardsContainer.getChildren().clear();
         List<SavingGoal> goals = goalsController.getAllSavings(currentAccount);
@@ -88,18 +123,20 @@ public class GoalsController implements Initializable, PropertyChangeListener {
         }
     }
 
+    // =========================================================================
+    // Actions
+    // =========================================================================
+
+    /** Opens the new-category dialog. */
     @FXML
     private void handleAddCategory() {
         DialogHelper.showNewCategoryDialog();
     }
 
-    @FXML private void navigateToDashboard() { App.showDashboard(); }
-    @FXML private void navigateToTransactions() { App.showTransactions(); }
-    @FXML private void navigateToBudgets() { App.showBudgets(); }
-    @FXML private void navigateToGoals() { App.showGoals(); }
-    @FXML private void navigateToReports() { App.showReports(); }
-    @FXML private void navigateToProfile() { App.showProfile(); }
-
+    /**
+     * Opens the new goal dialog and creates the goal if validation passes.
+     * Displays a specific error alert for each validation failure.
+     */
     @FXML
     private void handleNewGoal() {
         currentAccount = state.getCurrentAccount();
@@ -132,4 +169,21 @@ public class GoalsController implements Initializable, PropertyChangeListener {
             }
         }
     }
+
+    // =========================================================================
+    // Screen Navigation
+    // =========================================================================
+
+    /** Navigates to the Dashboard screen. */
+    @FXML private void navigateToDashboard() { App.showDashboard(); }
+    /** Navigates to the Transactions screen. */
+    @FXML private void navigateToTransactions() { App.showTransactions(); }
+    /** Navigates to the Budgets screen. */
+    @FXML private void navigateToBudgets() { App.showBudgets(); }
+    /** Navigates to the Goals screen. */
+    @FXML private void navigateToGoals() { App.showGoals(); }
+    /** Navigates to the Reports screen. */
+    @FXML private void navigateToReports() { App.showReports(); }
+    /** Navigates to the Profile screen. */
+    @FXML private void navigateToProfile() { App.showProfile(); }
 }

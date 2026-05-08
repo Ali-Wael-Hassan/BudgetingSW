@@ -12,9 +12,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * FXML controller for the Login screen.  Validates credentials, authenticates
+ * the user, and navigates to the dashboard on success.  Also manages the
+ * password visibility toggle and the link to the sign up screen.
+ */
 public class LoginController {
 
     private Recognition authEngine = new Login();
+
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
 
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
@@ -22,10 +31,19 @@ public class LoginController {
     @FXML private Label errorLabel;
     @FXML private Hyperlink signUpLink;
 
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+
+    /** Constructs the controller and sets the authentication strategy. */
     public LoginController() {
         authEngine.setAuthStrategy(new AppAuth());
     }
 
+    /**
+     * Initializes the form.  Binds the visible text field to the hidden
+     * PasswordField for bidirectional text synchronization.
+     */
     @FXML
     private void initialize() {
         if (passwordTextField != null && passwordField != null) {
@@ -34,6 +52,14 @@ public class LoginController {
         }
     }
 
+    // =========================================================================
+    // Authentication
+    // =========================================================================
+
+    /**
+     * Validates the email and password inputs and attempts to sign in.
+     * On success the session is initialized and the dashboard is shown.
+     */
     @FXML
     private void handleSignIn() {
         String rawEmail = emailField.getText();
@@ -62,6 +88,10 @@ public class LoginController {
         }
     }
 
+    /**
+     * Maps a Message flag to a user-facing error string and shows it.
+     * @param flag the result message from the authentication engine
+     */
     private void displayError(Message flag) {
         switch (flag) {
             case ERROR:
@@ -73,12 +103,22 @@ public class LoginController {
         }
     }
 
+    // =========================================================================
+    // Navigation
+    // =========================================================================
+
+    /** Navigates to the sign up screen. */
     @FXML
     private void handleSignUp() {
         clearError();
         App.showSignUp();
     }
 
+    // =========================================================================
+    // UI Helpers
+    // =========================================================================
+
+    /** Toggles the visibility of the password field between text and masked. */
     @FXML
     private void handleTogglePassword() {
         if (passwordTextField != null && passwordField != null) {
@@ -90,12 +130,17 @@ public class LoginController {
         }
     }
 
+    /**
+     * Displays an error message on the form.
+     * @param message the error text to show
+     */
     private void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
         errorLabel.setManaged(true);
     }
 
+    /** Hides the error label. */
     private void clearError() {
         errorLabel.setText("");
         errorLabel.setVisible(false);

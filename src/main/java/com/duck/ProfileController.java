@@ -30,7 +30,16 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * FXML controller for the Profile / Settings screen.  Displays and edits
+ * user profile details, theme preference, currency, and provides security
+ * actions such as password change, sign out, and account deletion.
+ */
 public class ProfileController implements Initializable, PropertyChangeListener {
+
+    // =========================================================================
+    // FXML Controls
+    // =========================================================================
 
     @FXML private StackPane rootPane;
     @FXML private StackPane sidebarAvatarContainer;
@@ -41,6 +50,10 @@ public class ProfileController implements Initializable, PropertyChangeListener 
     @FXML private HBox currencyRow1;
     @FXML private HBox currencyRow2;
     @FXML private VBox securityOptions;
+
+    // =========================================================================
+    // Instance State
+    // =========================================================================
 
     private final ApplicationState state = ApplicationState.getInstance();
     private final AccountManager accountManager = state.getAccountManager();
@@ -55,16 +68,31 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         {"EGP", "EGP"},
     };
 
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+
+    /**
+     * Initializes the controller.  Schedules a full refresh on the JavaFX
+     * application thread.
+     * @param location  unused
+     * @param resources unused
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(this::refresh);
     }
 
+    /**
+     * Fired when underlying data changes.  Schedules a UI refresh.
+     * @param evt unused
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Platform.runLater(this::refresh);
     }
 
+    /** Rebuilds all profile sections with the latest account data. */
     private void refresh() {
         currentAccount = state.getCurrentAccount();
         if (currentAccount == null) return;
@@ -76,6 +104,7 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         renderSecurityActions();
     }
 
+    /** Applies the account's preferred color theme and updates the root pane style. */
     private void applyTheme() {
         AppSettings.Mode mode = AppSettings.Mode.DARK;
         if (currentAccount.getAccountConfig() != null && currentAccount.getAccountConfig().getMode() != null) {
@@ -91,8 +120,11 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
-    // ── FXML handlers ──
+    // =========================================================================
+    // FXML Handlers
+    // =========================================================================
 
+    /** Opens the edit profile dialog and saves changes if confirmed. */
     @FXML
     private void handleEditProfile() {
         if (currentAccount == null) return;
@@ -106,11 +138,13 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /** Opens the new-category dialog. */
     @FXML
     private void handleAddCategory() {
         DialogHelper.showNewCategoryDialog();
     }
 
+    /** Prompts for confirmation and permanently deletes the current account. */
     @FXML
     private void handleDeleteAccount() {
         if (currentAccount == null) return;
@@ -134,6 +168,7 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /** Opens the change password dialog and updates the password if confirmed. */
     private void handleChangePassword() {
         if (currentAccount == null) return;
         String[] passwords = DialogHelper.showChangePasswordDialog();
@@ -153,6 +188,7 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /** Prompts for confirmation and signs the user out. */
     private void handleSignOut() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Sign Out");
@@ -169,21 +205,35 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    // =========================================================================
+    // Screen Navigation
+    // =========================================================================
+
+    /** Navigates to the Dashboard screen. */
     @FXML private void navigateToDashboard() { App.showDashboard(); }
+    /** Navigates to the Transactions screen. */
     @FXML private void navigateToTransactions() { App.showTransactions(); }
+    /** Navigates to the Budgets screen. */
     @FXML private void navigateToBudgets() { App.showBudgets(); }
+    /** Navigates to the Goals screen. */
     @FXML private void navigateToGoals() { App.showGoals(); }
+    /** Navigates to the Reports screen. */
     @FXML private void navigateToReports() { App.showReports(); }
+    /** Navigates to the Profile screen. */
     @FXML private void navigateToProfile() { App.showProfile(); }
 
-    // ── Render methods ──
+    // =========================================================================
+    // Render Methods
+    // =========================================================================
 
+    /** Populates the profile header with the current account name and email. */
     private void renderProfile() {
         profileNameLabel.setText(currentAccount.getUserName());
         profileEmailLabel.setText(currentAccount.getEmail());
         renderAvatar();
     }
 
+    /** Renders the profile avatar image or a fallback SVG icon. */
     private void renderAvatar() {
         profileAvatarContainer.getChildren().clear();
         String avatarPath = currentAccount.getAccountConfig() != null
@@ -211,6 +261,7 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         profileAvatarContainer.getChildren().addAll(circle, svg);
     }
 
+    /** Renders the theme toggle buttons (Dark / Light). */
     private void renderThemeToggles() {
         themeToggleBox.getChildren().clear();
         ToggleGroup group = new ToggleGroup();
@@ -229,6 +280,7 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /** Renders the currency selection toggle buttons (USD, EUR, EGP). */
     private void renderCurrencyToggles() {
         currencyRow1.getChildren().clear();
         currencyRow2.getChildren().clear();
@@ -255,6 +307,7 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /** Renders the security action rows (change password, sign out). */
     private void renderSecurityActions() {
         securityOptions.getChildren().clear();
         securityOptions.getChildren().add(buildSecurityRow(
@@ -265,6 +318,15 @@ public class ProfileController implements Initializable, PropertyChangeListener 
                 this::handleSignOut));
     }
 
+    /**
+     * Builds a single security action row with a label, description, and button.
+     * @param label       the action title
+     * @param description the action description
+     * @param buttonText  the button label
+     * @param buttonStyle the button CSS style class
+     * @param handler     the action to run on button click
+     * @return a styled HBox
+     */
     private HBox buildSecurityRow(String label, String description, String buttonText,
                                    String buttonStyle, Runnable handler) {
         HBox row = new HBox();
@@ -287,6 +349,10 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         return row;
     }
 
+    /**
+     * Updates the account theme and re-applies it.
+     * @param newMode the theme mode to switch to
+     */
     private void updateTheme(AppSettings.Mode newMode) {
         if (currentAccount == null) return;
         AccountConfig config = currentAccount.getAccountConfig();
@@ -303,6 +369,10 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Updates the account currency preference.
+     * @param newCurrency the currency to switch to
+     */
     private void updateCurrency(AppSettings.Currency newCurrency) {
         if (currentAccount == null) return;
         AccountConfig config = currentAccount.getAccountConfig();
@@ -317,6 +387,10 @@ public class ProfileController implements Initializable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Displays an error alert dialog with the given message.
+     * @param message the error text to show
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");

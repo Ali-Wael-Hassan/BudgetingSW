@@ -18,22 +18,48 @@ import com.duck.model.type.AppSettings.Message;
 import com.duck.model.type.AppSettings.AccountEvent;
 import com.duck.model.type.AppSettings.TransactionEvent;
 
+/**
+* Manages saving goals CRUD operations.  Validates, creates,
+* queries, and persists saving goals.  Listens for transaction and
+* account token change events to update goal progress and fire
+* completion alerts.
+*/
 public class SavingGoalsManager implements PropertyChangeListener {
     private List<SavingGoal> goals = new ArrayList<>();
     private final PropertyChangeSupport support;
     
+    /**
+     * Constructs an empty SavingGoalsManager with a PropertyChangeSupport.
+     */
     public SavingGoalsManager() {
         support =  new PropertyChangeSupport(this);
     }
 
+    /**
+     * Registers a PropertyChangeListener.
+     * @param listener the listener to add
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Removes a PropertyChangeListener.
+     * @param listener the listener to remove
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
     }
 
+    // =========================================================================
+    // Validation
+    // =========================================================================
+
+    /**
+     * Validates a saving goal against business rules.
+     * @param savingGoal the goal to validate
+     * @return SUCCESS or the appropriate error Message
+     */
     private Message validateGoal(SavingGoal savingGoal) {
 
         // 1. Check for null object
@@ -85,6 +111,11 @@ public class SavingGoalsManager implements PropertyChangeListener {
         return Message.SUCCESS;
     }
 
+    /**
+     * Creates a new saving goal after validation and persists to storage.
+     * @param savingGoal the goal to create
+     * @return SUCCESS or the validation error Message
+     */
     public Message createSavingGoal(SavingGoal savingGoal) {
         Message check = validateGoal(savingGoal);
         if (check == Message.SUCCESS) {
@@ -96,6 +127,11 @@ public class SavingGoalsManager implements PropertyChangeListener {
         return check;
     }
 
+    /**
+     * Calculates the required monthly saving amount to reach a goal by its deadline.
+     * @param savingGoal the goal to calculate for
+     * @return the monthly amount needed, or 0 if the goal is already met or null
+     */
     public float calculateMonthlySaving(SavingGoal savingGoal) {
         if (savingGoal == null) {
             return 0;
@@ -117,6 +153,11 @@ public class SavingGoalsManager implements PropertyChangeListener {
         return remainingAmount / monthsRemaining;
     }
 
+    /**
+     * Returns all saving goals belonging to the specified account.
+     * @param account the account to filter by
+     * @return list of matching goals
+     */
     public List<SavingGoal> getAllSavings(Account account) {
         List<SavingGoal> accountGoals = new ArrayList<>();
     
@@ -128,9 +169,19 @@ public class SavingGoalsManager implements PropertyChangeListener {
         return accountGoals;
     }
 
+    // =========================================================================
+    // Event Handling
+    // =========================================================================
+
+    /**
+     * Responds to property change events.  On TRANSACTION_RECEIVED,
+     * updates goal progress.  On TOKEN_CHANGED, loads or clears
+     * persisted goal data.
+     * @param evt the property change event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("SavingGoalsController: Property '" + evt.getPropertyName() + "' changed.");
+        System.out.println("SavingGoalsManager: Property '" + evt.getPropertyName() + "' changed.");
 
         if (TransactionEvent.TRANSACTION_RECEIVED.getName().equals(evt.getPropertyName())) {
             Object newValue = evt.getNewValue();
@@ -151,6 +202,11 @@ public class SavingGoalsManager implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Applies a positive transaction amount to the active saving goal.
+     * Fires a GOAL_COMPLETED event if the target amount is reached.
+     * @param transaction the transaction to apply
+     */
     private void handleTransactionUpdate(Transaction transaction) {
         System.out.println("Processing transaction: " + transaction);
     

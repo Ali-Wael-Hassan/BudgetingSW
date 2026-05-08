@@ -16,13 +16,24 @@ import javafx.util.Duration;
 import java.io.IOException;
 
 /**
- * JavaFX App with Scene Transitions
+ * Main JavaFX Application class.  Initializes the primary Stage and
+ * Scene, manages theme stylesheet toggling, and provides static
+ * navigation methods that animate transitions between FXML screens.
  */
 public class App extends Application {
+
+    // =========================================================================
+    // Scene and Theme State
+    // =========================================================================
 
     private static Scene scene;
     private static String lightThemeCss;
 
+    /**
+     * Toggles the light or dark theme by adding or removing the light
+     * theme stylesheet from the scene.
+     * @param mode the desired theme mode (LIGHT or DARK)
+     */
     public static void setTheme(Mode mode) {
         if (scene == null) return;
         if (lightThemeCss == null) {
@@ -38,6 +49,16 @@ public class App extends Application {
         }
     }
 
+    // =========================================================================
+    // Application Lifecycle
+    // =========================================================================
+
+    /**
+     * Starts the JavaFX application.  Checks for an existing session token
+     * to decide whether to show the dashboard or the login screen.
+     * @param stage the primary stage for the application
+     * @throws IOException if the initial FXML resource cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
         String token = Session.getInstance().getToken();
@@ -54,9 +75,11 @@ public class App extends Application {
         stage.show();
     }
 
-    /**
-     * Switch to Sign-Up screen with fade and slide animation
-     */
+    // =========================================================================
+    // Screen Navigation
+    // =========================================================================
+
+    /** Navigates to the Sign Up screen with a fade and slide animation. */
     public static void showSignUp() {
         try {
             Parent newRoot = loadFXML("sign_up");
@@ -66,9 +89,7 @@ public class App extends Application {
         }
     }
 
-    /**
-     * Switch to Login screen with fade and slide animation
-     */
+    /** Navigates to the Login screen with a fade and slide animation. */
     public static void showLogin() {
         try {
             Parent newRoot = loadFXML("login");
@@ -78,9 +99,7 @@ public class App extends Application {
         }
     }
 
-    /**
-     * Switch to Dashboard screen with fade and slide animation
-     */
+    /** Navigates to the Dashboard screen with a fade and slide animation. */
     public static void showDashboard() {
         try {
             Parent newRoot = loadFXML("dashboard");
@@ -90,9 +109,7 @@ public class App extends Application {
         }
     }
 
-    /**
-     * Switch to Transactions screen
-     */
+    /** Navigates to the Transactions screen with a fade and slide animation. */
     public static void showTransactions() {
         try {
             Parent newRoot = loadFXML("transactions");
@@ -102,6 +119,7 @@ public class App extends Application {
         }
     }
 
+    /** Navigates to the Budgets screen with a fade and slide animation. */
     public static void showBudgets() {
         try {
             Parent newRoot = loadFXML("budget");
@@ -111,6 +129,7 @@ public class App extends Application {
         }
     }
 
+    /** Navigates to the Goals screen with a fade and slide animation. */
     public static void showGoals() {
         try {
             Parent newRoot = loadFXML("goals");
@@ -120,6 +139,7 @@ public class App extends Application {
         }
     }
 
+    /** Navigates to the Reports screen with a fade and slide animation. */
     public static void showReports() {
         try {
             Parent newRoot = loadFXML("reports");
@@ -129,6 +149,7 @@ public class App extends Application {
         }
     }
 
+    /** Navigates to the Profile screen with a fade and slide animation. */
     public static void showProfile() {
         try {
             Parent newRoot = loadFXML("profile");
@@ -138,37 +159,37 @@ public class App extends Application {
         }
     }
 
+    // =========================================================================
+    // Animation
+    // =========================================================================
+
     /**
-     * Animate scene transition using Fade and Slide effects
+     * Animates the scene root transition with a parallel fade-out / slide-out
+     * of the current root, followed by a fade-in / slide-in of the new root.
+     * @param newRoot the new scene root to transition to
      */
     private static void animateSceneTransition(Parent newRoot) {
         Parent currentRoot = scene.getRoot();
 
-        // Fade out current root
         FadeTransition fadeOut = new FadeTransition(Duration.millis(300), currentRoot);
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
-        // Slide out current root to the left
         TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), currentRoot);
         slideOut.setFromX(0);
         slideOut.setToX(-100);
 
-        // New root starts off-screen to the right
         newRoot.setTranslateX(100);
         newRoot.setOpacity(0);
 
-        // Fade in new root
         FadeTransition fadeIn = new FadeTransition(Duration.millis(300), newRoot);
         fadeIn.setFromValue(0.0);
         fadeIn.setToValue(1.0);
 
-        // Slide in new root from the right
         TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), newRoot);
         slideIn.setFromX(100);
         slideIn.setToX(0);
 
-        // Combine animations
         ParallelTransition outTransition = new ParallelTransition(fadeOut, slideOut);
         ParallelTransition inTransition = new ParallelTransition(fadeIn, slideIn);
 
@@ -180,10 +201,25 @@ public class App extends Application {
         outTransition.play();
     }
 
+    // =========================================================================
+    // FXML Loading
+    // =========================================================================
+
+    /**
+     * Replaces the scene root with the given FXML file (no animation).
+     * @param fxml the FXML file name without extension
+     * @throws IOException if the resource cannot be loaded
+     */
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
+    /**
+     * Loads an FXML file from the classpath resources.
+     * @param fxml the FXML file name without extension
+     * @return the loaded Parent node
+     * @throws IOException if the resource is not found or cannot be loaded
+     */
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         java.net.URL url = App.class.getResource(fxml + ".fxml");
@@ -194,6 +230,14 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
+    // =========================================================================
+    // Entry Point
+    // =========================================================================
+
+    /**
+     * Application entry point.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         try {
             launch();

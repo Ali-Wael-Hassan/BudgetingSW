@@ -16,48 +16,54 @@ import com.duck.model.type.AppSettings.TransactionEvent;
 import com.duck.model.type.AppSettings.TransactionType;
 import com.duck.model.type.AppSettings.AccountEvent;
 
+/**
+ * Manages all Transaction objects for the application.  Provides
+ * validation, creation, filtered queries, and persistence.  Fires
+ * TRANSACTION_RECEIVED events so that BudgetManager and
+ * SavingGoalsManager can react to new transactions.
+ */
 public class TransactionManager implements PropertyChangeListener {
 
     private List<Transaction> transactions = new ArrayList<>();
     private final PropertyChangeSupport support;
     
+    /** Constructs an empty TransactionManager with a PropertyChangeSupport. */
     public TransactionManager() {
         support = new PropertyChangeSupport(this);
     }
 
+    /**
+     * Validates a transaction against business rules.
+     * @param transaction the transaction to validate
+     * @return SUCCESS or the appropriate error Message
+     */
     public Message validateTransaction(Transaction transaction) {
-        // 1. Basic null check
         if (transaction == null) {
             return Message.NULL_TRANSACTION_ERROR;
         }
-
-        // 2. Amount validation (Transaction must have a value)
         if (transaction.getAmount() <= 0) {
             return Message.INVALID_TRANSACTION_AMOUNT;
         }
-
-        // 3. Category validation
         if (transaction.getCategory() == null || transaction.getCategory().trim().isEmpty()) {
             return Message.INVALID_CATEGORY;
         }
-
-        // 4. Date validation
         if (transaction.getDate() == null || transaction.getDate().isAfter(LocalDate.now())) {
             return Message.INVALID_DATE;
         }
-
-        // 5. Account validation
         if (transaction.getAccount() == null) {
             return Message.NULL_ACCOUNT;
         }
-
         return Message.SUCCESS;
     }
 
+    /**
+     * Adds a new transaction after validation.  Persists to storage and
+     * fires a TRANSACTION_RECEIVED event on success.
+     * @param transaction the transaction to add
+     * @return SUCCESS or the validation error Message
+     */
     public Message addTransaction(Transaction transaction) {
-        // Validate first!
         Message check = validateTransaction(transaction);
-        
         if (check == Message.SUCCESS) {
             transactions.add(transaction);
 
@@ -70,13 +76,17 @@ public class TransactionManager implements PropertyChangeListener {
                 LocalStorage.getInstance().insert(DataKey.EXPENSES, transaction);
 
             support.firePropertyChange(TransactionEvent.TRANSACTION_RECEIVED.getName(), null, transaction);
-            
             return Message.SUCCESS;
         }
-        
         return check;
     }
 
+    /**
+     * Returns transactions filtered by the given config.
+     * Supports filtering by account, date period, and transaction type.
+     * @param config the filter configuration, or null for all transactions
+     * @return the filtered list of transactions
+     */
     public List<Transaction> getTransactions(TransactionConfig config) {
         List<Transaction> filteredTransactions = new ArrayList<>();
 
@@ -85,31 +95,33 @@ public class TransactionManager implements PropertyChangeListener {
         for (Transaction t : transactions) {
             try {
                 boolean accountMatch = config.getAccount() == null || t.getAccount().equals(config.getAccount());
-                
                 boolean dateMatch = true; 
                 if (config.getPeriod() != null) {
                     dateMatch = config.getPeriod().contains(t.getDate());
                 }
-
                 boolean typeMatch = true;
                 if (config.getType() != null) {
                     typeMatch = t.getType() == config.getType();
                 }
-
                 if (accountMatch && dateMatch && typeMatch) {
                     filteredTransactions.add(t);
                 }
             } catch (Exception ignored) {
             }
         }
-
         return filteredTransactions;
     }
 
+    /** @param listener the listener to add */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Handles property change events.  Responds to TOKEN_CHANGED by
+     * loading or clearing the persisted transaction list.
+     * @param evt the property change event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (AccountEvent.TOKEN_CHANGED.getName().equals(evt.getPropertyName())) {
