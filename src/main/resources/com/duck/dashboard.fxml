@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.duck.DashboardController"
+           styleClass="dashboard-root">
+    <children>
+        <HBox spacing="0" styleClass="dashboard-container">
+            <children>
+                <!-- Sidebar -->
+                <VBox styleClass="sidebar" prefWidth="280">
+                    <children>
+                        <VBox spacing="12" styleClass="sidebar-top">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="14">
+                                    <children>
+                                        <StackPane fx:id="sidebarAvatarContainer" styleClass="user-avatar">
+                                            <children>
+                                                <Circle radius="24" fill="#1F2937" />
+                                                <SVGPath styleClass="avatar-icon" content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label text="BudgetingSW" styleClass="app-name" />
+                                                <Label text="Financial Stewardship" styleClass="app-tagline" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Menu Items -->
+                        <VBox spacing="0" styleClass="sidebar-menu" VBox.vgrow="ALWAYS">
+                            <children>
+                                <!-- FIX: Dashboard was an unstyled HBox with no action; replaced with consistent Button pattern (active state) -->
+                                <Button text="Dashboard" styleClass="menu-button-active" maxWidth="Infinity" />
+                                <Button text="Transactions" styleClass="menu-button" maxWidth="Infinity" onAction="#navigateToTransactions" />
+                                <Button text="Budgets" styleClass="menu-button" maxWidth="Infinity" onAction="#navigateToBudgets" />
+                                <Button text="Saving Goals" styleClass="menu-button" maxWidth="Infinity" onAction="#navigateToGoals" />
+                                <Button text="Reports" styleClass="menu-button" maxWidth="Infinity" onAction="#navigateToReports" />
+                            </children>
+                        </VBox>
+
+                        <VBox styleClass="sidebar-bottom">
+                            <children>
+                                <Button text="+ New Category" styleClass="add-transaction-btn" maxWidth="Infinity" onAction="#handleAddCategory" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- Main Content Area -->
+                <VBox styleClass="main-content" HBox.hgrow="ALWAYS">
+                    <children>
+                        <HBox styleClass="top-header" alignment="CENTER_LEFT">
+                            <children>
+                                <StackPane HBox.hgrow="ALWAYS" />
+                                <HBox spacing="20" alignment="CENTER">
+                                    <children>
+                                        <Button text="Profile" styleClass="menu-button" onAction="#navigateToProfile" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <ScrollPane styleClass="content-scroll" VBox.vgrow="ALWAYS">
+                            <content>
+                                <VBox spacing="24" styleClass="content-area">
+                                    <children>
+                                        <HBox spacing="20" alignment="TOP_CENTER">
+                                            <children>
+                                                <VBox styleClass="balance-card" prefWidth="380">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="8">
+                                                            <children>
+                                                                <Label text="Total Balance" styleClass="card-title" />
+                                                                <SVGPath styleClass="card-icon" content="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="balance-amount-section">
+                                                            <children>
+                                                                <Label fx:id="balanceLabel" styleClass="balance-amount" />
+                                                                <Label fx:id="balanceBadgeLabel" styleClass="balance-badge" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox spacing="12" styleClass="balance-buttons">
+                                                            <children>
+                                                                <Button text="Transfer" styleClass="btn-transfer" onAction="#handleTransfer" />
+                                                                <Button text="Deposit" styleClass="btn-deposit" onAction="#handleDeposit" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox styleClass="spending-card" prefWidth="380">
+                                                    <children>
+                                                        <HBox alignment="CENTER_LEFT" spacing="8">
+                                                            <children>
+                                                                <Label text="Monthly Spending" styleClass="card-title" />
+                                                                <SVGPath styleClass="card-icon" content="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="spending-amount-section">
+                                                            <children>
+                                                                <Label fx:id="spendingAmountLabel" styleClass="spending-amount" />
+                                                                <Label fx:id="spendingLimitLabel" styleClass="spending-limit" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="income-amount-section">
+                                                            <Label fx:id="incomeAmountLabel" styleClass="spending-income" />
+                                                        </HBox>
+                                                        <HBox spacing="8">
+                                                            <children>
+                                                                <Label fx:id="spendingInfoLabel" text="0% of budget" styleClass="spending-info" />
+                                                                <Label text="•" styleClass="spending-divider" />
+                                                                <Label fx:id="daysLeftLabel" text="0 days left" styleClass="spending-info" />
+                                                            </children>
+                                                        </HBox>
+                                                        <StackPane styleClass="progress-container">
+                                                            <children>
+                                                                <StackPane styleClass="progress-bar-bg">
+                                                                    <children>
+                                                                        <StackPane fx:id="progressBarFill" styleClass="progress-bar-fill" />
+                                                                    </children>
+                                                                </StackPane>
+                                                            </children>
+                                                        </StackPane>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+
+                                        <VBox spacing="16">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label text="Saving Goals" styleClass="section-title" />
+                                                        <StackPane HBox.hgrow="ALWAYS" />
+                                                        <Button text="View All ->" styleClass="view-all-link" onAction="#navigateToGoals" />
+                                                    </children>
+                                                </HBox>
+                                                 <HBox spacing="16" alignment="CENTER_LEFT">
+                                                     <children>
+                                                         <VBox fx:id="goalsContainer" spacing="16" HBox.hgrow="ALWAYS" />
+                                                     </children>
+                                                 </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</StackPane>
