@@ -24,8 +24,10 @@ public class AccountManager implements PropertyChangeListener {
      */
     public AccountManager() {
         if (session.getToken() != null) {
+            // 1. load data if session exist
             this.accounts = LocalStorage.getInstance().getAccounts();
         }
+        // 2. listen for token changes
         session.addPropertyChangeListener(this);
     }
 
@@ -36,8 +38,10 @@ public class AccountManager implements PropertyChangeListener {
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        // 1. check session token
         if (AccountEvent.TOKEN_CHANGED.getName().equals(evt.getPropertyName())) {
             String newToken = (String) evt.getNewValue();
+            // 2. wipe or reload data
             if (newToken != null) {
                 this.accounts = LocalStorage.getInstance().getAccounts();
             } else {
@@ -54,7 +58,7 @@ public class AccountManager implements PropertyChangeListener {
      * @return SUCCESS or ERROR
      */
     public AppSettings.Message editAccount(Account acc, AccountConfig config) {
-        // 1. Check if we even have accounts loaded
+        // 1. verify session activity
         if (accounts == null || accounts.isEmpty()) {
             return AppSettings.Message.ERROR;
         }
@@ -68,10 +72,8 @@ public class AccountManager implements PropertyChangeListener {
             return AppSettings.Message.ERROR;
         }
 
-        // 3. Perform Update
+        // 3. update & presist
         acc.setAccountConfig(config);
-        
-        // 4. Persist
         return saveAll();
     }
 
@@ -80,6 +82,7 @@ public class AccountManager implements PropertyChangeListener {
      * @return SUCCESS or ERROR
      */
     private AppSettings.Message saveAll() {
+        // presist account list to local storage
         return LocalStorage.getInstance().save(AppSettings.DataKey.ACCOUNTS, new java.util.ArrayList<>(accounts));
     }
 
@@ -92,12 +95,16 @@ public class AccountManager implements PropertyChangeListener {
      * @return SUCCESS or ERROR
      */
     public AppSettings.Message updatePassword(Account acc, String oldPassword, String newPassword) {
+        // 1. verify session activity
         if (accounts == null || accounts.isEmpty()) return AppSettings.Message.ERROR;
         String decryptedToken = session.getToken();
         if (decryptedToken == null) return AppSettings.Message.ERROR;
+        // 2. validate ownership
         String emailFromToken = extractEmailFromToken(decryptedToken);
         if (emailFromToken == null || !emailFromToken.equals(acc.getEmail())) return AppSettings.Message.ERROR;
+        // 3. check if old pass. matches
         if (!acc.getPassword().equals(oldPassword)) return AppSettings.Message.ERROR;
+        // 4. update & presist
         acc.setPassword(newPassword);
         return saveAll();
     }
@@ -109,26 +116,32 @@ public class AccountManager implements PropertyChangeListener {
      * @return SUCCESS or ERROR
      */
     public AppSettings.Message deleteAccount(Account acc) {
+        // 1. verify session activity
         if (accounts == null || accounts.isEmpty()) return AppSettings.Message.ERROR;
         String decryptedToken = session.getToken();
         if (decryptedToken == null) return AppSettings.Message.ERROR;
+        // 2. ensure the current user owns the account
         String emailFromToken = extractEmailFromToken(decryptedToken);
         if (emailFromToken == null || !emailFromToken.equals(acc.getEmail())) return AppSettings.Message.ERROR;
 
         LocalStorage storage = LocalStorage.getInstance();
-
+        
+        // 3. wipe financial records
         storage.getExpenses().removeIf(t -> acc.equals(t.getAccount()));
         storage.getIncome().removeIf(t -> acc.equals(t.getAccount()));
         storage.getBudgets().removeIf(b -> acc.equals(b.getAccount()));
         storage.getGoals().removeIf(g -> acc.equals(g.getAccount()));
 
+        // 4. remove account
         accounts.remove(acc);
-        saveAll();
+        // 5. save all chamges
+        saveAll();  
         storage.save(AppSettings.DataKey.EXPENSES, new java.util.ArrayList<>(storage.getExpenses()));
         storage.save(AppSettings.DataKey.INCOME, new java.util.ArrayList<>(storage.getIncome()));
         storage.save(AppSettings.DataKey.BUDGETS, new java.util.ArrayList<>(storage.getBudgets()));
         storage.save(AppSettings.DataKey.GOALS, new java.util.ArrayList<>(storage.getGoals()));
 
+        // 6. clear session
         session.saveToken(null);
         return AppSettings.Message.SUCCESS;
     }
@@ -141,11 +154,15 @@ public class AccountManager implements PropertyChangeListener {
      * @return SUCCESS or ERROR
      */
     public AppSettings.Message updateAccountName(Account acc, String newName) {
+        // 1. verify session activity
         if (accounts == null || accounts.isEmpty()) return AppSettings.Message.ERROR;
+        // 2. get session token
         String decryptedToken = session.getToken();
         if (decryptedToken == null) return AppSettings.Message.ERROR;
+        // 3. ensure token match email
         String emailFromToken = extractEmailFromToken(decryptedToken);
         if (emailFromToken == null || !emailFromToken.equals(acc.getEmail())) return AppSettings.Message.ERROR;
+        // 4. update & presist
         acc.setUserName(newName);
         return saveAll();
     }
@@ -158,7 +175,9 @@ public class AccountManager implements PropertyChangeListener {
      */
     private String extractEmailFromToken(String token) {
         try {
+            // 1. splits token with "_"
             String[] parts = token.split("_");
+            // 2. return email
             return (parts.length >= 2) ? parts[1] : null;
         } catch (Exception e) {
             return null;
