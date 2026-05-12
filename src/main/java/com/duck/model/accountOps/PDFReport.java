@@ -38,6 +38,7 @@ public class PDFReport implements ReportGenerator {
 
         Map<String, Float> map = new HashMap<>();
 
+        // 1. initialize categories in map
         for (var item : categories) {
             map.put(item, 0.0f);
         }
@@ -45,9 +46,10 @@ public class PDFReport implements ReportGenerator {
         List<Transaction> incomeList = LocalStorage.getInstance().getIncome();
         List<Transaction> expenseList = LocalStorage.getInstance().getExpenses();
 
-        // 1. Check if the config allows INCOME transactions
+        // 2. Check if the config allows INCOME transactions
         if (config.getType() == null || config.getType() == AppSettings.TransactionType.INCOME) {
             for (var income : incomeList) {
+                // 3. sum income transactions
                 if (passesFilters(income, config)) {
                     float currentAmount = map.getOrDefault(income.getCategory(), 0.0f);
                     map.put(income.getCategory(), currentAmount + income.getAmount());
@@ -55,9 +57,10 @@ public class PDFReport implements ReportGenerator {
             }
         }
 
-        // 2. Check if the config allows EXPENSE transactions
+        // 3. Check if the config allows EXPENSE transactions
         if (config.getType() == null || config.getType() == AppSettings.TransactionType.EXPENSE) {
             for (var expense : expenseList) {
+                // 4. subtract expense transactions 
                 if (passesFilters(expense, config)) {
                     float currentAmount = map.getOrDefault(expense.getCategory(), 0.0f);
                     map.put(expense.getCategory(), currentAmount - expense.getAmount());
@@ -65,13 +68,14 @@ public class PDFReport implements ReportGenerator {
             }
         }
 
+        // 5. calc. total
         float totalAmount = 0;
         for (float amount : map.values()) {
             totalAmount += Math.abs(amount);
         }
 
         ArrayList<ReportConfig> reportData = new ArrayList<>();
-
+        // 6. convert total to precentage
         if (totalAmount > 0) {
             for (Map.Entry<String, Float> entry : map.entrySet()) {
                 String category = entry.getKey();
@@ -86,6 +90,7 @@ public class PDFReport implements ReportGenerator {
             }
         }
 
+        // 7. generate data pdf
         exportToPdfFile(reportData);
 
         return reportData;
@@ -141,7 +146,7 @@ public class PDFReport implements ReportGenerator {
      * @param data the category-percentage pairs to render
      */
     private void exportToPdfFile(ArrayList<ReportConfig> data) {
-        // Create PFD Document
+        // 1. Create PFD Document
         try (PDDocument document = new PDDocument()) {
             // Add a blank page to the document
             PDPage page = new PDPage();
@@ -149,21 +154,21 @@ public class PDFReport implements ReportGenerator {
 
             // Prepare to write text onto the page
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                // Write the Title
+                // 2. Write the Title
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 18);
                 contentStream.newLineAtOffset(50, 720);
                 contentStream.showText("Financial Category Report");
                 contentStream.endText();
 
-                // Write Data Rows
+                // 3. Write Data Rows
                 int yPosition = 670;
                 for (ReportConfig item : data) {
                     contentStream.beginText();
                     contentStream.setFont(PDType1Font.HELVETICA, 12);
                     contentStream.newLineAtOffset(50, yPosition);
 
-                    // Format the text (Category: Percent%")
+                    // 4. Format the text (Category: Percent%")
                     String lineText = String.format("- %s: %.2f%%", item.getCategory(), item.getPercent());
 
                     contentStream.showText(lineText);
@@ -173,10 +178,12 @@ public class PDFReport implements ReportGenerator {
                 }
             }
 
+            // 5. setup path
             String userHome = System.getProperty("user.home");
 
             File reportDir = new File(userHome, "Documents" + File.separator + "Reports");
             
+            // 6. ensure existence of folder
             if (!reportDir.exists()) {
                 boolean created = reportDir.mkdirs(); 
                 if (created) {
@@ -186,11 +193,13 @@ public class PDFReport implements ReportGenerator {
                 }
             }
 
+            // 7. save file
             File pdfFile = new File(reportDir, "TransactionReport.pdf");
 
             document.save(pdfFile);
             System.out.println("PDF Successfully Created at: " + pdfFile.getAbsolutePath());
         } catch (IOException e) {
+            // 8. handle errors 
             System.err.println("Error generating the PDF file: " + e.getMessage());
             e.printStackTrace();
         }
