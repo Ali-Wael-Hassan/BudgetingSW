@@ -25,8 +25,10 @@ public class AppAuth implements Auth {
     public AppSettings.Message emailExists(String email) {
         
         try {
+            // 1. load accounts
             List<Account> accounts = LocalStorage.getInstance().getAccounts();
             
+            // 2. search for email
             if (accounts != null) {
                 for (Account acc : accounts) {
                     if (acc.getEmail().equalsIgnoreCase(email)) {
@@ -50,6 +52,7 @@ public class AppAuth implements Auth {
     @Override
 public AppSettings.Message checkAgainstDataBase(Account account) {
     System.out.println("--- DB Check: Starting ---");
+    // 1. load accounts
     try {
         List<Account> accounts = LocalStorage.getInstance().getAccounts();
         System.out.println("DB Check: Loaded " + (accounts != null ? accounts.size() : "0") + " accounts from storage.");
@@ -57,7 +60,8 @@ public AppSettings.Message checkAgainstDataBase(Account account) {
         if (accounts != null) {
             String email = account.getEmail();
             System.out.println("DB Check: Validating format for: " + email);
-
+            
+            // 2. validate format of email
             String[] atSplit = email.split("@");
             boolean checkAt = atSplit.length == 2;
             boolean checkDot = true;
@@ -73,6 +77,7 @@ public AppSettings.Message checkAgainstDataBase(Account account) {
                 return Message.INVALID_EMAIL;
             }
             
+            // 3. auth. credintials
             System.out.println("DB Check: Searching for matching credentials...");
             for (Account acc : accounts) {
                 if (acc.getEmail().equalsIgnoreCase(email)) {
@@ -105,7 +110,9 @@ public AppSettings.Message checkAgainstDataBase(Account account) {
      */
     @Override
     public String getPasswordStrength(String password) {
+        // 1. check length
         if (password == null || password.length() < 6) return "Weak";
+        // 2. check complexity
         if (password.matches(".*[0-9].*") && password.matches(".*[A-Z].*")) return "Strong";
         return "Medium";
     }
