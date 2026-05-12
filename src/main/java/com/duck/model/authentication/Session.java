@@ -26,6 +26,7 @@ public class Session {
      * @return the singleton instance
      */
     public static Session getInstance() {
+        // ensure singleton
         if (instance == null) {
             instance = new Session();
         }
@@ -37,6 +38,7 @@ public class Session {
      * @param pcl the listener to add
      */
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        // register observer
         support.addPropertyChangeListener(pcl);
     }
 
@@ -49,6 +51,7 @@ public class Session {
     public void saveToken(String token) {
         String oldToken = this.token;
         try {
+            // 1. handle logout
             if (token == null) {
                 this.token = null;
                 File f = new File(SESSION_FILE);
@@ -56,12 +59,15 @@ public class Session {
                 support.firePropertyChange("token", oldToken, null);
                 return;
             }
+            // 2. presist
             try (PrintWriter out = new PrintWriter(new FileWriter(SESSION_FILE))) {
                 String encryptedToken = EncryptionUtil.encrypt(token);
                 out.println(encryptedToken);
+                // 3. update state
                 this.token = token;
                 support.firePropertyChange("token", oldToken, token);
             }
+        // 4. error handler
         } catch (Exception e) {
             System.err.println("Failed to encrypt and save token: " + e.getMessage());
         }
@@ -73,17 +79,21 @@ public class Session {
      * @return the token string, or null if none exists
      */
     public String getToken() {
+        // 1. check cashe
         if (token == null) {
             try (BufferedReader br = new BufferedReader(new FileReader(SESSION_FILE))) {
+                // 2. load then decrypt
                 String encryptedLine = br.readLine();
                 if (encryptedLine != null) {
                     String decryptedToken = EncryptionUtil.decrypt(encryptedLine);
                     
+                    // 3. sync state
                     String oldToken = this.token;
                     this.token = decryptedToken;
                     
                     support.firePropertyChange("token", oldToken, this.token);
                 }
+            // 4. error handler
             } catch (Exception e) {
                 return null;
             }
