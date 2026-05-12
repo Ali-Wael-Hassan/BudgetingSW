@@ -15,11 +15,14 @@ public class Login extends Recognition {
      */
     @Override
     protected AppSettings.Message validate(Account account) {
+        // 1. delegate validation
         AppSettings.Message flag = authStrategy.checkAgainstDataBase(account);
+        // 2. check
         if(flag == AppSettings.Message.SUCCESS) {
             return AppSettings.Message.SUCCESS;
         }
 
+        // 3. error handler
         return AppSettings.Message.ERROR;
     }
 
@@ -29,6 +32,7 @@ public class Login extends Recognition {
      */
     @Override
     public AppSettings.Message redirection() {
+        // return target
         return AppSettings.Message.SUCCESS;
     }
 }
