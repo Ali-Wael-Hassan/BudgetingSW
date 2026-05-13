@@ -36,12 +36,15 @@ public class LocalStorage implements StorageStrategy {
      * from the JSON file.  Seeds default categories if none exist.
      */
     private LocalStorage() {
+        // 1. configure mapper
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
         this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         
+        // 2. load the data
         loadFromFile();
 
+        // 3. seed defaults
         if (categories.isEmpty()) {
             categories.add("Food");
             categories.add("Transport");
@@ -55,6 +58,7 @@ public class LocalStorage implements StorageStrategy {
      * @return the singleton instance
      */
     public static synchronized LocalStorage getInstance() {
+        // check for singleton
         if (instance == null) {
             instance = new LocalStorage();
         }
@@ -69,6 +73,7 @@ public class LocalStorage implements StorageStrategy {
      * Serialises this object to the JSON file.
      */
     private void saveToFile() throws IOException {
+        // write to disk
         mapper.writeValue(new File(FILE_PATH), this);
     }
 
@@ -77,9 +82,11 @@ public class LocalStorage implements StorageStrategy {
      * in-memory lists.  Silently returns if the file does not exist.
      */
     private void loadFromFile() {
+        // 1. check file
         File file = new File(FILE_PATH);
         if (file.exists()) {
             try {
+                // 2. map data
                 LocalStorage data = mapper.readValue(file, LocalStorage.class);
                 this.accounts = data.accounts;
                 this.expenses = data.expenses;
@@ -104,6 +111,7 @@ public class LocalStorage implements StorageStrategy {
      */
     @Override
     public Object fetch(AppSettings.DataKey key) {
+        // target identification
         switch (key) {
             case ACCOUNTS:   return this.accounts;
             case EXPENSES:   return this.expenses;
@@ -125,10 +133,12 @@ public class LocalStorage implements StorageStrategy {
     @Override
     public AppSettings.Message save(AppSettings.DataKey key, Object data) {
         try {
+            // 1. validate input
             if (data == null) return AppSettings.Message.ERROR;
             Object currentStorage = fetch(key);
 
             if (currentStorage instanceof List && data instanceof List) {
+                // 2. clear and replace
                 @SuppressWarnings("unchecked")
                 List<Object> targetList = (List<Object>) currentStorage;
                 targetList.clear();
@@ -138,6 +148,7 @@ public class LocalStorage implements StorageStrategy {
                     targetList.addAll((List<? extends Object>) dataList);
                 }
                 
+                // 3. presist
                 saveToFile();
                 return AppSettings.Message.SUCCESS;
             }
@@ -157,14 +168,17 @@ public class LocalStorage implements StorageStrategy {
     @Override
     public AppSettings.Message insert(AppSettings.DataKey key, Object data) {
         try {
+            // 1. check data
             if (data == null) return AppSettings.Message.ERROR;
             Object storage = fetch(key);
 
             if (storage instanceof List) {
+                // 2. update
                 @SuppressWarnings("unchecked")
                 List<Object> typedStorage = (List<Object>) storage;
                 typedStorage.add(data);
                 
+                // 3. presist
                 saveToFile();
                 return AppSettings.Message.SUCCESS;
             }
