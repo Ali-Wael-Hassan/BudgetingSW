@@ -23,8 +23,11 @@ public class Transaction {
      * @param amount the transaction amount
      */
     public Transaction(TransactionConfig config, LocalDate date, float amount) {
+        // 1. configure link
         this.config = config;
+        // 2. set timeline
         this.date = date;
+        // 3. assign value
         this.amount = amount;
     }
 
