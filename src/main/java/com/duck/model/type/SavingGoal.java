@@ -27,19 +27,25 @@ public class SavingGoal {
      * @param account       the owning account
      */
     public SavingGoal(String name, float targetAmount, float currentAmount, LocalDate deadline, Account account) {
+        // 1. assign identitiy
         this.name = name;
         this.targetAmount = targetAmount;
+        // 2. initialize progress
         this.currentAmount = currentAmount;
         this.deadline = deadline;
+        // 3. set timeline
         this.account = account;
     }
 
     @Override
     public boolean equals(Object obj) {
+        // 1. check refrence
         if (this == obj) return true;
 
+        // 2. check type
         if (obj == null || getClass() != obj.getClass()) return false;
 
+        //3. compare attributes
         SavingGoal other = (SavingGoal) obj;
 
         if (this.name == null) {
