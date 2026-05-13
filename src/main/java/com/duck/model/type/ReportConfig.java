@@ -17,6 +17,7 @@ public class ReportConfig {
      * @param percent  the percentage value
      */
     public ReportConfig(String category, float percent) {
+        // initialize values
         this.category = category;
         this.percent = percent;
     }
@@ -33,11 +34,13 @@ public class ReportConfig {
 
     /** @param category the new category name */
     public void setCategory(String category) {
+        // update category
         this.category = category;
     }
 
     /** @param percent the new percentage value */
     public void setPercent(float percent) {
+        // update precentage
         this.percent = percent;
     }
 }
