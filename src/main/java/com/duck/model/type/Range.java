@@ -18,6 +18,7 @@ public class Range {
      * @param maxValue the maximum value
      */
     public Range(float minValue, float maxValue) {
+        // validate order
         if (minValue <= maxValue) {
             this.minValue = minValue;
             this.maxValue = maxValue;
@@ -42,6 +43,7 @@ public class Range {
      * @param minValue the new minimum value
      */
     public void setMinValue(float minValue) {
+        // update min value
         if (minValue <= this.maxValue) {
             this.minValue = minValue;
         }
@@ -52,6 +54,7 @@ public class Range {
      * @param maxValue the new maximum value
      */
     public void setMaxValue(float maxValue) {
+        // update max value
         if (maxValue >= this.minValue) {
             this.maxValue = maxValue;
         }
@@ -63,6 +66,7 @@ public class Range {
      * @return true if value is between min and max inclusive
      */
     public boolean contains(float value) {
+        // check bounds
         return value >= minValue && value <= maxValue;
     }
 }
