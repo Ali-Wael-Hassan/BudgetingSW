@@ -8,6 +8,7 @@ package com.duck.model.type;
  */
 public class AppSettings {
     public enum DataKey {
+        // storage identifiers
         ACCOUNTS,
         EXPENSES,
         INCOME,
@@ -17,22 +18,26 @@ public class AppSettings {
     }
 
     public enum Mode {
+        // theme selections
         DARK,
         LIGHT
     }
 
     public enum Currency {
+        // regional currency
         EGP,
         USD,
         EUR
     }
 
     public enum TransactionType {
+        // financial classification
         EXPENSE,
         INCOME
     }
 
     public enum Message {
+        // feedback
         ERROR,
         SUCCESS,
         NOT_FOUND,
@@ -61,6 +66,7 @@ public class AppSettings {
     }
 
     public enum GoalEvent {
+        // goal tracker
         GOAL_COMPLETED("goalCompleted");
     
         private final String propertyName;
@@ -75,6 +81,7 @@ public class AppSettings {
     }
 
     public enum AccountEvent {
+        // session monitor
         TOKEN_CHANGED("token");
 
         private final String propertyName;
@@ -89,6 +96,7 @@ public class AppSettings {
     }
 
     public enum TransactionEvent {
+        // transaction updates
         TRANSACTION_RECEIVED("transaction");
 
         private final String propertyName;
@@ -103,6 +111,7 @@ public class AppSettings {
     }
 
     public enum BudgetEvent {
+        // expense notifications
         THRESHOLD_REACHED("budgetThresholdReached"),
         BUDGET_EXCEEDED("budgetExceeded"),
         BUDGET_UPDATED("budgetUpdated");
