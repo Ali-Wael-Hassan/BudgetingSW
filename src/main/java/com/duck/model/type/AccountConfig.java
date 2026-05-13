@@ -12,6 +12,7 @@ public class AccountConfig {
 
     /** Constructs an AccountConfig with default DARK mode and USD currency. */
     public AccountConfig() {
+        // set defaults
         this.mode = AppSettings.Mode.DARK;
         this.curreny = AppSettings.Currency.USD;
     }
@@ -23,6 +24,7 @@ public class AccountConfig {
      * @param curreny    the preferred currency
      */
     public AccountConfig(String avatarPath, AppSettings.Mode mode, AppSettings.Currency curreny) {
+        // assign preferences
         this.avatarPath = avatarPath;
         this.mode = mode;
         this.curreny = curreny;
@@ -38,11 +40,20 @@ public class AccountConfig {
     public AppSettings.Currency getCurrency() { return this.curreny; }
 
     /** @param avatarPath the new avatar image path */
-    public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
+    public void setAvatarPath(String avatarPath) { 
+        // update asset    
+        this.avatarPath = avatarPath; 
+    }
 
     /** @param mode the new display theme mode */
-    public void setMode(AppSettings.Mode mode) { this.mode = mode; }
+    public void setMode(AppSettings.Mode mode) { 
+        // toggle theme
+        this.mode = mode; 
+    }
 
     /** @param curreny the new preferred currency */
-    public void setCurrency(AppSettings.Currency curreny) { this.curreny = curreny; }
+    public void setCurrency(AppSettings.Currency curreny) { 
+        // change curruncy type
+        this.curreny = curreny; 
+    }
 }
