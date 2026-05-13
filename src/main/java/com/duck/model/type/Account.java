@@ -26,10 +26,13 @@ public class Account {
      * @param accountConfig the configuration (theme, currency, avatar)
      */
     public Account(String email, String userName, String password, float balance, AccountConfig accountConfig) {
+        // 1. initialize credintials
         this.email = email;
         this.userName = userName;
         this.password = password;
+        // 2. set financial data
         this.balance = balance;
+        // 3. apply configurations
         this.accountConfig = accountConfig;
     }
 
@@ -65,14 +68,18 @@ public class Account {
 
     @Override
     public boolean equals(Object o) {
+        // 1. check refrence
         if (this == o) return true;
+        // 2. check type    
         if (!(o instanceof Account)) return false;
+        // 3. verify identity
         Account account = (Account) o;
         return Objects.equals(email, account.email);
     }
 
     @Override
     public int hashCode() {
+        // generate hash    
         return Objects.hash(email);
     }
 }
