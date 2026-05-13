@@ -27,10 +27,14 @@ public class TransactionConfig {
      * @param account  the owning account
      */
     public TransactionConfig(AppSettings.TransactionType type, Period period, List<String> category, Range range, Account account) {
+        // 1. set type
         this.type = type;
+        // 2. set time
         this.period = period;
+        // 3. set filters
         this.category = category;
         this.range = range;
+        // 4. bind account
         this.account = account;
     }
 
